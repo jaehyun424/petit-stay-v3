@@ -170,6 +170,104 @@ export async function getSitterById(id: string): Promise<SitterDetail | null> {
   }
 }
 
+// ── Booking detail ──
+
+export interface BookingDetail {
+  id: string
+  parent_id: string
+  sitter_id: string
+  status: string
+  date: string
+  start_time: string
+  end_time: string
+  total_amount: number
+  service_fee: number
+  net_amount: number
+  created_at: string
+  sitter_name: string
+  sitter_avatar_url: string | null
+  sitter_is_verified: boolean
+  sitter_rating_avg: number
+  children: { id: string; name: string; age: number; special_notes: string | null }[]
+  emergency_contacts: { id: string; name: string; phone: string; relationship: string }[]
+  session_reports: {
+    id: string
+    check_in_at: string
+    check_out_at: string | null
+    activities: string | null
+    mood_behavior: string | null
+    sleep_notes: string | null
+    additional_notes: string | null
+  }[]
+  reviews: {
+    id: string
+    rating: number
+    keywords: string[]
+    comment: string | null
+  }[]
+}
+
+export async function getBookingById(id: string): Promise<BookingDetail | null> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('bookings')
+    .select(`
+      id,
+      parent_id,
+      sitter_id,
+      status,
+      date,
+      start_time,
+      end_time,
+      total_amount,
+      service_fee,
+      net_amount,
+      created_at,
+      sitter_profiles!bookings_sitter_id_fkey (
+        is_verified,
+        rating_avg,
+        profiles!sitter_profiles_id_fkey (full_name, avatar_url)
+      ),
+      booking_children (id, name, age, special_notes),
+      booking_emergency_contacts (id, name, phone, relationship),
+      session_reports (id, check_in_at, check_out_at, activities, mood_behavior, sleep_notes, additional_notes),
+      reviews (id, rating, keywords, comment)
+    `)
+    .eq('id', id)
+    .single()
+
+  if (error || !data) return null
+
+  const sp = data.sitter_profiles as unknown as {
+    is_verified: boolean
+    rating_avg: number
+    profiles: { full_name: string; avatar_url: string | null } | null
+  } | null
+
+  return {
+    id: data.id,
+    parent_id: data.parent_id,
+    sitter_id: data.sitter_id,
+    status: data.status,
+    date: data.date,
+    start_time: data.start_time,
+    end_time: data.end_time,
+    total_amount: data.total_amount,
+    service_fee: data.service_fee,
+    net_amount: data.net_amount,
+    created_at: data.created_at,
+    sitter_name: sp?.profiles?.full_name ?? 'Unknown',
+    sitter_avatar_url: sp?.profiles?.avatar_url ?? null,
+    sitter_is_verified: sp?.is_verified ?? false,
+    sitter_rating_avg: sp?.rating_avg ?? 0,
+    children: (data.booking_children ?? []) as BookingDetail['children'],
+    emergency_contacts: (data.booking_emergency_contacts ?? []) as BookingDetail['emergency_contacts'],
+    session_reports: (data.session_reports ?? []) as BookingDetail['session_reports'],
+    reviews: (data.reviews ?? []) as BookingDetail['reviews'],
+  }
+}
+
 export async function getSitterReviews(sitterId: string, limit?: number): Promise<SitterReview[] | null> {
   const supabase = await createClient()
 
