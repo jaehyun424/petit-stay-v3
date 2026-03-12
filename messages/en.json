@@ -208,7 +208,15 @@
     "creatingAccount": "Creating account...",
     "loggingIn": "Logging in...",
     "selectRole": "Please select a role",
-    "agreeRequired": "Please agree to the Terms of Service and Privacy Policy"
+    "agreeRequired": "Please agree to the Terms of Service and Privacy Policy",
+    "emailAlreadyRegistered": "This email is already registered",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "resetPassword": "Reset password",
+    "resetPasswordDesc": "Enter your email and we'll send you a reset link.",
+    "sendResetLink": "Send reset link",
+    "sending": "Sending...",
+    "resetPasswordSent": "Reset link sent! Check your email.",
+    "cancel": "Cancel"
   },
   "bookingDetail": {
     "confirmed": "Booking confirmed ✓",

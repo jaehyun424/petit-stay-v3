@@ -2,6 +2,7 @@
 
 import { type FormEvent, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
@@ -14,6 +15,7 @@ type Role = "parent" | "sitter" | null;
 
 export default function SignupPage() {
   const t = useTranslations();
+  const router = useRouter();
   const [role, setRole] = useState<Role>(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +25,16 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  function mapAuthError(message: string): string {
+    if (message.toLowerCase().includes("already registered")) {
+      return t('auth.emailAlreadyRegistered');
+    }
+    if (message.toLowerCase().includes("password") && message.includes("6")) {
+      return t('auth.passwordTooShort');
+    }
+    return message;
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -40,7 +52,7 @@ export default function SignupPage() {
     setLoading(true);
 
     const supabase = createClient();
-    const { error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -55,10 +67,18 @@ export default function SignupPage() {
     setLoading(false);
 
     if (authError) {
-      setError(authError.message);
+      setError(mapAuthError(authError.message));
       return;
     }
 
+    // If email confirmation is disabled, user is logged in immediately
+    if (data.session) {
+      router.refresh();
+      router.push("/");
+      return;
+    }
+
+    // Email confirmation required
     setSuccess(true);
   }
 

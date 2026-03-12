@@ -208,7 +208,15 @@
     "creatingAccount": "帳號建立中...",
     "loggingIn": "登入中...",
     "selectRole": "請選擇角色",
-    "agreeRequired": "請同意服務條款與隱私權政策"
+    "agreeRequired": "請同意服務條款與隱私權政策",
+    "emailAlreadyRegistered": "此電子郵件已被註冊",
+    "passwordTooShort": "密碼至少需要 6 個字元",
+    "resetPassword": "重設密碼",
+    "resetPasswordDesc": "輸入您的電子郵件，我們將發送重設連結。",
+    "sendResetLink": "發送重設連結",
+    "sending": "發送中...",
+    "resetPasswordSent": "重設連結已發送！請查看您的電子郵件。",
+    "cancel": "取消"
   },
   "bookingDetail": {
     "confirmed": "預約已確認 ✓",

@@ -208,7 +208,15 @@
     "creatingAccount": "アカウント作成中...",
     "loggingIn": "ログイン中...",
     "selectRole": "役割を選択してください",
-    "agreeRequired": "利用規約とプライバシーポリシーに同意してください"
+    "agreeRequired": "利用規約とプライバシーポリシーに同意してください",
+    "emailAlreadyRegistered": "このメールアドレスは既に登録されています",
+    "passwordTooShort": "パスワードは6文字以上必要です",
+    "resetPassword": "パスワードをリセット",
+    "resetPasswordDesc": "メールアドレスを入力すると、リセットリンクをお送りします。",
+    "sendResetLink": "リセットリンクを送信",
+    "sending": "送信中...",
+    "resetPasswordSent": "リセットリンクを送信しました！メールをご確認ください。",
+    "cancel": "キャンセル"
   },
   "bookingDetail": {
     "confirmed": "予約確定 ✓",

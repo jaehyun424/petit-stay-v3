@@ -13,10 +13,17 @@ import { createClient } from "@/src/lib/supabase/client";
 export default function LoginPage() {
   const t = useTranslations();
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("demo@petitstay.com");
+  const [password, setPassword] = useState("PetitStay2026!");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Forgot password state
+  const [showReset, setShowReset] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetError, setResetError] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -36,7 +43,29 @@ export default function LoginPage() {
       return;
     }
 
+    router.refresh();
     router.push("/");
+  }
+
+  async function handleResetPassword(e: FormEvent) {
+    e.preventDefault();
+    setResetError(null);
+    setResetLoading(true);
+
+    const supabase = createClient();
+    const { error: resetErr } = await supabase.auth.resetPasswordForEmail(
+      resetEmail,
+      { redirectTo: `${window.location.origin}/auth/callback` }
+    );
+
+    setResetLoading(false);
+
+    if (resetErr) {
+      setResetError(resetErr.message);
+      return;
+    }
+
+    setResetSent(true);
   }
 
   return (
@@ -71,9 +100,18 @@ export default function LoginPage() {
             />
 
             <div className="flex justify-end">
-              <a href="#" className="text-sm text-[#222222] underline">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowReset(true);
+                  setResetEmail(email);
+                  setResetSent(false);
+                  setResetError(null);
+                }}
+                className="cursor-pointer text-sm text-[#222222] underline"
+              >
                 {t('auth.forgotPassword')}
-              </a>
+              </button>
             </div>
 
             {error && (
@@ -89,6 +127,64 @@ export default function LoginPage() {
               {loading ? t('auth.loggingIn') : t('common.login')}
             </Button>
           </form>
+
+          {/* Forgot password inline form */}
+          {showReset && (
+            <div className="mt-6 rounded-xl border border-[#DDDDDD] bg-[#F5F0EB] p-5">
+              <h2 className="text-sm font-semibold text-[#222222]">
+                {t('auth.resetPassword')}
+              </h2>
+              <p className="mt-1 text-xs text-[#717171]">
+                {t('auth.resetPasswordDesc')}
+              </p>
+
+              {resetSent ? (
+                <div className="mt-3">
+                  <p className="text-sm text-[#222222]">
+                    {t('auth.resetPasswordSent')}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowReset(false)}
+                    className="mt-2 cursor-pointer text-sm text-[#717171] underline"
+                  >
+                    {t('auth.cancel')}
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleResetPassword} className="mt-3 flex flex-col gap-3">
+                  <Input
+                    label={t('auth.email')}
+                    placeholder={t('auth.email')}
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    required
+                  />
+                  {resetError && (
+                    <p className="text-xs text-[var(--color-error)]">{resetError}</p>
+                  )}
+                  <div className="flex gap-2">
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      className="flex-1"
+                      disabled={resetLoading}
+                    >
+                      {resetLoading ? t('auth.sending') : t('auth.sendResetLink')}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => setShowReset(false)}
+                    >
+                      {t('auth.cancel')}
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
 
           {/* Divider */}
           <div className="my-8 flex items-center gap-4">
