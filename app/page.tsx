@@ -38,28 +38,28 @@ export default async function Home() {
               </div>
             </div>
             <div className="flex-1">
-              <div className="flex aspect-[4/3] w-full items-center justify-center gap-10 rounded-xl md:gap-14">
-                {/* Shield — Trust */}
-                <div className="flex flex-col items-center gap-3">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11 5.25-.85 9-5.75 9-11V7l-9-5Z" />
-                    <path d="M9 12l2 2 4-4" />
-                  </svg>
-                  <span className="text-xs font-semibold tracking-wide text-[#8B7355] uppercase">Trust</span>
-                </div>
-                {/* Heart — Care */}
-                <div className="flex flex-col items-center gap-3">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
-                  </svg>
-                  <span className="text-xs font-semibold tracking-wide text-[#8B7355] uppercase">Care</span>
-                </div>
-                {/* Star — Quality */}
-                <div className="flex flex-col items-center gap-3">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z" />
-                  </svg>
-                  <span className="text-xs font-semibold tracking-wide text-[#8B7355] uppercase">Quality</span>
+              <div className="flex aspect-[4/3] w-full items-center justify-center rounded-xl">
+                {/* CSS Illustration — overlapping circles */}
+                <div className="relative h-[260px] w-[320px]">
+                  {/* Large circle — home */}
+                  <div className="absolute left-0 top-[40px] flex h-[200px] w-[200px] items-center justify-center rounded-full bg-gradient-to-br from-[#F5F0EB] to-[#E8E0D8] shadow-sm">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" />
+                      <path d="M9 21V12h6v9" />
+                    </svg>
+                  </div>
+                  {/* Medium circle — heart */}
+                  <div className="absolute right-[20px] top-0 flex h-[160px] w-[160px] items-center justify-center rounded-full bg-[#C4956A]/10 shadow-sm">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+                    </svg>
+                  </div>
+                  {/* Small circle — star */}
+                  <div className="absolute bottom-0 right-0 flex h-[120px] w-[120px] items-center justify-center rounded-full bg-[#C4956A]/20 shadow-sm">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z" />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
@@ -71,29 +71,51 @@ export default async function Home() {
       <section className="bg-[#F5F0EB]">
         <div className="mx-auto max-w-[1280px] px-6 py-12">
           <div className="flex flex-col gap-8 md:flex-row md:justify-between">
-            <div className="flex-1">
-              <p className="text-base font-semibold text-[#222222]">
-                {t('landing.trustVerified')}
-              </p>
-              <p className="mt-1 text-sm text-[#717171]">
-                {t('landing.trustVerifiedDesc')}
-              </p>
+            <div className="flex flex-1 items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11 5.25-.85 9-5.75 9-11V7l-9-5Z" />
+                  <path d="M9 12l2 2 4-4" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-base font-semibold text-[#222222]">
+                  {t('landing.trustVerified')}
+                </p>
+                <p className="mt-1 text-sm text-[#717171]">
+                  {t('landing.trustVerifiedDesc')}
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-base font-semibold text-[#222222]">
-                {t('landing.trustInsured')}
-              </p>
-              <p className="mt-1 text-sm text-[#717171]">
-                {t('landing.trustInsuredDesc')}
-              </p>
+            <div className="flex flex-1 items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-base font-semibold text-[#222222]">
+                  {t('landing.trustInsured')}
+                </p>
+                <p className="mt-1 text-sm text-[#717171]">
+                  {t('landing.trustInsuredDesc')}
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-base font-semibold text-[#222222]">
-                {t('landing.trustReviews')}
-              </p>
-              <p className="mt-1 text-sm text-[#717171]">
-                {t('landing.trustReviewsDesc')}
-              </p>
+            <div className="flex flex-1 items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-base font-semibold text-[#222222]">
+                  {t('landing.trustReviews')}
+                </p>
+                <p className="mt-1 text-sm text-[#717171]">
+                  {t('landing.trustReviewsDesc')}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -205,7 +227,7 @@ export default async function Home() {
             className="border-white text-white hover:bg-white/10"
             asChild
           >
-            <Link href="/search">{t('landing.heroCta')}</Link>
+            <Link href="/search">{t('landing.ctaCta')}</Link>
           </Button>
         </div>
       </section>

@@ -1,4 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
   <rect width="32" height="32" rx="6" fill="#C4956A"/>
-  <text x="16" y="23" text-anchor="middle" font-family="'Lora', Georgia, serif" font-size="18" font-weight="700" fill="white">PS</text>
+  <g transform="translate(16,17)" fill="white">
+    <!-- Left ear -->
+    <ellipse cx="-4" cy="-10" rx="2.5" ry="6.5" transform="rotate(-8)"/>
+    <!-- Right ear -->
+    <ellipse cx="4" cy="-10" rx="2.5" ry="6.5" transform="rotate(8)"/>
+    <!-- Head -->
+    <circle cx="0" cy="0" r="6.5"/>
+    <!-- Eye -->
+    <circle cx="-2" cy="-1" r="1" fill="#C4956A"/>
+    <circle cx="2" cy="-1" r="1" fill="#C4956A"/>
+  </g>
 </svg>
