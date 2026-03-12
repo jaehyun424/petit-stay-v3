@@ -1,14 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="6" fill="#C4956A"/>
-  <g transform="translate(16,17)" fill="white">
-    <!-- Left ear -->
-    <ellipse cx="-4" cy="-10" rx="2.5" ry="6.5" transform="rotate(-8)"/>
-    <!-- Right ear -->
-    <ellipse cx="4" cy="-10" rx="2.5" ry="6.5" transform="rotate(8)"/>
+  <rect width="32" height="32" rx="7" fill="#C4956A"/>
+  <g fill="#FFF">
+    <!-- Back ear (thinner, slightly left) -->
+    <ellipse cx="12.5" cy="7" rx="1.8" ry="7" transform="rotate(-10 12.5 7)"/>
+    <!-- Front ear (wider, slightly right, tip above square) -->
+    <ellipse cx="17" cy="6" rx="2.3" ry="7.5" transform="rotate(8 17 6)"/>
     <!-- Head -->
-    <circle cx="0" cy="0" r="6.5"/>
-    <!-- Eye -->
-    <circle cx="-2" cy="-1" r="1" fill="#C4956A"/>
-    <circle cx="2" cy="-1" r="1" fill="#C4956A"/>
+    <circle cx="15.5" cy="17.5" r="6"/>
+    <!-- Body -->
+    <ellipse cx="14" cy="25" rx="5.5" ry="3.5"/>
   </g>
 </svg>
