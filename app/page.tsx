@@ -38,29 +38,16 @@ export default async function Home() {
               </div>
             </div>
             <div className="flex-1">
-              <div className="flex aspect-[4/3] w-full items-center justify-center rounded-xl">
-                {/* CSS Illustration — overlapping circles */}
-                <div className="relative h-[260px] w-[320px]">
-                  {/* Large circle — home */}
-                  <div className="absolute left-0 top-[40px] flex h-[200px] w-[200px] items-center justify-center rounded-full bg-gradient-to-br from-[#F5F0EB] to-[#E8E0D8] shadow-sm">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z" />
-                      <path d="M9 21V12h6v9" />
-                    </svg>
-                  </div>
-                  {/* Medium circle — heart */}
-                  <div className="absolute right-[20px] top-0 flex h-[160px] w-[160px] items-center justify-center rounded-full bg-[#C4956A]/10 shadow-sm">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
-                    </svg>
-                  </div>
-                  {/* Small circle — star */}
-                  <div className="absolute bottom-0 right-0 flex h-[120px] w-[120px] items-center justify-center rounded-full bg-[#C4956A]/20 shadow-sm">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z" />
-                    </svg>
-                  </div>
-                </div>
+              <div className="relative w-full overflow-hidden rounded-xl">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full aspect-[4/3] rounded-xl object-cover"
+                  src="/hero.mp4"
+                />
+                <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-t from-[#F5F0EB]/30 to-transparent" />
               </div>
             </div>
           </div>
