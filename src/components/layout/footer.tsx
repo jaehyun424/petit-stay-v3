@@ -4,16 +4,16 @@ export function Footer() {
       <div className="mx-auto max-w-[1280px] px-6 py-12">
         <p className="text-base font-semibold text-white">Petit Stay</p>
         <nav className="mt-4 flex flex-wrap gap-6 text-sm text-[#B0B0B0]">
-          <a href="#" className="transition-colors hover:text-white">
+          <a href="/about" className="transition-colors hover:text-white">
             About
           </a>
-          <a href="#" className="transition-colors hover:text-white">
+          <a href="/help" className="transition-colors hover:text-white">
             Help
           </a>
-          <a href="#" className="transition-colors hover:text-white">
+          <a href="/privacy" className="transition-colors hover:text-white">
             Privacy
           </a>
-          <a href="#" className="transition-colors hover:text-white">
+          <a href="/terms" className="transition-colors hover:text-white">
             Terms
           </a>
         </nav>
