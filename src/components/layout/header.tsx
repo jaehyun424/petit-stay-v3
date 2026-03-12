@@ -7,9 +7,9 @@ export function Header() {
         <Link href="/" className="text-lg font-bold text-[#222222]">
           Petit Stay
         </Link>
-        <a href="#" className="text-sm text-[#222222] underline">
+        <Link href="/login" className="text-sm text-[#222222] underline">
           Log in
-        </a>
+        </Link>
       </div>
     </header>
   );
