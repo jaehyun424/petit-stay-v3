@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/src/lib/supabase/client";
+import { Logo } from "@/src/components/ui/logo";
 import type { User } from "@supabase/supabase-js";
 
 const languages = [
@@ -54,8 +55,8 @@ export function Header() {
   return (
     <header className="border-b border-[#DDDDDD] bg-white">
       <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4">
-        <Link href="/" className="text-lg font-bold text-[#222222]">
-          Petit Stay
+        <Link href="/" aria-label="Petit Stay Home">
+          <Logo />
         </Link>
         <div className="flex items-center gap-4">
           <select

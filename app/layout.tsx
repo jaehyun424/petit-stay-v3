@@ -10,10 +10,13 @@ export const metadata: Metadata = {
   },
   description:
     "Find verified, multilingual babysitters for your family in Seoul. Book in minutes, enjoy your evening.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     type: "website",
     siteName: "Petit Stay",
-    images: ["/og-image.png"],
+    images: ["/og-image.svg"],
   },
   twitter: {
     card: "summary_large_image",

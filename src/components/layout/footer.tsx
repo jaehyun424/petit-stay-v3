@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Logo } from "@/src/components/ui/logo";
 
 export function Footer() {
   const t = useTranslations();
@@ -8,7 +9,7 @@ export function Footer() {
   return (
     <footer className="bg-[#222222]">
       <div className="mx-auto max-w-[1280px] px-6 py-12">
-        <p className="text-base font-semibold text-white">Petit Stay</p>
+        <Logo variant="white" className="h-6" />
         <nav className="mt-4 flex flex-wrap gap-6 text-sm text-[#B0B0B0]">
           <a href="/about" className="transition-colors hover:text-white">
             {t('footer.about')}

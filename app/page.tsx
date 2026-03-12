@@ -15,7 +15,7 @@ export default async function Home() {
       <Header />
 
       {/* Hero */}
-      <section className="bg-white">
+      <section style={{ background: "linear-gradient(135deg, #F5F0EB 0%, #E8E0D8 50%, rgba(196,149,106,0.12) 100%)" }}>
         <div className="mx-auto max-w-[1280px] px-6 py-16 md:px-20">
           <div className="flex flex-col gap-10 md:flex-row md:items-center md:gap-16">
             <div className="flex flex-1 flex-col gap-6">
@@ -33,21 +33,29 @@ export default async function Home() {
               </div>
             </div>
             <div className="flex-1">
-              <div className="flex aspect-[4/3] w-full items-center justify-center rounded-xl bg-[#E8E0D8]">
-                <svg
-                  width="48"
-                  height="48"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#C4B5A6"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M3 10.182V22h18V10.182L12 2L3 10.182Z" />
-                  <path d="M9 22V14h6v8" />
-                </svg>
+              <div className="flex aspect-[4/3] w-full items-center justify-center gap-10 rounded-xl md:gap-14">
+                {/* Shield — Trust */}
+                <div className="flex flex-col items-center gap-3">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11 5.25-.85 9-5.75 9-11V7l-9-5Z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                  <span className="text-xs font-semibold tracking-wide text-[#8B7355] uppercase">Trust</span>
+                </div>
+                {/* Heart — Care */}
+                <div className="flex flex-col items-center gap-3">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+                  </svg>
+                  <span className="text-xs font-semibold tracking-wide text-[#8B7355] uppercase">Care</span>
+                </div>
+                {/* Star — Quality */}
+                <div className="flex flex-col items-center gap-3">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C4956A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z" />
+                  </svg>
+                  <span className="text-xs font-semibold tracking-wide text-[#8B7355] uppercase">Quality</span>
+                </div>
               </div>
             </div>
           </div>
