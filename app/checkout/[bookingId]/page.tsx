@@ -1,37 +1,88 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useParams } from "next/navigation";
+import {
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
 
-type PaymentMethod = "card" | "alipay" | "wechat" | "paypal";
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
+
+/* ── Types ── */
+interface BookingData {
+  id: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  total_amount: number;
+  service_fee: number;
+  net_amount: number;
+  sitter_profiles: {
+    rating_avg: number | null;
+    profiles: { full_name: string };
+  };
+  booking_children: { name: string; age: number }[];
+}
 
 /* ── Booking Summary ── */
-function BookingSummary() {
+function BookingSummary({ booking }: { booking: BookingData }) {
+  const sitterName = booking.sitter_profiles?.profiles?.full_name ?? "Sitter";
+  const rating = booking.sitter_profiles?.rating_avg;
+  const startH = parseInt(booking.start_time.split(":")[0], 10);
+  const endH = parseInt(booking.end_time.split(":")[0], 10);
+  const startM = parseInt(booking.start_time.split(":")[1], 10) || 0;
+  const endM = parseInt(booking.end_time.split(":")[1], 10) || 0;
+  const hours = endH - startH + (endM - startM) / 60;
+  const childCount = booking.booking_children?.length ?? 0;
+  const hourlyRate = hours > 0 ? Math.round(booking.net_amount / hours) : 0;
+
+  const fmt = (n: number) => n.toLocaleString("ko-KR");
+
+  const dateStr = new Date(booking.date + "T00:00:00").toLocaleDateString(
+    "en-US",
+    { year: "numeric", month: "long", day: "numeric" }
+  );
+
   return (
     <div className="rounded-[12px] bg-[#F5F0EB] p-5">
       <dl className="flex flex-col gap-3 text-sm">
         <div className="flex justify-between">
           <dt className="text-[#717171]">Sitter</dt>
           <dd className="font-medium text-[#222222]">
-            Emily K. <span className="text-[#C4956A]">&#9733;</span> 4.92
+            {sitterName}
+            {rating != null && (
+              <>
+                {" "}
+                <span className="text-[#C4956A]">&#9733;</span> {rating.toFixed(2)}
+              </>
+            )}
           </dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-[#717171]">Date</dt>
-          <dd className="font-medium text-[#222222]">March 15, 2026</dd>
+          <dd className="font-medium text-[#222222]">{dateStr}</dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-[#717171]">Time</dt>
           <dd className="font-medium text-[#222222]">
-            18:00 – 22:00 (4 hours)
+            {booking.start_time.slice(0, 5)} – {booking.end_time.slice(0, 5)} (
+            {hours} {hours === 1 ? "hour" : "hours"})
           </dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-[#717171]">Children</dt>
-          <dd className="font-medium text-[#222222]">1 child</dd>
+          <dd className="font-medium text-[#222222]">
+            {childCount} {childCount === 1 ? "child" : "children"}
+          </dd>
         </div>
 
         <hr className="my-3 border-t border-[#DDDDDD]" />
@@ -39,16 +90,20 @@ function BookingSummary() {
         <div className="flex justify-between">
           <dt className="text-[#717171]">Rate</dt>
           <dd className="font-medium text-[#222222]">
-            25,000&#xA0;won &#215; 4 hours
+            {fmt(hourlyRate)}&nbsp;won &times; {hours} hours
           </dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-[#717171]">Subtotal</dt>
-          <dd className="font-medium text-[#222222]">100,000&#xA0;won</dd>
+          <dd className="font-medium text-[#222222]">
+            {fmt(booking.net_amount)}&nbsp;won
+          </dd>
         </div>
         <div className="flex justify-between">
           <dt className="text-[#717171]">Service fee (20%)</dt>
-          <dd className="font-medium text-[#222222]">20,000&#xA0;won</dd>
+          <dd className="font-medium text-[#222222]">
+            {fmt(booking.service_fee)}&nbsp;won
+          </dd>
         </div>
 
         <hr className="my-3 border-t border-[#DDDDDD]" />
@@ -56,7 +111,7 @@ function BookingSummary() {
         <div className="flex justify-between">
           <dt className="text-[18px] font-bold text-[#222222]">Total</dt>
           <dd className="text-[18px] font-bold text-[#222222]">
-            120,000&#xA0;won
+            {fmt(booking.total_amount)}&nbsp;won
           </dd>
         </div>
       </dl>
@@ -64,176 +119,227 @@ function BookingSummary() {
   );
 }
 
-/* ── Payment Method Option ── */
-function PaymentOption({
-  label,
-  description,
-  value,
-  selected,
-  onSelect,
+/* ── Payment Form (inside Elements) ── */
+function PaymentForm({
+  booking,
+  showSummary,
+  setShowSummary,
 }: {
-  label: string;
-  description?: string;
-  value: PaymentMethod;
-  selected: boolean;
-  onSelect: (v: PaymentMethod) => void;
+  booking: BookingData;
+  showSummary: boolean;
+  setShowSummary: (v: boolean) => void;
 }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [processing, setProcessing] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const fmt = (n: number) => n.toLocaleString("ko-KR");
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!stripe || !elements) return;
+
+      setProcessing(true);
+      setErrorMsg(null);
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/${booking.id}/complete`,
+        },
+      });
+
+      // Only reaches here if there's an immediate error (redirect didn't happen)
+      if (error) {
+        setErrorMsg(error.message ?? "Payment failed. Please try again.");
+      }
+      setProcessing(false);
+    },
+    [stripe, elements, booking.id]
+  );
+
   return (
-    <button
-      type="button"
-      onClick={() => onSelect(value)}
-      className={`flex w-full items-center gap-3 rounded-[8px] p-4 text-left transition-colors ${
-        selected
-          ? "border-2 border-[#C4956A]"
-          : "border border-[#DDDDDD]"
-      }`}
-    >
-      <span
-        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${
-          selected ? "border-[#C4956A]" : "border-[#DDDDDD]"
-        }`}
-      >
-        {selected && (
-          <span className="h-2.5 w-2.5 rounded-full bg-[#C4956A]" />
-        )}
-      </span>
-      <div>
-        <p className="text-sm font-medium text-[#222222]">{label}</p>
-        {description && (
-          <p className="text-xs text-[#717171]">{description}</p>
-        )}
+    <form onSubmit={handleSubmit}>
+      <div className="mx-auto max-w-[640px] md:max-w-[1040px]">
+        <div className="flex flex-col md:flex-row md:gap-8">
+          {/* ── Left: Payment form ── */}
+          <div className="w-full md:flex-1 md:max-w-[640px]">
+            {/* Mobile collapsible booking summary */}
+            <div className="mb-6 md:hidden">
+              <button
+                type="button"
+                onClick={() => setShowSummary(!showSummary)}
+                className="flex w-full items-center justify-between text-sm font-semibold text-[#222222]"
+              >
+                View booking details
+                <span
+                  className={`text-xs transition-transform duration-200 ${
+                    showSummary ? "rotate-180" : ""
+                  }`}
+                >
+                  &#9660;
+                </span>
+              </button>
+              {showSummary && (
+                <div className="mt-3">
+                  <BookingSummary booking={booking} />
+                </div>
+              )}
+            </div>
+
+            {/* Stripe Payment Element */}
+            <section className="mb-8">
+              <h2 className="mb-4 text-[18px] font-semibold text-[#222222]">
+                Payment method
+              </h2>
+              <PaymentElement />
+            </section>
+
+            {/* Secure payment notice */}
+            <section className="mb-8">
+              <h3 className="text-base font-semibold text-[#222222]">
+                Secure payment
+              </h3>
+              <p className="mt-1 text-sm text-[#717171]">
+                Your payment is protected. You won&#39;t be charged until the
+                sitter confirms your booking.
+              </p>
+            </section>
+
+            {/* Cancellation policy */}
+            <section className="mb-8">
+              <h3 className="text-base font-semibold text-[#222222]">
+                Cancellation policy
+              </h3>
+              <p className="mt-1 text-sm text-[#717171]">
+                Free cancellation up to 24 hours before the session.
+                Cancellations within 24 hours may be subject to a fee.
+              </p>
+            </section>
+
+            {/* Error message */}
+            {errorMsg && (
+              <div className="mb-4 rounded-[8px] bg-[#FFEBEE] p-3 text-sm text-[#D32F2F]">
+                {errorMsg}
+              </div>
+            )}
+
+            {/* Pay button */}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={!stripe || !elements || processing}
+            >
+              {processing
+                ? "Processing..."
+                : `Pay ${fmt(booking.total_amount)}\u00A0won`}
+            </Button>
+            <p className="mt-3 text-center text-xs text-[#B0B0B0]">
+              By confirming, you agree to our Terms of Service and Privacy
+              Policy
+            </p>
+          </div>
+
+          {/* ── Right: Desktop sticky summary ── */}
+          <aside className="hidden md:block w-[360px] shrink-0">
+            <div className="sticky top-24">
+              <BookingSummary booking={booking} />
+            </div>
+          </aside>
+        </div>
       </div>
-    </button>
+    </form>
   );
 }
 
 /* ── Page ── */
 export default function CheckoutPage() {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
+  const params = useParams();
+  const bookingId = params.bookingId as string;
+
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [booking, setBooking] = useState<BookingData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showSummary, setShowSummary] = useState(false);
+
+  useEffect(() => {
+    async function init() {
+      try {
+        // Fetch booking data and create PaymentIntent in parallel
+        const [bookingRes, checkoutRes] = await Promise.all([
+          fetch(`/api/bookings/${bookingId}`),
+          fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ bookingId }),
+          }),
+        ]);
+
+        if (!bookingRes.ok) {
+          const data = await bookingRes.json();
+          throw new Error(data.error || "Failed to load booking");
+        }
+        if (!checkoutRes.ok) {
+          const data = await checkoutRes.json();
+          throw new Error(data.error || "Failed to create payment");
+        }
+
+        const bookingData = await bookingRes.json();
+        const { clientSecret: secret } = await checkoutRes.json();
+
+        setBooking(bookingData);
+        setClientSecret(secret);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    init();
+  }, [bookingId]);
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <Header />
 
       <main className="flex-1 px-6 py-8">
-        <div className="mx-auto max-w-[640px] md:max-w-[1040px]">
-          <div className="flex flex-col md:flex-row md:gap-8">
-            {/* ── Left: Payment form ── */}
-            <div className="w-full md:flex-1 md:max-w-[640px]">
-              {/* Mobile collapsible booking summary */}
-              <div className="mb-6 md:hidden">
-                <button
-                  type="button"
-                  onClick={() => setShowSummary(!showSummary)}
-                  className="flex w-full items-center justify-between text-sm font-semibold text-[#222222]"
-                >
-                  View booking details
-                  <span
-                    className={`text-xs transition-transform duration-200 ${
-                      showSummary ? "rotate-180" : ""
-                    }`}
-                  >
-                    &#9660;
-                  </span>
-                </button>
-                {showSummary && (
-                  <div className="mt-3">
-                    <BookingSummary />
-                  </div>
-                )}
-              </div>
-
-              {/* Payment method selection */}
-              <section className="mb-8">
-                <h2 className="mb-4 text-[18px] font-semibold text-[#222222]">
-                  Payment method
-                </h2>
-                <div className="flex flex-col gap-3">
-                  <PaymentOption
-                    label="Credit / Debit Card"
-                    description="Visa, Mastercard, JCB, AMEX"
-                    value="card"
-                    selected={paymentMethod === "card"}
-                    onSelect={setPaymentMethod}
-                  />
-                  <PaymentOption
-                    label="Alipay"
-                    value="alipay"
-                    selected={paymentMethod === "alipay"}
-                    onSelect={setPaymentMethod}
-                  />
-                  <PaymentOption
-                    label="WeChat Pay"
-                    value="wechat"
-                    selected={paymentMethod === "wechat"}
-                    onSelect={setPaymentMethod}
-                  />
-                  <PaymentOption
-                    label="PayPal"
-                    value="paypal"
-                    selected={paymentMethod === "paypal"}
-                    onSelect={setPaymentMethod}
-                  />
-                </div>
-              </section>
-
-              {/* Card info inputs (Credit Card only) */}
-              {paymentMethod === "card" && (
-                <section className="mb-8">
-                  <div className="flex flex-col gap-4">
-                    <Input label="Card number" placeholder="Card number" />
-                    <div className="flex gap-4">
-                      <div className="flex-1">
-                        <Input label="Expiry" placeholder="MM/YY" />
-                      </div>
-                      <div className="flex-1">
-                        <Input label="CVC" placeholder="CVC" />
-                      </div>
-                    </div>
-                    <Input label="Name on card" placeholder="Name on card" />
-                  </div>
-                </section>
-              )}
-
-              {/* Secure payment notice */}
-              <section className="mb-8">
-                <h3 className="text-base font-semibold text-[#222222]">
-                  Secure payment
-                </h3>
-                <p className="mt-1 text-sm text-[#717171]">
-                  Your payment is protected. You won&#39;t be charged until the
-                  sitter confirms your booking.
-                </p>
-              </section>
-
-              {/* Cancellation policy */}
-              <section className="mb-8">
-                <h3 className="text-base font-semibold text-[#222222]">
-                  Cancellation policy
-                </h3>
-                <p className="mt-1 text-sm text-[#717171]">
-                  Free cancellation up to 24 hours before the session.
-                  Cancellations within 24 hours may be subject to a fee.
-                </p>
-              </section>
-
-              {/* Pay button */}
-              <Button className="w-full">Pay 120,000&#xA0;won</Button>
-              <p className="mt-3 text-center text-xs text-[#B0B0B0]">
-                By confirming, you agree to our Terms of Service and Privacy
-                Policy
-              </p>
-            </div>
-
-            {/* ── Right: Desktop sticky summary ── */}
-            <aside className="hidden md:block w-[360px] shrink-0">
-              <div className="sticky top-24">
-                <BookingSummary />
-              </div>
-            </aside>
+        {loading && (
+          <div className="flex justify-center py-20">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#DDDDDD] border-t-[#C4956A]" />
           </div>
-        </div>
+        )}
+
+        {error && (
+          <div className="mx-auto max-w-[480px] py-20 text-center">
+            <p className="text-sm text-[#D32F2F]">{error}</p>
+          </div>
+        )}
+
+        {!loading && !error && clientSecret && booking && (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              clientSecret,
+              appearance: {
+                theme: "stripe",
+                variables: {
+                  colorPrimary: "#C4956A",
+                  borderRadius: "8px",
+                },
+              },
+            }}
+          >
+            <PaymentForm
+              booking={booking}
+              showSummary={showSummary}
+              setShowSummary={setShowSummary}
+            />
+          </Elements>
+        )}
       </main>
 
       <Footer />
