@@ -1,16 +1,91 @@
 "use client";
 
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
+import { createClient } from "@/src/lib/supabase/client";
+import type { UserRole } from "@/src/lib/supabase/types";
 
 type Role = "parent" | "sitter" | null;
 
 export default function SignupPage() {
   const [role, setRole] = useState<Role>(null);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+
+    if (!role) {
+      setError("Please select a role");
+      return;
+    }
+    if (!agreed) {
+      setError("Please agree to the Terms of Service and Privacy Policy");
+      return;
+    }
+
+    setLoading(true);
+
+    const supabase = createClient();
+    const { error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+          phone,
+          role: role as UserRole,
+        },
+      },
+    });
+
+    setLoading(false);
+
+    if (authError) {
+      setError(authError.message);
+      return;
+    }
+
+    setSuccess(true);
+  }
+
+  if (success) {
+    return (
+      <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
+        <Header />
+        <main className="flex flex-1 justify-center px-6 py-16">
+          <div className="w-full max-w-[400px] text-center">
+            <h1 className="text-[26px] font-semibold text-[#222222]">
+              Check your email
+            </h1>
+            <p className="mt-4 text-sm text-[#717171]">
+              We sent a confirmation link to <strong>{email}</strong>.
+              <br />
+              Please check your email to confirm your account.
+            </p>
+            <Link
+              href="/login"
+              className="mt-8 inline-block text-sm text-[#222222] underline"
+            >
+              Back to login
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
@@ -64,25 +139,60 @@ export default function SignupPage() {
           </div>
 
           {/* Form */}
-          <div className="mt-6 flex flex-col gap-4">
-            <Input placeholder="Full name" type="text" />
-            <Input placeholder="Email address" type="email" />
-            <Input placeholder="Password" type="password" />
-            <Input placeholder="Phone number" type="tel" />
+          <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+            <Input
+              placeholder="Full name"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
+            <Input
+              placeholder="Email address"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Input
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+            <Input
+              placeholder="Phone number"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
 
             {/* Terms checkbox */}
             <label className="flex items-start gap-3 text-sm text-[#717171]">
               <input
                 type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
                 className="mt-0.5 h-4 w-4 shrink-0 accent-[#C4956A]"
               />
               <span>I agree to the Terms of Service and Privacy Policy</span>
             </label>
 
-            <Button variant="primary" className="w-full">
-              Create account
+            {error && (
+              <p className="text-sm text-[var(--color-error)]">{error}</p>
+            )}
+
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full"
+              disabled={loading}
+            >
+              {loading ? "Creating account..." : "Create account"}
             </Button>
-          </div>
+          </form>
 
           {/* Divider */}
           <div className="my-8 flex items-center gap-4">
