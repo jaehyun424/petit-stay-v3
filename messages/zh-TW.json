@@ -54,6 +54,7 @@
     "language": "語言",
     "available": "共 {count} 位保姆可預約",
     "noSitters": "目前尚無保姆",
+    "noFilterResults": "沒有符合條件的保姆",
     "sortBy": "排序",
     "sortRecommended": "推薦",
     "sortRating": "評分最高",

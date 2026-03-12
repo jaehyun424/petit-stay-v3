@@ -54,6 +54,7 @@
     "language": "Language",
     "available": "{count} sitters available",
     "noSitters": "No sitters available yet",
+    "noFilterResults": "No sitters match your filters",
     "sortBy": "Sort",
     "sortRecommended": "Recommended",
     "sortRating": "Highest rated",

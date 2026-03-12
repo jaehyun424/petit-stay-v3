@@ -370,12 +370,6 @@ export default function BookingDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const STATUS_OPTIONS: { key: BookingStatus; label: string }[] = [
-    { key: "confirmed", label: t('bookingDetail.statusConfirmed') },
-    { key: "inProgress", label: t('bookingDetail.statusInProgress') },
-    { key: "completed", label: t('bookingDetail.statusCompleted') },
-  ];
-
   useEffect(() => {
     async function init() {
       const res = await fetch(`/api/bookings/${id}`);
@@ -425,23 +419,6 @@ export default function BookingDetailPage() {
       <Header />
 
       <main id="main-content" className="mx-auto w-full max-w-[640px] flex-1 px-6 py-8">
-        {/* Status switcher (demo only) */}
-        <div className="mb-8 flex gap-2">
-          {STATUS_OPTIONS.map((opt) => (
-            <button
-              key={opt.key}
-              onClick={() => setStatus(opt.key)}
-              className={`rounded-[var(--radius-button)] px-4 py-2 text-sm font-medium transition-colors ${
-                status === opt.key
-                  ? "bg-[var(--color-cta)] text-white"
-                  : "bg-[#F5F0EB] text-[var(--color-text-primary)]"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
         {/* Content by status */}
         {status === "confirmed" && <ConfirmedView booking={booking} />}
         {status === "inProgress" && <InProgressView booking={booking} />}

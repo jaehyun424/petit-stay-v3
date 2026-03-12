@@ -54,6 +54,7 @@
     "language": "언어",
     "available": "시터 {count}명 예약 가능",
     "noSitters": "아직 등록된 시터가 없어요",
+    "noFilterResults": "조건에 맞는 시터가 없어요",
     "sortBy": "정렬",
     "sortRecommended": "추천순",
     "sortRating": "별점 높은순",

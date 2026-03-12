@@ -54,6 +54,7 @@
     "language": "言語",
     "available": "{count}名のシッターが見つかりました",
     "noSitters": "現在シッターが登録されていません",
+    "noFilterResults": "条件に合うシッターが見つかりませんでした",
     "sortBy": "並び替え",
     "sortRecommended": "おすすめ順",
     "sortRating": "評価順",
