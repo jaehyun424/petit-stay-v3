@@ -51,6 +51,13 @@ interface ActiveFilters {
 
 /* ── Helpers ── */
 
+const LANG_CODE_TO_NAMES: Record<string, string[]> = {
+  en: ["english"],
+  ja: ["japanese"],
+  ko: ["korean"],
+  zh: ["chinese", "mandarin"],
+};
+
 function buildBadges(
   sitter: Pick<Sitter, "is_verified" | "languages" | "certifications">
 ): { label: string; variant: "verified" | "language" | "certification" }[] {
@@ -111,13 +118,17 @@ export function SearchContent() {
   const displayedSitters = useMemo(() => {
     let filtered = [...allSitters];
 
-    // Language filter
+    // Language filter (map code → name, e.g. "en" → "English")
     if (activeFilters.language) {
+      const names = LANG_CODE_TO_NAMES[activeFilters.language] ?? [];
       filtered = filtered.filter((s) =>
-        s.languages.some(
-          (l) =>
-            l.lang.toLowerCase() === activeFilters.language.toLowerCase()
-        )
+        s.languages.some((l) => {
+          const langLower = l.lang.toLowerCase();
+          return (
+            langLower === activeFilters.language.toLowerCase() ||
+            names.includes(langLower)
+          );
+        })
       );
     }
 
@@ -150,7 +161,8 @@ export function SearchContent() {
       case "recommended":
         filtered.sort(
           (a, b) =>
-            b.rating_avg * b.review_count - a.rating_avg * a.review_count
+            b.rating_avg * Math.log(b.review_count + 1) -
+            a.rating_avg * Math.log(a.review_count + 1)
         );
         break;
       case "rating":
