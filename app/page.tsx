@@ -1,6 +1,8 @@
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
+import { Header } from "@/src/components/layout/header";
+import { Footer } from "@/src/components/layout/footer";
 
 const sitters = [
   {
@@ -45,6 +47,8 @@ const sitters = [
 export default function Home() {
   return (
     <>
+      <Header />
+
       {/* Hero */}
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-16 md:px-20">
@@ -211,29 +215,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#222222]">
-        <div className="mx-auto max-w-[1280px] px-6 py-12">
-          <p className="text-base font-semibold text-white">Petit Stay</p>
-          <nav className="mt-4 flex flex-wrap gap-6 text-sm text-[#B0B0B0]">
-            <a href="#" className="transition-colors hover:text-white">
-              About
-            </a>
-            <a href="#" className="transition-colors hover:text-white">
-              Help
-            </a>
-            <a href="#" className="transition-colors hover:text-white">
-              Privacy
-            </a>
-            <a href="#" className="transition-colors hover:text-white">
-              Terms
-            </a>
-          </nav>
-          <p className="mt-6 text-sm text-[#B0B0B0]">
-            © 2026 Petit Stay. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
