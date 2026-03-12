@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const bookingSchema = z.object({
-  sitterId: z.string().uuid(),
+  sitterId: z.string().min(1),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
   startTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format (HH:MM)"),
   endTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format (HH:MM)"),
