@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
@@ -6,6 +7,12 @@ import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { getSitters, buildSitterBadges } from "@/src/lib/queries";
 import { getTranslations } from "next-intl/server";
+
+export const metadata: Metadata = {
+  title: "Find a Sitter",
+  description:
+    "Browse verified babysitters in Seoul. Filter by date, time, language, and more.",
+};
 
 export default async function SearchPage() {
   const sitters = await getSitters();

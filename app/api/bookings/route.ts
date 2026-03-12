@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
+import { bookingSchema } from '@/src/lib/validations'
 
 export async function POST(request: Request) {
   const supabase = await createClient()
@@ -9,25 +10,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  let body: Record<string, unknown>
+  let body: unknown
   try {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { sitterId, date, startTime, endTime, children, emergencyContact } = body as {
-    sitterId: string
-    date: string
-    startTime: string
-    endTime: string
-    children: { name: string; age: number; specialNotes?: string }[]
-    emergencyContact: { name: string; phone: string; relationship: string }
+  const parsed = bookingSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: parsed.error.issues.map(e => e.message).join(', ') },
+      { status: 400 },
+    )
   }
 
-  if (!sitterId || !date || !startTime || !endTime || !children?.length || !emergencyContact) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-  }
+  const { sitterId, date, startTime, endTime, children, emergencyContact } = parsed.data
 
   // Get sitter's hourly rate (server-side to prevent tampering)
   const { data: sitter, error: sitterError } = await supabase

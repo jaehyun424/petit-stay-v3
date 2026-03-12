@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
@@ -11,6 +12,21 @@ import {
   formatRelativeTime,
 } from "@/src/lib/queries";
 import { getTranslations } from "next-intl/server";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const sitter = await getSitterById(id);
+  if (!sitter) return { title: "Sitter Not Found" };
+  return {
+    title: `${sitter.name} — ★ ${sitter.rating_avg.toFixed(1)}`,
+    description:
+      sitter.bio ?? `Book ${sitter.name}, a verified babysitter in Seoul.`,
+  };
+}
 
 function Stars({ count }: { count: number }) {
   const full = Math.round(count);

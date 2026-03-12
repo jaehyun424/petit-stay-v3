@@ -4,9 +4,20 @@ import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Petit Stay — Trusted Babysitters in Seoul",
+  title: {
+    template: "%s | Petit Stay",
+    default: "Petit Stay — Trusted Babysitters in Seoul",
+  },
   description:
-    "Verified multilingual babysitters for traveling families in Seoul. Book in minutes, enjoy your evening.",
+    "Find verified, multilingual babysitters for your family in Seoul. Book in minutes, enjoy your evening.",
+  openGraph: {
+    type: "website",
+    siteName: "Petit Stay",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default async function RootLayout({

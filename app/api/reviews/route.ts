@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
+import { reviewSchema } from '@/src/lib/validations'
 
 export async function POST(request: Request) {
   const supabase = await createClient()
@@ -9,17 +10,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const body = await request.json()
-  const { bookingId, rating, keywords, comment } = body as {
-    bookingId: string
-    rating: number
-    keywords: string[]
-    comment: string | null
+  let body: unknown
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  if (!bookingId || !rating || rating < 1 || rating > 5) {
-    return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+  const parsed = reviewSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: parsed.error.issues.map(e => e.message).join(', ') },
+      { status: 400 },
+    )
   }
+
+  const { bookingId, rating, keywords, comment } = parsed.data
 
   // Verify booking exists, belongs to user, and is completed
   const { data: booking, error: bookingError } = await supabase

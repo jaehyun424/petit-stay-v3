@@ -2,7 +2,7 @@ import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 
 export const metadata = {
-  title: "About — Petit Stay",
+  title: "About",
 };
 
 export default function AboutPage() {

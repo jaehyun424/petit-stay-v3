@@ -2,7 +2,7 @@ import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 
 export const metadata = {
-  title: "Terms of Service — Petit Stay",
+  title: "Terms of Service",
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

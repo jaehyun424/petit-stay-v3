@@ -2,7 +2,7 @@ import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 
 export const metadata = {
-  title: "Help Center — Petit Stay",
+  title: "Help Center",
 };
 
 function QA({ question, answer }: { question: string; answer: string }) {
