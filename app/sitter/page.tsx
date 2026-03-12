@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Avatar } from "@/src/components/ui/avatar";
@@ -10,59 +11,93 @@ import { Button } from "@/src/components/ui/button";
 const TABS = ["Dashboard", "Requests", "Schedule", "Earnings", "Profile"] as const;
 type Tab = (typeof TABS)[number];
 
-/* ───────────────────── mock data ───────────────────── */
-const stats = [
-  { label: "This month", value: "12 sessions", accent: false },
-  { label: "This month", value: "₩960,000 earned", accent: false },
-  { label: "This month", value: "4.94 avg rating", accent: false },
-  { label: "This month", value: "2 pending requests", accent: true },
-];
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const upcomingSessions = [
-  { date: "Mar 18", time: "18:00–22:00", parent: "James T.", children: "1 child", status: "Confirmed" as const },
-  { date: "Mar 20", time: "19:00–22:00", parent: "Mika S.", children: "2 children", status: "Confirmed" as const },
-  { date: "Mar 22", time: "18:00–21:00", parent: "Lisa W.", children: "1 child", status: "Pending" as const },
-];
+interface DashboardData {
+  profile: {
+    full_name: string;
+    avatar_url: string | null;
+    is_verified: boolean;
+    languages: { lang: string; level: string }[];
+    bio: string | null;
+    hourly_rate: number;
+    created_at: string;
+  };
+  stats: {
+    monthSessions: number;
+    monthEarnings: number;
+    avgRating: number;
+    pendingCount: number;
+  };
+  upcomingSessions: {
+    id: string;
+    date: string;
+    start_time: string;
+    end_time: string;
+    parent_name: string;
+    child_count: number;
+    status: string;
+  }[];
+  pendingRequests: {
+    id: string;
+    date: string;
+    start_time: string;
+    end_time: string;
+    parent_name: string;
+    children: { name: string; age: number }[];
+    special_notes: string | null;
+  }[];
+  availability: {
+    day_of_week: number;
+    start_time: string;
+    end_time: string;
+    is_active: boolean;
+  }[];
+  earnings: {
+    date: string;
+    parent_name: string;
+    hours: number;
+    amount: number;
+    status: string;
+  }[];
+  earningsSummary: {
+    total: number;
+    sessions: number;
+    avgPerSession: number;
+    platformFee: number;
+    netPayout: number;
+  };
+}
 
-const bookingRequests = [
-  {
-    name: "Lisa W.",
-    children: "1 child (age 5)",
-    schedule: "Mar 22 · 18:00–21:00",
-    notes: "Mild peanut allergy",
-  },
-  {
-    name: "Tom H.",
-    children: "2 children (ages 4, 7)",
-    schedule: "Mar 25 · 19:00–23:00",
-    notes: "Bedtime at 21:00 for younger child",
-  },
-];
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
 
-const weeklySchedule = [
-  { day: "Mon", hours: "18:00 – 23:00", active: true },
-  { day: "Tue", hours: "18:00 – 23:00", active: true },
-  { day: "Wed", hours: "Off", active: false },
-  { day: "Thu", hours: "18:00 – 23:00", active: true },
-  { day: "Fri", hours: "18:00 – 23:00", active: true },
-  { day: "Sat", hours: "14:00 – 23:00", active: true },
-  { day: "Sun", hours: "14:00 – 23:00", active: true },
-];
+function formatTime(t: string) {
+  return t.slice(0, 5);
+}
 
-const recentTransactions = [
-  { date: "Mar 15", parent: "James T.", hours: "4hrs", amount: "₩100,000", status: "Paid ✓" },
-  { date: "Mar 12", parent: "Mika S.", hours: "3hrs", amount: "₩75,000", status: "Paid ✓" },
-  { date: "Mar 10", parent: "Sarah K.", hours: "4hrs", amount: "₩100,000", status: "Paid ✓" },
-];
+function formatWon(amount: number) {
+  return `₩${amount.toLocaleString()}`;
+}
 
 /* ───────────────────── tab content ───────────────────── */
 
-function DashboardTab() {
+function DashboardTab({ data }: { data: DashboardData }) {
+  const { stats, upcomingSessions } = data;
+  const statCards = [
+    { label: "This month", value: `${stats.monthSessions} sessions`, accent: false },
+    { label: "This month", value: `${formatWon(stats.monthEarnings)} earned`, accent: false },
+    { label: "This month", value: `${stats.avgRating.toFixed(2)} avg rating`, accent: false },
+    { label: "This month", value: `${stats.pendingCount} pending requests`, accent: true },
+  ];
+
   return (
     <div className="space-y-8">
       {/* stat cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {stats.map((s) => (
+        {statCards.map((s) => (
           <div key={s.value} className="rounded-[12px] bg-[#F5F0EB] p-5">
             <p className="text-[14px] text-[#717171]">{s.label}</p>
             <p
@@ -79,59 +114,105 @@ function DashboardTab() {
       {/* upcoming sessions */}
       <div>
         <h2 className="text-[18px] font-semibold text-[#222222]">Upcoming sessions</h2>
-        <div className="mt-4">
-          {upcomingSessions.map((session, i) => (
-            <div
-              key={i}
-              className={`flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between ${
-                i < upcomingSessions.length - 1 ? "border-b border-[#DDDDDD]" : ""
-              }`}
-            >
-              <p className="text-[14px] text-[#222222]">
-                {session.date} · {session.time} · {session.parent} · {session.children}
-              </p>
-              <Badge variant={session.status === "Confirmed" ? "verified" : "default"}>
-                {session.status}
-              </Badge>
-            </div>
-          ))}
-        </div>
+        {upcomingSessions.length === 0 ? (
+          <p className="mt-4 text-[14px] text-[#717171]">No upcoming sessions</p>
+        ) : (
+          <div className="mt-4">
+            {upcomingSessions.map((session, i) => (
+              <div
+                key={session.id}
+                className={`flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between ${
+                  i < upcomingSessions.length - 1 ? "border-b border-[#DDDDDD]" : ""
+                }`}
+              >
+                <p className="text-[14px] text-[#222222]">
+                  {formatDate(session.date)} · {formatTime(session.start_time)}–{formatTime(session.end_time)} · {session.parent_name} · {session.child_count} child{session.child_count !== 1 ? "ren" : ""}
+                </p>
+                <Badge variant={session.status === "confirmed" ? "verified" : "default"}>
+                  {session.status === "confirmed" ? "Confirmed" : "Pending"}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function RequestsTab() {
+function RequestsTab({
+  data,
+  onAction,
+  actionLoading,
+}: {
+  data: DashboardData;
+  onAction: (id: string, action: "accept" | "decline") => void;
+  actionLoading: string | null;
+}) {
+  const { pendingRequests } = data;
+
   return (
     <div>
       <h2 className="text-[18px] font-semibold text-[#222222]">Booking requests</h2>
-      <div className="mt-4 space-y-4">
-        {bookingRequests.map((req) => (
-          <div
-            key={req.name}
-            className="rounded-[12px] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.05)]"
-          >
-            <p className="text-[16px] font-semibold text-[#222222]">{req.name}</p>
-            <p className="mt-1 text-[14px] text-[#717171]">{req.children}</p>
-            <p className="mt-1 text-[14px] text-[#717171]">{req.schedule}</p>
-            <p className="mt-2 text-[14px] text-[#222222]">
-              <span className="text-[#717171]">Special notes: </span>
-              {req.notes}
-            </p>
-            <div className="mt-4 flex gap-3">
-              <Button size="sm">Accept</Button>
-              <Button variant="ghost" size="sm" className="text-[#C13515] no-underline hover:underline">
-                Decline
-              </Button>
+      {pendingRequests.length === 0 ? (
+        <p className="mt-4 text-[14px] text-[#717171]">No pending requests</p>
+      ) : (
+        <div className="mt-4 space-y-4">
+          {pendingRequests.map((req) => (
+            <div
+              key={req.id}
+              className="rounded-[12px] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.05)]"
+            >
+              <p className="text-[16px] font-semibold text-[#222222]">{req.parent_name}</p>
+              <p className="mt-1 text-[14px] text-[#717171]">
+                {req.children.length} child{req.children.length !== 1 ? "ren" : ""} ({req.children.map(c => `age ${c.age}`).join(", ")})
+              </p>
+              <p className="mt-1 text-[14px] text-[#717171]">
+                {formatDate(req.date)} · {formatTime(req.start_time)}–{formatTime(req.end_time)}
+              </p>
+              {req.special_notes && (
+                <p className="mt-2 text-[14px] text-[#222222]">
+                  <span className="text-[#717171]">Special notes: </span>
+                  {req.special_notes}
+                </p>
+              )}
+              <div className="mt-4 flex gap-3">
+                <Button
+                  size="sm"
+                  onClick={() => onAction(req.id, "accept")}
+                  disabled={actionLoading === req.id}
+                >
+                  {actionLoading === req.id ? "..." : "Accept"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-[#C13515] no-underline hover:underline"
+                  onClick={() => onAction(req.id, "decline")}
+                  disabled={actionLoading === req.id}
+                >
+                  Decline
+                </Button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function ScheduleTab() {
+function ScheduleTab({ data }: { data: DashboardData }) {
+  const { availability } = data;
+
+  // Build full week schedule
+  const weeklySchedule = Array.from({ length: 7 }, (_, i) => {
+    const slots = availability.filter(a => a.day_of_week === i && a.is_active);
+    if (slots.length === 0) return { day: DAY_NAMES[i], hours: "Off", active: false };
+    const hours = slots.map(s => `${formatTime(s.start_time)} – ${formatTime(s.end_time)}`).join(", ");
+    return { day: DAY_NAMES[i], hours, active: true };
+  });
+
   return (
     <div>
       <h2 className="text-[18px] font-semibold text-[#222222]">Your availability</h2>
@@ -165,39 +246,69 @@ function ScheduleTab() {
   );
 }
 
-function EarningsTab() {
+function EarningsTab({ data }: { data: DashboardData }) {
+  const { earnings, earningsSummary } = data;
+  const now = new Date();
+  const monthName = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
   return (
     <div className="space-y-8">
       {/* monthly summary */}
       <div className="rounded-[12px] bg-[#F5F0EB] p-5">
-        <h2 className="text-[18px] font-semibold text-[#222222]">March 2026</h2>
-        <p className="mt-2 text-[26px] font-bold text-[#222222]">Total earned: ₩960,000</p>
-        <p className="mt-1 text-[14px] text-[#717171]">12 sessions · Avg ₩80,000/session</p>
-        <p className="mt-1 text-[14px] text-[#717171]">Platform fee (20%): -₩192,000</p>
-        <p className="mt-2 text-[18px] font-semibold text-[#222222]">Net payout: ₩768,000</p>
+        <h2 className="text-[18px] font-semibold text-[#222222]">{monthName}</h2>
+        <p className="mt-2 text-[26px] font-bold text-[#222222]">Total earned: {formatWon(earningsSummary.total)}</p>
+        <p className="mt-1 text-[14px] text-[#717171]">
+          {earningsSummary.sessions} sessions · Avg {formatWon(earningsSummary.avgPerSession)}/session
+        </p>
+        <p className="mt-1 text-[14px] text-[#717171]">
+          Platform fee (20%): -{formatWon(earningsSummary.platformFee)}
+        </p>
+        <p className="mt-2 text-[18px] font-semibold text-[#222222]">
+          Net payout: {formatWon(earningsSummary.netPayout)}
+        </p>
       </div>
 
       {/* recent transactions */}
       <div>
         <h2 className="text-[18px] font-semibold text-[#222222]">Recent transactions</h2>
-        <div className="mt-4">
-          {recentTransactions.map((tx, i) => (
-            <div
-              key={i}
-              className={`py-3 text-[14px] text-[#222222] ${
-                i < recentTransactions.length - 1 ? "border-b border-[#DDDDDD]" : ""
-              }`}
-            >
-              {tx.date} · {tx.parent} · {tx.hours} · {tx.amount} · {tx.status}
-            </div>
-          ))}
-        </div>
+        {earnings.length === 0 ? (
+          <p className="mt-4 text-[14px] text-[#717171]">No transactions this month</p>
+        ) : (
+          <div className="mt-4">
+            {earnings.map((tx, i) => (
+              <div
+                key={i}
+                className={`py-3 text-[14px] text-[#222222] ${
+                  i < earnings.length - 1 ? "border-b border-[#DDDDDD]" : ""
+                }`}
+              >
+                {formatDate(tx.date)} · {tx.parent_name} · {tx.hours}hrs · {formatWon(tx.amount)} · {tx.status} ✓
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function ProfileTab() {
+function ProfileTab({
+  data,
+  onSave,
+  saving,
+}: {
+  data: DashboardData;
+  onSave: (fields: { fullName: string; bio: string; hourlyRate: number; languages: string }) => void;
+  saving: boolean;
+}) {
+  const { profile } = data;
+  const [fullName, setFullName] = useState(profile.full_name);
+  const [bio, setBio] = useState(profile.bio ?? "");
+  const [hourlyRate, setHourlyRate] = useState(String(profile.hourly_rate));
+  const [languages, setLanguages] = useState(
+    profile.languages.map(l => `${l.lang} (${l.level})`).join(", ")
+  );
+
   return (
     <div>
       <h2 className="text-[18px] font-semibold text-[#222222]">Edit your profile</h2>
@@ -216,7 +327,8 @@ function ProfileTab() {
           <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Display name</label>
           <input
             type="text"
-            defaultValue="Emily K."
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             className="h-12 w-full rounded-[8px] border border-[#DDDDDD] px-4 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
           />
         </div>
@@ -224,7 +336,8 @@ function ProfileTab() {
           <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Bio</label>
           <textarea
             rows={4}
-            defaultValue=""
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
             className="w-full rounded-[8px] border border-[#DDDDDD] px-4 py-3 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
           />
         </div>
@@ -232,7 +345,8 @@ function ProfileTab() {
           <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Hourly rate</label>
           <input
             type="text"
-            defaultValue="25,000"
+            value={hourlyRate}
+            onChange={(e) => setHourlyRate(e.target.value)}
             className="h-12 w-full rounded-[8px] border border-[#DDDDDD] px-4 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
           />
         </div>
@@ -240,14 +354,27 @@ function ProfileTab() {
           <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Languages</label>
           <input
             type="text"
-            defaultValue="English (Native), Korean (Conversational)"
+            value={languages}
+            onChange={(e) => setLanguages(e.target.value)}
             className="h-12 w-full rounded-[8px] border border-[#DDDDDD] px-4 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
           />
         </div>
       </div>
 
       <div className="mt-6">
-        <Button>Save changes</Button>
+        <Button
+          onClick={() =>
+            onSave({
+              fullName,
+              bio,
+              hourlyRate: Number(hourlyRate.replace(/,/g, "")) || 0,
+              languages,
+            })
+          }
+          disabled={saving}
+        >
+          {saving ? "Saving..." : "Save changes"}
+        </Button>
       </div>
     </div>
   );
@@ -256,7 +383,125 @@ function ProfileTab() {
 /* ───────────────────── main page ───────────────────── */
 
 export default function SitterDashboardPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("Dashboard");
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await fetch("/api/sitter/dashboard");
+      if (res.status === 401) {
+        router.push("/login");
+        return;
+      }
+      if (res.status === 403) {
+        setError("Access denied. This page is for sitters only.");
+        setLoading(false);
+        return;
+      }
+      if (!res.ok) {
+        setError("Failed to load dashboard");
+        setLoading(false);
+        return;
+      }
+      const json = await res.json();
+      setData(json);
+    } catch {
+      setError("Failed to load dashboard");
+    } finally {
+      setLoading(false);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleBookingAction = async (id: string, action: "accept" | "decline") => {
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/sitter/bookings/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      if (res.ok) {
+        await fetchData();
+      }
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleProfileSave = async (fields: {
+    fullName: string;
+    bio: string;
+    hourlyRate: number;
+    languages: string;
+  }) => {
+    setSaving(true);
+    try {
+      // Parse languages string like "English (L3), Korean (L2)"
+      const langs = fields.languages
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((s) => {
+          const match = s.match(/^(.+?)\s*\((\w+)\)$/);
+          if (match) return { lang: match[1].trim(), level: match[2] };
+          return { lang: s, level: "L1" };
+        });
+
+      const res = await fetch("/api/sitter/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: fields.fullName,
+          bio: fields.bio,
+          hourlyRate: fields.hourlyRate,
+          languages: langs,
+        }),
+      });
+      if (res.ok) {
+        await fetchData();
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen flex-col bg-white">
+        <Header />
+        <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
+          <p className="text-[16px] text-[#717171]">Loading...</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col bg-white">
+        <Header />
+        <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
+          <p className="text-[16px] text-[#C13515]">{error}</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!data) return null;
+
+  const { profile } = data;
+  const memberYear = new Date(profile.created_at).getFullYear();
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -265,15 +510,17 @@ export default function SitterDashboardPage() {
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-6">
         {/* sitter profile header */}
         <div className="flex items-center gap-4 py-6">
-          <Avatar size="lg" fallback="E" />
+          <Avatar size="lg" fallback={profile.full_name.charAt(0)} />
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-[20px] font-semibold text-[#222222]">Emily K.</h1>
-              <Badge variant="verified">Verified</Badge>
-              <Badge variant="language">L3 English</Badge>
+              <h1 className="text-[20px] font-semibold text-[#222222]">{profile.full_name}</h1>
+              {profile.is_verified && <Badge variant="verified">Verified</Badge>}
+              {profile.languages.map((l) => (
+                <Badge key={l.lang} variant="language">{l.level} {l.lang}</Badge>
+              ))}
             </div>
             <p className="mt-1 text-[14px] text-[#717171]">
-              Active sitter · Member since 2025
+              Active sitter · Member since {memberYear}
             </p>
           </div>
         </div>
@@ -300,11 +547,15 @@ export default function SitterDashboardPage() {
 
         {/* tab content */}
         <div className="py-6">
-          {activeTab === "Dashboard" && <DashboardTab />}
-          {activeTab === "Requests" && <RequestsTab />}
-          {activeTab === "Schedule" && <ScheduleTab />}
-          {activeTab === "Earnings" && <EarningsTab />}
-          {activeTab === "Profile" && <ProfileTab />}
+          {activeTab === "Dashboard" && <DashboardTab data={data} />}
+          {activeTab === "Requests" && (
+            <RequestsTab data={data} onAction={handleBookingAction} actionLoading={actionLoading} />
+          )}
+          {activeTab === "Schedule" && <ScheduleTab data={data} />}
+          {activeTab === "Earnings" && <EarningsTab data={data} />}
+          {activeTab === "Profile" && (
+            <ProfileTab data={data} onSave={handleProfileSave} saving={saving} />
+          )}
         </div>
       </main>
 
