@@ -256,5 +256,36 @@
     "statusInProgress": "In Progress",
     "statusCompleted": "Completed",
     "notFound": "Booking not found"
+  },
+  "about": {
+    "title": "About Petit Stay",
+    "intro1": "Petit Stay is a premium babysitter matching platform for families visiting Seoul.",
+    "intro2": "Finding trustworthy childcare while traveling can be stressful — Petit Stay is here to help.",
+    "intro3": "Every sitter completes ID verification, experience checks, and background screening, and speaks multiple languages. From booking to payment to care reports, everything is managed in one simple platform.",
+    "roleTitle": "Our role",
+    "roleDesc": "Petit Stay does not directly employ sitters. We connect verified independent sitters with families. Hotels and accommodations participate as referral partners.",
+    "promiseTitle": "Our promise",
+    "promiseDesc": "Safe childcare, a relaxing evening. That's the Petit Stay promise.",
+    "contactTitle": "Contact",
+    "contactEmail": "hello@petitstay.com"
+  },
+  "help": {
+    "title": "Frequently Asked Questions",
+    "q1": "What is Petit Stay?",
+    "a1": "Petit Stay connects traveling families with verified babysitters in Seoul. We specialize in evening in-room childcare at hotels.",
+    "q2": "How are sitters verified?",
+    "a2": "Every sitter completes ID verification, childcare experience checks, and background screening. Certifications (CPR, first aid, etc.) are displayed on their profiles.",
+    "q3": "What are the available hours?",
+    "a3": "Our standard hours are 18:00 to 23:00. We recommend booking at least 24 hours in advance.",
+    "q4": "Is there an age limit for children?",
+    "a4": "We serve children aged 3 to 8.",
+    "q5": "How does payment work?",
+    "a5": "Pay by card when you book. You won't be charged until the sitter confirms. We use secure payment processing.",
+    "q6": "Can I cancel a booking?",
+    "a6": "Free cancellation is available up to 24 hours before the session. Late cancellations may incur a fee.",
+    "q7": "Are there services sitters don't provide?",
+    "a7": "Sitters do not provide overnight care, pool/beach supervision, vehicle transportation, or medication administration.",
+    "q8": "What if something goes wrong?",
+    "a8": "Contact us at help@petitstay.com. We'll help you right away."
   }
 }
