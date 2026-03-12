@@ -151,10 +151,18 @@ export default async function Home() {
                 return (
                   <Link key={sitter.id} href={`/sitters/${sitter.id}`} className="block">
                     <Card>
-                      <div className="flex aspect-square w-full items-center justify-center bg-[#E8E0D8]">
-                        <span className="text-3xl font-semibold text-[#C4B5A6]">
-                          {sitter.name.charAt(0)}
-                        </span>
+                      <div className="flex aspect-square w-full items-center justify-center overflow-hidden bg-[#E8E0D8]">
+                        {sitter.avatar_url ? (
+                          <img
+                            src={sitter.avatar_url}
+                            alt={sitter.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-3xl font-semibold text-[#C4B5A6]">
+                            {sitter.name.charAt(0)}
+                          </span>
+                        )}
                       </div>
                       <CardContent>
                         <p className="text-sm font-semibold text-[#222222]">

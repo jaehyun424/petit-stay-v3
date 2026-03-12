@@ -6,6 +6,7 @@ import type { SitterLanguage, SitterCertification, SitterAvailability } from '@/
 export interface SitterListItem {
   id: string
   name: string
+  avatar_url: string | null
   bio: string | null
   hourly_rate: number
   rating_avg: number
@@ -95,7 +96,7 @@ export async function getSitters(limit?: number): Promise<SitterListItem[] | nul
       languages,
       certifications,
       is_verified,
-      profiles!sitter_profiles_id_fkey (full_name)
+      profiles!sitter_profiles_id_fkey (full_name, avatar_url)
     `)
     .eq('is_active', true)
     .order('rating_avg', { ascending: false })
@@ -108,17 +109,21 @@ export async function getSitters(limit?: number): Promise<SitterListItem[] | nul
 
   if (error || !data) return null
 
-  return data.map((row) => ({
-    id: row.id,
-    name: (row.profiles as unknown as { full_name: string } | null)?.full_name ?? 'Unknown',
-    bio: row.bio,
-    hourly_rate: row.hourly_rate,
-    rating_avg: row.rating_avg,
-    review_count: row.review_count,
-    languages: (row.languages ?? []) as SitterLanguage[],
-    certifications: (row.certifications ?? []) as SitterCertification[],
-    is_verified: row.is_verified,
-  }))
+  return data.map((row) => {
+    const p = row.profiles as unknown as { full_name: string; avatar_url: string | null } | null
+    return {
+      id: row.id,
+      name: p?.full_name ?? 'Unknown',
+      avatar_url: p?.avatar_url ?? null,
+      bio: row.bio,
+      hourly_rate: row.hourly_rate,
+      rating_avg: row.rating_avg,
+      review_count: row.review_count,
+      languages: (row.languages ?? []) as SitterLanguage[],
+      certifications: (row.certifications ?? []) as SitterCertification[],
+      is_verified: row.is_verified,
+    }
+  })
 }
 
 export async function getSitterById(id: string): Promise<SitterDetail | null> {
@@ -136,12 +141,14 @@ export async function getSitterById(id: string): Promise<SitterDetail | null> {
       certifications,
       is_verified,
       response_rate,
-      profiles!sitter_profiles_id_fkey (full_name)
+      profiles!sitter_profiles_id_fkey (full_name, avatar_url)
     `)
     .eq('id', id)
     .single()
 
   if (error || !sitter) return null
+
+  const sp = sitter.profiles as unknown as { full_name: string; avatar_url: string | null } | null
 
   const reviews = await getSitterReviews(id, 3)
 
@@ -156,7 +163,8 @@ export async function getSitterById(id: string): Promise<SitterDetail | null> {
 
   return {
     id: sitter.id,
-    name: (sitter.profiles as unknown as { full_name: string } | null)?.full_name ?? 'Unknown',
+    name: sp?.full_name ?? 'Unknown',
+    avatar_url: sp?.avatar_url ?? null,
     bio: sitter.bio,
     hourly_rate: sitter.hourly_rate,
     rating_avg: sitter.rating_avg,

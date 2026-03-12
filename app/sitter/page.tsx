@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
@@ -298,7 +298,7 @@ function ProfileTab({
   saving,
 }: {
   data: DashboardData;
-  onSave: (fields: { fullName: string; bio: string; hourlyRate: number; languages: string }) => void;
+  onSave: (fields: { fullName: string; bio: string; hourlyRate: number; languages: string; avatarUrl?: string }) => void;
   saving: boolean;
 }) {
   const { profile } = data;
@@ -308,6 +308,46 @@ function ProfileTab({
   const [languages, setLanguages] = useState(
     profile.languages.map(l => `${l.lang} (${l.level})`).join(", ")
   );
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(profile.avatar_url);
+  const [uploadedAvatarUrl, setUploadedAvatarUrl] = useState<string | undefined>(undefined);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate type
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Only JPG, PNG, or WebP files are allowed.");
+      return;
+    }
+
+    // Validate size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("File size must be under 5MB.");
+      return;
+    }
+
+    setUploadError(null);
+    setAvatarPreview(URL.createObjectURL(file));
+    setUploading(true);
+
+    try {
+      const { uploadImage } = await import("@/src/lib/cloudinary");
+      const url = await uploadImage(file);
+      setUploadedAvatarUrl(url);
+      setAvatarPreview(url);
+    } catch {
+      setUploadError("Upload failed. Please try again.");
+      setAvatarPreview(profile.avatar_url);
+      setUploadedAvatarUrl(undefined);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div>
@@ -315,10 +355,39 @@ function ProfileTab({
 
       {/* photo */}
       <div className="mt-6 flex items-center gap-4">
-        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#F5F0EB]" />
-        <button type="button" className="text-[14px] text-[#222222] underline">
-          Change photo
-        </button>
+        {avatarPreview ? (
+          <img
+            src={avatarPreview}
+            alt="Profile photo"
+            className="h-24 w-24 rounded-full object-cover"
+          />
+        ) : (
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#F5F0EB]">
+            <span className="text-2xl font-semibold text-[#C4B5A6]">
+              {profile.full_name.charAt(0)}
+            </span>
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <button
+            type="button"
+            className="text-[14px] text-[#222222] underline"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? "Uploading..." : "Change photo"}
+          </button>
+          {uploadError && (
+            <p className="text-[13px] text-[#C13515]">{uploadError}</p>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
       </div>
 
       {/* form fields */}
@@ -369,6 +438,7 @@ function ProfileTab({
               bio,
               hourlyRate: Number(hourlyRate.replace(/,/g, "")) || 0,
               languages,
+              avatarUrl: uploadedAvatarUrl,
             })
           }
           disabled={saving}
@@ -442,6 +512,7 @@ export default function SitterDashboardPage() {
     bio: string;
     hourlyRate: number;
     languages: string;
+    avatarUrl?: string;
   }) => {
     setSaving(true);
     try {
@@ -464,6 +535,7 @@ export default function SitterDashboardPage() {
           bio: fields.bio,
           hourlyRate: fields.hourlyRate,
           languages: langs,
+          ...(fields.avatarUrl !== undefined && { avatarUrl: fields.avatarUrl }),
         }),
       });
       if (res.ok) {
@@ -510,7 +582,7 @@ export default function SitterDashboardPage() {
       <main id="main-content" className="mx-auto w-full max-w-[1280px] flex-1 px-6">
         {/* sitter profile header */}
         <div className="flex items-center gap-4 py-6">
-          <Avatar size="lg" fallback={profile.full_name.charAt(0)} />
+          <Avatar size="lg" src={profile.avatar_url ?? undefined} fallback={profile.full_name.charAt(0)} />
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-[20px] font-semibold text-[#222222]">{profile.full_name}</h1>

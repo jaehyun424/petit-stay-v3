@@ -71,11 +71,19 @@ export default async function SitterProfilePage({
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-8">
           <div className="flex flex-col gap-8 md:flex-row">
-            {/* Photo Placeholder */}
-            <div className="flex aspect-square w-full items-center justify-center rounded-xl bg-[#E8E0D8] md:w-[280px] md:shrink-0">
-              <span className="text-[48px] font-semibold text-[#C4B5A6]">
-                {initial}
-              </span>
+            {/* Profile Photo */}
+            <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-[#E8E0D8] md:w-[280px] md:shrink-0">
+              {sitter.avatar_url ? (
+                <img
+                  src={sitter.avatar_url}
+                  alt={sitter.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span className="text-[48px] font-semibold text-[#C4B5A6]">
+                  {initial}
+                </span>
+              )}
             </div>
 
             {/* Info */}

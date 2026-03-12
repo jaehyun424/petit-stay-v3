@@ -27,11 +27,12 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { bio, hourlyRate, languages, fullName } = body as {
+  const { bio, hourlyRate, languages, fullName, avatarUrl } = body as {
     bio?: string
     hourlyRate?: number
     languages?: { lang: string; level: string }[]
     fullName?: string
+    avatarUrl?: string
   }
 
   // Update sitter_profiles
@@ -51,15 +52,19 @@ export async function PATCH(request: Request) {
     }
   }
 
-  // Update profiles.full_name
-  if (fullName) {
-    const { error: nameError } = await supabase
+  // Update profiles (full_name, avatar_url)
+  const profileUpdate: Record<string, unknown> = {}
+  if (fullName) profileUpdate.full_name = fullName
+  if (avatarUrl !== undefined) profileUpdate.avatar_url = avatarUrl
+
+  if (Object.keys(profileUpdate).length > 0) {
+    const { error: profileError } = await supabase
       .from('profiles')
-      .update({ full_name: fullName })
+      .update(profileUpdate)
       .eq('id', user.id)
 
-    if (nameError) {
-      return NextResponse.json({ error: 'Failed to update name' }, { status: 500 })
+    if (profileError) {
+      return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 })
     }
   }
 
