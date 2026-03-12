@@ -5,9 +5,11 @@ import { Input } from "@/src/components/ui/input";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { getSitters, buildSitterBadges } from "@/src/lib/queries";
+import { getTranslations } from "next-intl/server";
 
 export default async function SearchPage() {
   const sitters = await getSitters();
+  const t = await getTranslations();
 
   return (
     <>
@@ -16,12 +18,12 @@ export default async function SearchPage() {
       {/* Search Filter Bar */}
       <div className="sticky top-0 z-10 border-b border-[#DDDDDD] bg-white">
         <div className="mx-auto flex max-w-[1280px] items-center gap-3 overflow-x-auto px-6 py-3 [&>*]:shrink-0">
-          <Input type="date" placeholder="Date" />
-          <Input placeholder="Time" />
-          <Input placeholder="Child age" />
-          <Input placeholder="Language" />
+          <Input type="date" placeholder={t('search.date')} />
+          <Input placeholder={t('search.time')} />
+          <Input placeholder={t('search.childAge')} />
+          <Input placeholder={t('search.language')} />
           <Button variant="primary" size="sm">
-            Search
+            {t('common.search')}
           </Button>
         </div>
       </div>
@@ -33,10 +35,10 @@ export default async function SearchPage() {
           <div className="mb-6 flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <p className="text-base font-semibold text-[#222222]">
               {sitters && sitters.length > 0
-                ? `${sitters.length} sitter${sitters.length > 1 ? "s" : ""} available`
-                : "No sitters available yet"}
+                ? t('search.available', { count: sitters.length })
+                : t('search.noSitters')}
             </p>
-            <p className="text-sm text-[#717171]">Sort by: Recommended</p>
+            <p className="text-sm text-[#717171]">{t('search.sortBy')}</p>
           </div>
 
           {/* Sitter Grid */}
@@ -66,7 +68,7 @@ export default async function SearchPage() {
                         ))}
                       </div>
                       <p className="mt-2 text-sm font-semibold text-[#222222]">
-                        {sitter.hourly_rate.toLocaleString()}원/시간
+                        {sitter.hourly_rate.toLocaleString()}{t('search.perHour')}
                       </p>
                     </CardContent>
                   </Card>

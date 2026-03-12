@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/src/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
@@ -13,6 +14,7 @@ const languages = [
 ] as const;
 
 export function Header() {
+  const t = useTranslations();
   const [user, setUser] = useState<User | null>(null);
   const [currentLocale, setCurrentLocale] = useState("en");
 
@@ -72,11 +74,11 @@ export function Header() {
               onClick={handleLogout}
               className="cursor-pointer text-sm text-[#222222] underline"
             >
-              Log out
+              {t('common.logout')}
             </button>
           ) : (
             <Link href="/login" className="text-sm text-[#222222] underline">
-              Log in
+              {t('common.login')}
             </Link>
           )}
         </div>

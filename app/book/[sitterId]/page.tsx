@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/src/lib/supabase/client";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
@@ -34,10 +35,6 @@ interface EmergencyData {
 
 /* ── Helpers ── */
 
-function formatWon(amount: number): string {
-  return `${amount.toLocaleString()} won`;
-}
-
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
   const d = new Date(dateStr + "T00:00:00");
@@ -63,6 +60,7 @@ function StepIndicator({
   current: number;
   total: number;
 }) {
+  const t = useTranslations('booking');
   return (
     <div className="flex items-center gap-2 text-sm font-medium">
       {Array.from({ length: total }, (_, i) => {
@@ -85,18 +83,19 @@ function StepIndicator({
                     : "text-[#B0B0B0]"
               }
             >
-              Step {step}
+              {t('stepLabel', { step })}
             </span>
           </span>
         );
       })}
-      <span className="text-[#B0B0B0]">of {total}</span>
+      <span className="text-[#B0B0B0]">{t('stepOf', { total })}</span>
     </div>
   );
 }
 
 /* ── Sitter sidebar (desktop only) ── */
 function SitterSidebar({ sitter }: { sitter: SitterInfo }) {
+  const t = useTranslations('booking');
   return (
     <aside className="hidden md:block w-[240px] shrink-0">
       <div className="rounded-[12px] bg-[#F5F0EB] p-4">
@@ -117,7 +116,7 @@ function SitterSidebar({ sitter }: { sitter: SitterInfo }) {
           </div>
         </div>
         <p className="mt-3 text-sm font-medium text-[#222222]">
-          {formatWon(sitter.hourly_rate)}/hr
+          {t('won', { amount: sitter.hourly_rate.toLocaleString() })}{t('perHour')}
         </p>
       </div>
     </aside>
@@ -142,35 +141,36 @@ function StepSchedule({
   onChangeEndTime: (v: string) => void;
   onNext: () => void;
 }) {
+  const t = useTranslations();
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
-        When do you need a sitter?
+        {t('booking.step1Title')}
       </h1>
 
       <Input
-        label="Date"
+        label={t('booking.dateLabel')}
         type="date"
         value={date}
         onChange={(e) => onChangeDate(e.target.value)}
       />
       <Input
-        label="Start time"
-        placeholder="Start time, e.g. 18:00"
+        label={t('booking.startTime')}
+        placeholder={t('booking.startTimePlaceholder')}
         value={startTime}
         onChange={(e) => onChangeStartTime(e.target.value)}
       />
       <Input
-        label="End time"
-        placeholder="End time, e.g. 22:00"
+        label={t('booking.endTime')}
+        placeholder={t('booking.endTimePlaceholder')}
         value={endTime}
         onChange={(e) => onChangeEndTime(e.target.value)}
       />
 
-      <p className="text-sm text-[#717171]">Evening sessions: 18:00 – 23:00</p>
+      <p className="text-sm text-[#717171]">{t('booking.eveningNote')}</p>
 
       <Button className="w-full" onClick={onNext}>
-        Next
+        {t('common.next')}
       </Button>
     </div>
   );
@@ -188,6 +188,7 @@ function StepChildren({
   onNext: () => void;
   onBack: () => void;
 }) {
+  const t = useTranslations();
   const updateChild = (
     index: number,
     field: keyof ChildData,
@@ -201,29 +202,29 @@ function StepChildren({
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
-        Tell us about your children
+        {t('booking.step2Title')}
       </h1>
 
       {/* Child 1 */}
       <fieldset className="flex flex-col gap-4">
         <legend className="mb-2 text-sm font-semibold text-[#222222]">
-          Child 1
+          {t('booking.child1')}
         </legend>
         <Input
-          label="Name"
-          placeholder="Child's name"
+          label={t('booking.nameLabel')}
+          placeholder={t('booking.childName')}
           value={children[0].name}
           onChange={(e) => updateChild(0, "name", e.target.value)}
         />
         <Input
-          label="Age"
-          placeholder="Age"
+          label={t('booking.childAge')}
+          placeholder={t('booking.childAge')}
           value={children[0].age}
           onChange={(e) => updateChild(0, "age", e.target.value)}
         />
         <Input
-          label="Special notes"
-          placeholder="Allergies, routines, preferences..."
+          label={t('booking.specialNotesLabel')}
+          placeholder={t('booking.specialNotes')}
           value={children[0].specialNotes}
           onChange={(e) => updateChild(0, "specialNotes", e.target.value)}
         />
@@ -234,31 +235,31 @@ function StepChildren({
         <fieldset className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <legend className="text-sm font-semibold text-[#222222]">
-              Child 2
+              {t('booking.child2')}
             </legend>
             <button
               type="button"
               className="text-sm text-[#717171] underline"
               onClick={() => onChange(children.slice(0, 1))}
             >
-              Remove
+              {t('booking.removeChild')}
             </button>
           </div>
           <Input
-            label="Name"
-            placeholder="Child's name"
+            label={t('booking.nameLabel')}
+            placeholder={t('booking.childName')}
             value={children[1].name}
             onChange={(e) => updateChild(1, "name", e.target.value)}
           />
           <Input
-            label="Age"
-            placeholder="Age"
+            label={t('booking.childAge')}
+            placeholder={t('booking.childAge')}
             value={children[1].age}
             onChange={(e) => updateChild(1, "age", e.target.value)}
           />
           <Input
-            label="Special notes"
-            placeholder="Allergies, routines, preferences..."
+            label={t('booking.specialNotesLabel')}
+            placeholder={t('booking.specialNotes')}
             value={children[1].specialNotes}
             onChange={(e) => updateChild(1, "specialNotes", e.target.value)}
           />
@@ -272,18 +273,18 @@ function StepChildren({
             onChange([...children, { name: "", age: "", specialNotes: "" }])
           }
         >
-          + Add another child
+          {t('booking.addChild')}
         </Button>
       )}
 
-      <p className="text-sm text-[#717171]">Max 2 children per session</p>
+      <p className="text-sm text-[#717171]">{t('booking.maxChildren')}</p>
 
       <div className="flex gap-3">
         <Button variant="secondary" className="flex-1" onClick={onBack}>
-          Back
+          {t('common.back')}
         </Button>
         <Button className="flex-1" onClick={onNext}>
-          Next
+          {t('common.next')}
         </Button>
       </div>
     </div>
@@ -302,28 +303,29 @@ function StepEmergency({
   onNext: () => void;
   onBack: () => void;
 }) {
+  const t = useTranslations();
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
-        Emergency contact
+        {t('booking.step3Title')}
       </h1>
 
       <Input
-        label="Contact name"
-        placeholder="Name"
+        label={t('booking.contactNameLabel')}
+        placeholder={t('booking.contactName')}
         value={contact.name}
         onChange={(e) => onChange({ ...contact, name: e.target.value })}
       />
       <Input
-        label="Phone"
-        placeholder="Phone number"
+        label={t('booking.phoneLabel')}
+        placeholder={t('booking.contactPhone')}
         type="tel"
         value={contact.phone}
         onChange={(e) => onChange({ ...contact, phone: e.target.value })}
       />
       <Input
-        label="Relationship"
-        placeholder="e.g. Parent, Hotel front desk"
+        label={t('booking.relationLabel')}
+        placeholder={t('booking.contactRelation')}
         value={contact.relationship}
         onChange={(e) =>
           onChange({ ...contact, relationship: e.target.value })
@@ -331,15 +333,15 @@ function StepEmergency({
       />
 
       <p className="text-sm text-[#717171]">
-        We&#39;ll only use this in case of emergency
+        {t('booking.emergencyNote')}
       </p>
 
       <div className="flex gap-3">
         <Button variant="secondary" className="flex-1" onClick={onBack}>
-          Back
+          {t('common.back')}
         </Button>
         <Button className="flex-1" onClick={onNext}>
-          Next
+          {t('common.next')}
         </Button>
       </div>
     </div>
@@ -368,6 +370,7 @@ function StepConfirm({
   onSubmit: () => void;
   onBack: () => void;
 }) {
+  const t = useTranslations();
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreeExcluded, setAgreeExcluded] = useState(false);
 
@@ -380,32 +383,32 @@ function StepConfirm({
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
-        Review your booking
+        {t('booking.step4Title')}
       </h1>
 
       {/* Summary card */}
       <div className="rounded-[12px] bg-[#F5F0EB] p-6 text-sm">
         <dl className="flex flex-col gap-3">
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Sitter</dt>
+            <dt className="text-[#717171]">{t('booking.sitterLabel')}</dt>
             <dd className="font-medium text-[#222222]">{sitter.name}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Date</dt>
+            <dt className="text-[#717171]">{t('booking.dateLabel')}</dt>
             <dd className="font-medium text-[#222222]">{formatDate(date)}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Time</dt>
+            <dt className="text-[#717171]">{t('booking.timeLabel')}</dt>
             <dd className="font-medium text-[#222222]">
               {startTime} – {endTime}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Duration</dt>
-            <dd className="font-medium text-[#222222]">{hours} hours</dd>
+            <dt className="text-[#717171]">{t('booking.durationLabel')}</dt>
+            <dd className="font-medium text-[#222222]">{t('booking.hoursCount', { count: hours })}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Children</dt>
+            <dt className="text-[#717171]">{t('booking.childrenLabel')}</dt>
             <dd className="font-medium text-[#222222]">
               {childCount} child{childCount !== 1 ? "ren" : ""}
             </dd>
@@ -414,30 +417,30 @@ function StepConfirm({
           <hr className="border-[#DDDDDD]" />
 
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Rate</dt>
+            <dt className="text-[#717171]">{t('booking.rateLabel')}</dt>
             <dd className="font-medium text-[#222222]">
-              {formatWon(sitter.hourly_rate)}/hr
+              {t('booking.won', { amount: sitter.hourly_rate.toLocaleString() })}{t('booking.perHour')}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Subtotal</dt>
+            <dt className="text-[#717171]">{t('booking.subtotalLabel')}</dt>
             <dd className="font-medium text-[#222222]">
-              {formatWon(subtotal)}
+              {t('booking.won', { amount: subtotal.toLocaleString() })}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">Service fee (20%)</dt>
+            <dt className="text-[#717171]">{t('booking.serviceFeeLabel')}</dt>
             <dd className="font-medium text-[#222222]">
-              {formatWon(serviceFee)}
+              {t('booking.won', { amount: serviceFee.toLocaleString() })}
             </dd>
           </div>
 
           <hr className="border-[#DDDDDD]" />
 
           <div className="flex justify-between">
-            <dt className="text-base font-semibold text-[#222222]">Total</dt>
+            <dt className="text-base font-semibold text-[#222222]">{t('booking.totalLabel')}</dt>
             <dd className="text-base font-semibold text-[#222222]">
-              {formatWon(total)}
+              {t('booking.won', { amount: total.toLocaleString() })}
             </dd>
           </div>
         </dl>
@@ -452,7 +455,7 @@ function StepConfirm({
             onChange={(e) => setAgreeTerms(e.target.checked)}
             className="mt-0.5 h-5 w-5 shrink-0 accent-[#C4956A]"
           />
-          I agree to the service terms and cancellation policy
+          {t('booking.agreeTerms')}
         </label>
         <label className="flex items-start gap-3 text-sm text-[#222222]">
           <input
@@ -461,8 +464,7 @@ function StepConfirm({
             onChange={(e) => setAgreeExcluded(e.target.checked)}
             className="mt-0.5 h-5 w-5 shrink-0 accent-[#C4956A]"
           />
-          I confirm the excluded services (no overnight, pool, vehicle,
-          medication)
+          {t('booking.agreeExcluded')}
         </label>
       </div>
 
@@ -473,11 +475,11 @@ function StepConfirm({
         disabled={!agreeTerms || !agreeExcluded || submitting}
         onClick={onSubmit}
       >
-        {submitting ? "Submitting..." : "Confirm booking"}
+        {submitting ? t('booking.submitting') : t('booking.confirmBooking')}
       </Button>
 
       <p className="text-sm text-[#717171]">
-        You won&#39;t be charged until the sitter confirms
+        {t('booking.chargeNote')}
       </p>
 
       <Button
@@ -486,7 +488,7 @@ function StepConfirm({
         onClick={onBack}
         disabled={submitting}
       >
-        Back
+        {t('common.back')}
       </Button>
     </div>
   );
@@ -494,6 +496,7 @@ function StepConfirm({
 
 /* ── Page ── */
 export default function BookingPage() {
+  const t = useTranslations();
   const { sitterId } = useParams<{ sitterId: string }>();
   const router = useRouter();
 
@@ -529,7 +532,7 @@ export default function BookingPage() {
 
       const res = await fetch(`/api/sitters/${sitterId}`);
       if (!res.ok) {
-        setError("Sitter not found");
+        setError(t('booking.sitterNotFound'));
         setLoading(false);
         return;
       }
@@ -537,7 +540,7 @@ export default function BookingPage() {
       setLoading(false);
     }
     init();
-  }, [sitterId, router]);
+  }, [sitterId, router, t]);
 
   const next = () => setCurrentStep((s) => Math.min(s + 1, 4));
   const back = () => setCurrentStep((s) => Math.max(s - 1, 1));
@@ -575,13 +578,13 @@ export default function BookingPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Something went wrong");
+        setError(data.error || t('common.error'));
         return;
       }
 
       router.push(`/booking/${data.bookingId}`);
     } catch {
-      setError("Network error. Please try again.");
+      setError(t('booking.networkError'));
     } finally {
       setSubmitting(false);
     }
@@ -592,7 +595,7 @@ export default function BookingPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">Loading...</p>
+          <p className="text-[#717171]">{t('common.loading')}</p>
         </main>
         <Footer />
       </div>
@@ -604,7 +607,7 @@ export default function BookingPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">{error || "Sitter not found"}</p>
+          <p className="text-[#717171]">{error || t('booking.sitterNotFound')}</p>
         </main>
         <Footer />
       </div>

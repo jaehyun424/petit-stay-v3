@@ -4,9 +4,11 @@ import { Badge } from "@/src/components/ui/badge";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { getSitters, buildSitterBadges } from "@/src/lib/queries";
+import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
   const sitters = await getSitters(4);
+  const t = await getTranslations();
 
   return (
     <>
@@ -21,14 +23,13 @@ export default async function Home() {
                 className="text-[32px] leading-[1.2] font-semibold tracking-tight text-[#222222] md:text-[48px]"
                 style={{ fontFamily: "var(--font-serif)" }}
               >
-                Find a trusted babysitter in Seoul
+                {t('landing.heroTitle')}
               </h1>
               <p className="max-w-md text-base leading-relaxed text-[#717171]">
-                Verified multilingual sitters for traveling families. Book in
-                minutes, enjoy your evening.
+                {t('landing.heroSubtitle')}
               </p>
               <div>
-                <Button variant="primary">Find a sitter</Button>
+                <Button variant="primary">{t('landing.heroCta')}</Button>
               </div>
             </div>
             <div className="flex-1">
@@ -59,26 +60,26 @@ export default async function Home() {
           <div className="flex flex-col gap-8 md:flex-row md:justify-between">
             <div className="flex-1">
               <p className="text-base font-semibold text-[#222222]">
-                ID Verified
+                {t('landing.trustVerified')}
               </p>
               <p className="mt-1 text-sm text-[#717171]">
-                Every sitter completes identity verification before joining
+                {t('landing.trustVerifiedDesc')}
               </p>
             </div>
             <div className="flex-1">
               <p className="text-base font-semibold text-[#222222]">
-                Insured Sessions
+                {t('landing.trustInsured')}
               </p>
               <p className="mt-1 text-sm text-[#717171]">
-                Liability insurance covers every booking on the platform
+                {t('landing.trustInsuredDesc')}
               </p>
             </div>
             <div className="flex-1">
               <p className="text-base font-semibold text-[#222222]">
-                Verified Reviews Only
+                {t('landing.trustReviews')}
               </p>
               <p className="mt-1 text-sm text-[#717171]">
-                Reviews come from parents with completed, paid sessions
+                {t('landing.trustReviewsDesc')}
               </p>
             </div>
           </div>
@@ -89,24 +90,24 @@ export default async function Home() {
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-16">
           <h2 className="mb-10 text-[22px] font-semibold text-[#222222]">
-            How it works
+            {t('landing.howTitle')}
           </h2>
           <div className="flex flex-col gap-10 md:flex-row md:gap-16">
             {[
               {
                 num: "1",
-                title: "Search",
-                desc: "Browse verified sitters by date, time, and language",
+                title: t('landing.how1Title'),
+                desc: t('landing.how1Desc'),
               },
               {
                 num: "2",
-                title: "Book",
-                desc: "Choose your sitter and confirm in minutes",
+                title: t('landing.how2Title'),
+                desc: t('landing.how2Desc'),
               },
               {
                 num: "3",
-                title: "Relax",
-                desc: "Enjoy your evening. Get a care report when done.",
+                title: t('landing.how3Title'),
+                desc: t('landing.how3Desc'),
               },
             ].map((step) => (
               <div key={step.num} className="flex-1">
@@ -129,7 +130,7 @@ export default async function Home() {
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-16">
           <h2 className="mb-10 text-[22px] font-semibold text-[#222222]">
-            Meet our sitters
+            {t('landing.sittersTitle')}
           </h2>
           {sitters && sitters.length > 0 ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
@@ -157,7 +158,7 @@ export default async function Home() {
                         ))}
                       </div>
                       <p className="mt-2 text-sm font-semibold text-[#222222]">
-                        {sitter.hourly_rate.toLocaleString()}원/시간
+                        {sitter.hourly_rate.toLocaleString()}{t('landing.perHour')}
                       </p>
                     </CardContent>
                   </Card>
@@ -165,7 +166,7 @@ export default async function Home() {
               })}
             </div>
           ) : (
-            <p className="text-base text-[#717171]">No sitters available yet</p>
+            <p className="text-base text-[#717171]">{t('landing.noSitters')}</p>
           )}
         </div>
       </section>
@@ -174,13 +175,13 @@ export default async function Home() {
       <section className="bg-[#C4956A]">
         <div className="mx-auto max-w-[1280px] px-6 py-16 text-center">
           <h2 className="mb-6 text-[22px] font-semibold text-white">
-            Your evening in Seoul starts here
+            {t('landing.ctaTitle')}
           </h2>
           <Button
             variant="secondary"
             className="border-white text-white hover:bg-white/10"
           >
-            Find a sitter
+            {t('landing.heroCta')}
           </Button>
         </div>
       </section>

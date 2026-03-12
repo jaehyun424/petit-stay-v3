@@ -3,23 +3,22 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Avatar } from "@/src/components/ui/avatar";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
 
-const RATING_LABELS = ["Poor", "Fair", "Good", "Great", "Excellent"] as const;
-
-const TAGS = [
-  "Punctual",
-  "Great with kids",
-  "Good communicator",
-  "Creative activities",
-  "Professional",
-  "Caring",
-  "Would book again",
-  "Flexible",
+const TAG_KEYS = [
+  "tagPunctual",
+  "tagGreatWithKids",
+  "tagCommunicator",
+  "tagCreative",
+  "tagProfessional",
+  "tagCaring",
+  "tagWouldBookAgain",
+  "tagFlexible",
 ] as const;
 
 function StarIcon({ filled }: { filled: boolean }) {
@@ -61,6 +60,7 @@ function formatTime(timeStr: string): string {
 }
 
 export default function ReviewPage() {
+  const t = useTranslations();
   const { bookingId } = useParams<{ bookingId: string }>();
   const router = useRouter();
 
@@ -77,6 +77,14 @@ export default function ReviewPage() {
 
   const displayRating = hoveredRating || rating;
 
+  const RATING_LABELS = [
+    t('review.poor'),
+    t('review.fair'),
+    t('review.good'),
+    t('review.great'),
+    t('review.excellent'),
+  ];
+
   useEffect(() => {
     async function loadBooking() {
       const res = await fetch(`/api/bookings/${bookingId}`);
@@ -85,7 +93,7 @@ export default function ReviewPage() {
         return;
       }
       if (!res.ok) {
-        setError("Booking not found");
+        setError(t('review.bookingNotFound'));
         setLoading(false);
         return;
       }
@@ -106,7 +114,7 @@ export default function ReviewPage() {
       setLoading(false);
     }
     loadBooking();
-  }, [bookingId, router]);
+  }, [bookingId, router, t]);
 
   function toggleTag(tag: string) {
     setSelectedTags((prev) =>
@@ -132,7 +140,7 @@ export default function ReviewPage() {
 
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Failed to submit review");
+      setError(data.error ?? t('common.error'));
       setSubmitting(false);
       return;
     }
@@ -146,7 +154,7 @@ export default function ReviewPage() {
       <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
         <Header />
         <main className="flex flex-1 items-center justify-center">
-          <p className="text-[#717171]">Loading...</p>
+          <p className="text-[#717171]">{t('common.loading')}</p>
         </main>
         <Footer />
       </div>
@@ -158,7 +166,7 @@ export default function ReviewPage() {
       <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
         <Header />
         <main className="flex flex-1 items-center justify-center">
-          <p className="text-[#717171]">{error || "Booking not found"}</p>
+          <p className="text-[#717171]">{error || t('review.bookingNotFound')}</p>
         </main>
         <Footer />
       </div>
@@ -172,14 +180,14 @@ export default function ReviewPage() {
         <main className="flex flex-1 flex-col items-center justify-center px-6">
           <div className="text-center">
             <h1 className="text-[22px] font-semibold text-[var(--color-text-primary)]">
-              Already reviewed
+              {t('review.alreadyReviewed')}
             </h1>
             <p className="mt-3 text-base text-[var(--color-text-secondary)]">
-              You have already submitted a review for this session.
+              {t('review.alreadyReviewedNote')}
             </p>
             <div className="mt-8">
               <Button variant="secondary" asChild>
-                <Link href={`/booking/${bookingId}`}>Back to booking</Link>
+                <Link href={`/booking/${bookingId}`}>{t('review.backToBooking')}</Link>
               </Button>
             </div>
           </div>
@@ -196,14 +204,14 @@ export default function ReviewPage() {
         <main className="flex flex-1 flex-col items-center justify-center px-6">
           <div className="text-center">
             <h1 className="text-[22px] font-semibold text-[var(--color-text-primary)]">
-              Thank you for your review!
+              {t('review.thankYou')}
             </h1>
             <p className="mt-3 text-base text-[var(--color-text-secondary)]">
-              Your feedback helps other families find great sitters.
+              {t('review.helpNote')}
             </p>
             <div className="mt-8">
               <Button variant="secondary" asChild>
-                <Link href="/">Back to home</Link>
+                <Link href="/">{t('review.backToHome')}</Link>
               </Button>
             </div>
           </div>
@@ -226,7 +234,7 @@ export default function ReviewPage() {
                 {bookingInfo.sitter_name}
               </span>
               {bookingInfo.sitter_is_verified && (
-                <Badge variant="verified">Verified</Badge>
+                <Badge variant="verified">{t('common.verified')}</Badge>
               )}
             </div>
             <p className="mt-0.5 text-sm text-[var(--color-text-secondary)]">
@@ -245,7 +253,7 @@ export default function ReviewPage() {
         {/* Star rating */}
         <section className="py-6">
           <h2 className="text-[22px] font-semibold text-[var(--color-text-primary)]">
-            How was your experience?
+            {t('review.howWas')}
           </h2>
           <div
             className="mt-4 flex gap-1"
@@ -274,23 +282,24 @@ export default function ReviewPage() {
         {/* Keyword tags */}
         <section className="py-6">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-            What stood out?
+            {t('review.whatStoodOut')}
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
-            {TAGS.map((tag) => {
-              const isSelected = selectedTags.includes(tag);
+            {TAG_KEYS.map((tagKey) => {
+              const label = t(`review.${tagKey}`);
+              const isSelected = selectedTags.includes(label);
               return (
                 <button
-                  key={tag}
+                  key={tagKey}
                   type="button"
-                  onClick={() => toggleTag(tag)}
+                  onClick={() => toggleTag(label)}
                   className={`cursor-pointer rounded-[4px] px-4 py-2 text-sm font-medium transition-colors ${
                     isSelected
                       ? "bg-[#C4956A] text-white"
                       : "bg-[#F5F0EB] text-[#8B7355]"
                   }`}
                 >
-                  {tag}
+                  {label}
                 </button>
               );
             })}
@@ -300,7 +309,7 @@ export default function ReviewPage() {
         {/* Review text */}
         <section className="py-6">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-            Tell other families about your experience
+            {t('review.tellOthers')}
           </h2>
           <textarea
             value={reviewText}
@@ -309,7 +318,7 @@ export default function ReviewPage() {
                 setReviewText(e.target.value);
               }
             }}
-            placeholder="What would you like other parents to know?"
+            placeholder={t('review.placeholder')}
             className="mt-4 h-[120px] w-full resize-none rounded-[8px] border border-[#DDDDDD] bg-[var(--color-bg)] px-4 py-4 text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-weak)] outline-none transition-[border-color] duration-200 focus:border-2 focus:border-[var(--color-border-hover)] focus:px-[15px] focus:py-[15px]"
           />
           <p className="mt-2 text-right text-sm text-[var(--color-text-weak)]">
@@ -324,10 +333,10 @@ export default function ReviewPage() {
             disabled={rating === 0 || submitting}
             onClick={handleSubmit}
           >
-            {submitting ? "Submitting..." : "Submit review"}
+            {submitting ? t('review.submitting') : t('review.submit')}
           </Button>
           <p className="mt-3 text-center text-sm text-[var(--color-text-secondary)]">
-            Your review will be visible after verification
+            {t('review.verifyNote')}
           </p>
         </section>
       </main>

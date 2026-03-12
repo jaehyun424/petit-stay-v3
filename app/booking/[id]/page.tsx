@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Button } from "@/src/components/ui/button";
@@ -69,7 +70,7 @@ function formatDate(dateStr: string): string {
 }
 
 function formatWon(amount: number): string {
-  return `${amount.toLocaleString()}원`;
+  return `${amount.toLocaleString()}`;
 }
 
 function formatTime(timeStr: string): string {
@@ -95,14 +96,9 @@ function getSitterName(booking: BookingData): string {
   return booking.sitter_profiles?.profiles?.full_name ?? "Unknown";
 }
 
-const STATUS_OPTIONS: { key: BookingStatus; label: string }[] = [
-  { key: "confirmed", label: "Confirmed" },
-  { key: "inProgress", label: "In Progress" },
-  { key: "completed", label: "Completed" },
-];
-
 /* ── Confirmed ── */
 function ConfirmedView({ booking }: { booking: BookingData }) {
+  const t = useTranslations('bookingDetail');
   const sitterName = getSitterName(booking);
   const isVerified = booking.sitter_profiles?.is_verified ?? false;
   const childCount = booking.booking_children.length;
@@ -113,11 +109,10 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
       {/* Banner */}
       <div className="rounded-[var(--radius-card)] bg-[#F5F0EB] p-5">
         <p className="text-lg font-semibold text-[var(--color-text-primary)]">
-          Booking confirmed ✓
+          {t('confirmed')}
         </p>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-          {sitterName} will arrive at {formatTime(booking.start_time)} on{" "}
-          {formatDate(booking.date)}
+          {t('sitterArrival', { name: sitterName, time: formatTime(booking.start_time), date: formatDate(booking.date) })}
         </p>
       </div>
 
@@ -127,14 +122,14 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
           {/* Sitter */}
           <div className="flex items-center justify-between">
             <span className="text-sm text-[var(--color-text-secondary)]">
-              Sitter
+              {t('sitterLabel')}
             </span>
             <div className="flex items-center gap-2">
               <Avatar size="sm" fallback={sitterName.charAt(0)} />
               <span className="text-sm font-medium text-[var(--color-text-primary)]">
                 {sitterName}
               </span>
-              {isVerified && <Badge variant="verified">Verified</Badge>}
+              {isVerified && <Badge variant="verified">{t('statusConfirmed')}</Badge>}
             </div>
           </div>
 
@@ -143,7 +138,7 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
           {/* Date */}
           <div className="flex items-center justify-between">
             <span className="text-sm text-[var(--color-text-secondary)]">
-              Date
+              {t('dateLabel')}
             </span>
             <span className="text-sm text-[var(--color-text-primary)]">
               {formatDate(booking.date)}
@@ -155,7 +150,7 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
           {/* Time */}
           <div className="flex items-center justify-between">
             <span className="text-sm text-[var(--color-text-secondary)]">
-              Time
+              {t('timeLabel')}
             </span>
             <span className="text-sm text-[var(--color-text-primary)]">
               {formatTime(booking.start_time)} –{" "}
@@ -168,7 +163,7 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
           {/* Children */}
           <div className="flex items-center justify-between">
             <span className="text-sm text-[var(--color-text-secondary)]">
-              Children
+              {t('childrenLabel')}
             </span>
             <span className="text-sm text-[var(--color-text-primary)]">
               {childCount} child{childCount !== 1 ? "ren" : ""}
@@ -180,7 +175,7 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
           {/* Emergency contact */}
           <div className="flex items-center justify-between">
             <span className="text-sm text-[var(--color-text-secondary)]">
-              Emergency contact
+              {t('emergencyContact')}
             </span>
             <span className="text-sm text-[var(--color-text-primary)]">
               {contact
@@ -194,10 +189,10 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
           {/* Total paid */}
           <div className="flex items-center justify-between">
             <span className="text-sm text-[var(--color-text-secondary)]">
-              Total paid
+              {t('totalPaid')}
             </span>
             <span className="text-sm font-semibold text-[var(--color-text-primary)]">
-              {formatWon(booking.total_amount)}
+              {formatWon(booking.total_amount)}원
             </span>
           </div>
         </div>
@@ -206,17 +201,16 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
       {/* Actions */}
       <div className="flex flex-col gap-3">
         <Button variant="secondary" className="w-full">
-          Contact sitter
+          {t('contactSitter')}
         </Button>
         <Button
           variant="ghost"
           className="w-full text-[var(--color-error)] no-underline hover:text-[var(--color-error)]"
         >
-          Cancel booking
+          {t('cancelBooking')}
         </Button>
         <p className="text-center text-sm text-[var(--color-text-secondary)]">
-          Free cancellation until{" "}
-          {getCancellationDeadline(booking.date, booking.start_time)}
+          {t('freeCancellation', { deadline: getCancellationDeadline(booking.date, booking.start_time) })}
         </p>
       </div>
     </div>
@@ -225,6 +219,7 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
 
 /* ── In Progress ── */
 function InProgressView({ booking }: { booking: BookingData }) {
+  const t = useTranslations('bookingDetail');
   const sitterName = getSitterName(booking);
   const report = booking.session_reports[0];
 
@@ -232,17 +227,17 @@ function InProgressView({ booking }: { booking: BookingData }) {
     ? [
         {
           time: report.check_in_at.slice(11, 16),
-          desc: `${sitterName} arrived and checked in`,
+          desc: t('arrivedCheckedIn', { name: sitterName }),
         },
         {
           time: report.check_in_at.slice(11, 16),
-          desc: "Session started",
+          desc: t('sessionStarted'),
         },
       ]
     : [
         {
           time: formatTime(booking.start_time),
-          desc: `Waiting for ${sitterName} to arrive`,
+          desc: t('waitingArrival', { name: sitterName }),
         },
       ];
 
@@ -250,11 +245,11 @@ function InProgressView({ booking }: { booking: BookingData }) {
     <div className="flex flex-col gap-6">
       {/* Banner */}
       <div className="rounded-[var(--radius-card)] bg-[var(--color-cta)] p-5 text-white">
-        <p className="text-lg font-semibold">Session in progress</p>
+        <p className="text-lg font-semibold">{t('inProgress')}</p>
         <p className="mt-1 text-sm">
           {report
-            ? `${sitterName} checked in at ${report.check_in_at.slice(11, 16)}`
-            : `Waiting for ${sitterName} to check in`}
+            ? t('checkedIn', { name: sitterName, time: report.check_in_at.slice(11, 16) })
+            : t('waitingCheckIn', { name: sitterName })}
         </p>
       </div>
 
@@ -284,7 +279,7 @@ function InProgressView({ booking }: { booking: BookingData }) {
 
       {/* Footer note */}
       <p className="text-sm text-[var(--color-text-secondary)]">
-        {sitterName} will send a care report when the session ends
+        {t('careReportNote', { name: sitterName })}
       </p>
     </div>
   );
@@ -292,15 +287,16 @@ function InProgressView({ booking }: { booking: BookingData }) {
 
 /* ── Completed ── */
 function CompletedView({ booking }: { booking: BookingData }) {
+  const t = useTranslations('bookingDetail');
   const sitterName = getSitterName(booking);
   const report = booking.session_reports[0];
 
   const sections = report
     ? [
-        { title: "Activities", body: report.activities },
-        { title: "Mood & Behavior", body: report.mood_behavior },
-        { title: "Sleep", body: report.sleep_notes },
-        { title: "Notes", body: report.additional_notes },
+        { title: t('activities'), body: report.activities },
+        { title: t('moodBehavior'), body: report.mood_behavior },
+        { title: t('sleep'), body: report.sleep_notes },
+        { title: t('notes'), body: report.additional_notes },
       ].filter((s) => s.body)
     : [];
 
@@ -309,7 +305,7 @@ function CompletedView({ booking }: { booking: BookingData }) {
       {/* Banner */}
       <div className="rounded-[var(--radius-card)] bg-[#F5F0EB] p-5">
         <p className="text-lg font-semibold text-[var(--color-text-primary)]">
-          Session completed ✓
+          {t('completed')}
         </p>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
           {formatDate(booking.date)} · {formatTime(booking.start_time)} –{" "}
@@ -321,7 +317,7 @@ function CompletedView({ booking }: { booking: BookingData }) {
       {sections.length > 0 && (
         <div className="rounded-[var(--radius-card)] bg-white p-5 shadow-[var(--shadow-md)]">
           <p className="text-lg font-semibold text-[var(--color-text-primary)]">
-            Care Report from {sitterName}
+            {t('careReport', { name: sitterName })}
           </p>
 
           <div className="mt-4 flex flex-col">
@@ -346,15 +342,15 @@ function CompletedView({ booking }: { booking: BookingData }) {
       <div className="flex flex-col gap-2">
         {booking.reviews.length > 0 ? (
           <p className="text-center text-sm text-[var(--color-text-secondary)]">
-            You&apos;ve already reviewed this session
+            {t('alreadyReviewed')}
           </p>
         ) : (
           <>
             <Button variant="primary" className="w-full" asChild>
-              <Link href={`/review/${booking.id}`}>Write a review</Link>
+              <Link href={`/review/${booking.id}`}>{t('writeReview')}</Link>
             </Button>
             <p className="text-center text-sm text-[var(--color-text-secondary)]">
-              Your review helps other families find great sitters
+              {t('reviewHelps')}
             </p>
           </>
         )}
@@ -365,6 +361,7 @@ function CompletedView({ booking }: { booking: BookingData }) {
 
 /* ── Main Page ── */
 export default function BookingDetailPage() {
+  const t = useTranslations();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
@@ -372,6 +369,12 @@ export default function BookingDetailPage() {
   const [status, setStatus] = useState<BookingStatus>("confirmed");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const STATUS_OPTIONS: { key: BookingStatus; label: string }[] = [
+    { key: "confirmed", label: t('bookingDetail.statusConfirmed') },
+    { key: "inProgress", label: t('bookingDetail.statusInProgress') },
+    { key: "completed", label: t('bookingDetail.statusCompleted') },
+  ];
 
   useEffect(() => {
     async function init() {
@@ -381,7 +384,7 @@ export default function BookingDetailPage() {
         return;
       }
       if (!res.ok) {
-        setError("Booking not found");
+        setError(t('bookingDetail.notFound'));
         setLoading(false);
         return;
       }
@@ -391,14 +394,14 @@ export default function BookingDetailPage() {
       setLoading(false);
     }
     init();
-  }, [id, router]);
+  }, [id, router, t]);
 
   if (loading) {
     return (
       <div className="flex min-h-screen flex-col bg-[var(--color-bg-page)]">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">Loading...</p>
+          <p className="text-[#717171]">{t('common.loading')}</p>
         </main>
         <Footer />
       </div>
@@ -410,7 +413,7 @@ export default function BookingDetailPage() {
       <div className="flex min-h-screen flex-col bg-[var(--color-bg-page)]">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">{error || "Booking not found"}</p>
+          <p className="text-[#717171]">{error || t('bookingDetail.notFound')}</p>
         </main>
         <Footer />
       </div>

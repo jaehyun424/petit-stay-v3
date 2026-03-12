@@ -2,6 +2,7 @@
 
 import { type FormEvent, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Header } from "@/src/components/layout/header";
@@ -12,6 +13,7 @@ import type { UserRole } from "@/src/lib/supabase/types";
 type Role = "parent" | "sitter" | null;
 
 export default function SignupPage() {
+  const t = useTranslations();
   const [role, setRole] = useState<Role>(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,11 +29,11 @@ export default function SignupPage() {
     setError(null);
 
     if (!role) {
-      setError("Please select a role");
+      setError(t('auth.selectRole'));
       return;
     }
     if (!agreed) {
-      setError("Please agree to the Terms of Service and Privacy Policy");
+      setError(t('auth.agreeRequired'));
       return;
     }
 
@@ -67,18 +69,16 @@ export default function SignupPage() {
         <main className="flex flex-1 justify-center px-6 py-16">
           <div className="w-full max-w-[400px] text-center">
             <h1 className="text-[26px] font-semibold text-[#222222]">
-              Check your email
+              {t('auth.checkEmail')}
             </h1>
             <p className="mt-4 text-sm text-[#717171]">
-              We sent a confirmation link to <strong>{email}</strong>.
-              <br />
-              Please check your email to confirm your account.
+              {t('auth.confirmEmail', { email })}
             </p>
             <Link
               href="/login"
               className="mt-8 inline-block text-sm text-[#222222] underline"
             >
-              Back to login
+              {t('auth.backToLogin')}
             </Link>
           </div>
         </main>
@@ -95,10 +95,10 @@ export default function SignupPage() {
         <div className="w-full max-w-[400px]">
           {/* Title */}
           <h1 className="text-[26px] font-semibold text-[#222222]">
-            Create an account
+            {t('auth.signupTitle')}
           </h1>
           <p className="mt-2 text-sm text-[#717171]">
-            Join Petit Stay as a parent or sitter
+            {t('auth.signupDesc')}
           </p>
 
           {/* Role selection */}
@@ -113,10 +113,10 @@ export default function SignupPage() {
               }`}
             >
               <p className="text-sm font-semibold text-[#222222]">
-                I&apos;m a parent
+                {t('auth.imParent')}
               </p>
               <p className="mt-1 text-xs text-[#717171]">
-                Find trusted sitters for your children
+                {t('auth.parentDesc')}
               </p>
             </button>
 
@@ -130,10 +130,10 @@ export default function SignupPage() {
               }`}
             >
               <p className="text-sm font-semibold text-[#222222]">
-                I&apos;m a sitter
+                {t('auth.imSitter')}
               </p>
               <p className="mt-1 text-xs text-[#717171]">
-                Earn by caring for traveling families
+                {t('auth.sitterDesc')}
               </p>
             </button>
           </div>
@@ -141,21 +141,21 @@ export default function SignupPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <Input
-              placeholder="Full name"
+              placeholder={t('auth.fullName')}
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
             />
             <Input
-              placeholder="Email address"
+              placeholder={t('auth.email')}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
             <Input
-              placeholder="Password"
+              placeholder={t('auth.password')}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -163,7 +163,7 @@ export default function SignupPage() {
               minLength={6}
             />
             <Input
-              placeholder="Phone number"
+              placeholder={t('auth.phone')}
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -177,7 +177,7 @@ export default function SignupPage() {
                 onChange={(e) => setAgreed(e.target.checked)}
                 className="mt-0.5 h-4 w-4 shrink-0 accent-[#C4956A]"
               />
-              <span>I agree to the Terms of Service and Privacy Policy</span>
+              <span>{t('auth.agreeTerms')}</span>
             </label>
 
             {error && (
@@ -190,32 +190,32 @@ export default function SignupPage() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? "Creating account..." : "Create account"}
+              {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
             </Button>
           </form>
 
           {/* Divider */}
           <div className="my-8 flex items-center gap-4">
             <div className="h-px flex-1 bg-[#DDDDDD]" />
-            <span className="text-sm text-[#B0B0B0]">or</span>
+            <span className="text-sm text-[#B0B0B0]">{t('auth.orDivider')}</span>
             <div className="h-px flex-1 bg-[#DDDDDD]" />
           </div>
 
           {/* Social buttons */}
           <div className="flex flex-col gap-3">
             <Button variant="secondary" className="w-full">
-              Continue with Google
+              {t('auth.continueGoogle')}
             </Button>
             <Button variant="secondary" className="w-full">
-              Continue with Kakao
+              {t('auth.continueKakao')}
             </Button>
           </div>
 
           {/* Login link */}
           <p className="mt-8 text-center text-sm text-[#717171]">
-            Already have an account?{" "}
+            {t('auth.hasAccount')}{" "}
             <Link href="/login" className="text-[#222222] underline">
-              Log in
+              {t('common.login')}
             </Link>
           </p>
         </div>

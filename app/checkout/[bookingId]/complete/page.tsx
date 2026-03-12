@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Button } from "@/src/components/ui/button";
 
 export default function CompletePage() {
+  const t = useTranslations('checkout');
   const params = useParams();
   const searchParams = useSearchParams();
   const bookingId = params.bookingId as string;
@@ -57,10 +59,10 @@ export default function CompletePage() {
             <>
               <div className="mx-auto mb-6 h-16 w-16 animate-spin rounded-full border-4 border-[#DDDDDD] border-t-[#C4956A]" />
               <h1 className="text-[24px] font-bold text-[#222222]">
-                Confirming your payment...
+                {t('confirmingPayment')}
               </h1>
               <p className="mt-2 text-sm text-[#717171]">
-                Please wait while we verify your payment.
+                {t('verifyingPayment')}
               </p>
             </>
           )}
@@ -83,14 +85,14 @@ export default function CompletePage() {
                 </svg>
               </div>
               <h1 className="text-[24px] font-bold text-[#222222]">
-                Payment confirmed!
+                {t('paymentConfirmed')}
               </h1>
               <p className="mt-2 text-sm text-[#717171]">
-                Your booking is confirmed. The sitter will be notified.
+                {t('bookingConfirmedNote')}
               </p>
               <div className="mt-8">
                 <Button asChild>
-                  <Link href={`/booking/${bookingId}`}>View booking</Link>
+                  <Link href={`/booking/${bookingId}`}>{t('viewBooking')}</Link>
                 </Button>
               </div>
             </>
@@ -114,14 +116,14 @@ export default function CompletePage() {
                 </svg>
               </div>
               <h1 className="text-[24px] font-bold text-[#222222]">
-                Payment failed
+                {t('paymentFailed')}
               </h1>
               <p className="mt-2 text-sm text-[#717171]">
-                {error || "Your payment could not be processed. Please try again."}
+                {error || t('paymentFailedNote')}
               </p>
               <div className="mt-8">
                 <Button asChild>
-                  <Link href={`/checkout/${bookingId}`}>Try again</Link>
+                  <Link href={`/checkout/${bookingId}`}>{t('tryAgain')}</Link>
                 </Button>
               </div>
             </>

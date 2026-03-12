@@ -10,6 +10,7 @@ import {
   formatAvailability,
   formatRelativeTime,
 } from "@/src/lib/queries";
+import { getTranslations } from "next-intl/server";
 
 function Stars({ count }: { count: number }) {
   const full = Math.round(count);
@@ -28,6 +29,7 @@ export default async function SitterProfilePage({
 }) {
   const { id } = await params;
   const sitter = await getSitterById(id);
+  const t = await getTranslations();
 
   if (!sitter) notFound();
 
@@ -73,11 +75,11 @@ export default async function SitterProfilePage({
               </div>
 
               <p className="text-base text-[#222222]">
-                ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count} reviews)
+                ★ {sitter.rating_avg.toFixed(2)} ({t('sitter.reviewCountText', { count: sitter.review_count })})
               </p>
 
               <p className="text-[22px] font-semibold text-[#222222]">
-                {formattedPrice}원/시간
+                {formattedPrice}{t('sitter.perHour')}
               </p>
 
               {sitter.bio && (
@@ -85,11 +87,11 @@ export default async function SitterProfilePage({
               )}
 
               <div className="hidden md:block">
-                <Button variant="primary">Book {firstName}</Button>
+                <Button variant="primary">{t('sitter.bookSitter', { name: firstName })}</Button>
               </div>
               <div className="md:hidden">
                 <Button variant="primary" className="w-full">
-                  Book {firstName}
+                  {t('sitter.bookSitter', { name: firstName })}
                 </Button>
               </div>
             </div>
@@ -111,7 +113,7 @@ export default async function SitterProfilePage({
               <path d="M18 14L36 24L18 34V14Z" fill="#C4B5A6" />
             </svg>
           </div>
-          <p className="mt-3 text-sm text-[#717171]">Video introduction</p>
+          <p className="mt-3 text-sm text-[#717171]">{t('sitter.videoIntro')}</p>
         </div>
       </section>
 
@@ -119,7 +121,7 @@ export default async function SitterProfilePage({
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-6">
           <h2 className="text-lg font-semibold text-[#222222]">
-            About {firstName}
+            {t('sitter.about', { name: firstName })}
           </h2>
           {sitter.bio ? (
             <p
@@ -135,7 +137,7 @@ export default async function SitterProfilePage({
             </p>
           ) : (
             <p className="mt-3 text-base text-[#717171]">
-              No bio available yet.
+              {t('sitter.noBio')}
             </p>
           )}
         </div>
@@ -146,7 +148,7 @@ export default async function SitterProfilePage({
         <section className="bg-[#F5F0EB]">
           <div className="mx-auto max-w-[1280px] px-6 py-8">
             <h2 className="text-lg font-semibold text-[#222222]">
-              Qualifications
+              {t('sitter.qualifications')}
             </h2>
             <ul className="mt-4">
               {certificationLines.map((q, i) => (
@@ -170,8 +172,8 @@ export default async function SitterProfilePage({
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-8">
           <h2 className="text-lg font-semibold text-[#222222]">
-            Reviews{" "}
-            <span className="font-semibold">({sitter.review_count})</span>
+            {t('sitter.reviews')}{" "}
+            <span className="font-semibold">{t('sitter.reviewCount', { count: sitter.review_count })}</span>
           </h2>
 
           {sitter.reviews.length > 0 ? (
@@ -211,7 +213,7 @@ export default async function SitterProfilePage({
               ))}
             </div>
           ) : (
-            <p className="mt-4 text-base text-[#717171]">No reviews yet.</p>
+            <p className="mt-4 text-base text-[#717171]">{t('sitter.noReviews')}</p>
           )}
 
           {sitter.review_count > 3 && (
@@ -219,7 +221,7 @@ export default async function SitterProfilePage({
               href="#"
               className="mt-4 inline-block text-sm text-[#222222] underline"
             >
-              See all {sitter.review_count} reviews
+              {t('sitter.seeAllReviews', { count: sitter.review_count })}
             </a>
           )}
         </div>
@@ -229,7 +231,7 @@ export default async function SitterProfilePage({
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-6">
           <h2 className="text-lg font-semibold text-[#222222]">
-            Availability
+            {t('sitter.availability')}
           </h2>
           {availabilityLines.length > 0 ? (
             <div className="mt-3 space-y-1">
@@ -241,11 +243,11 @@ export default async function SitterProfilePage({
             </div>
           ) : (
             <p className="mt-3 text-base text-[#717171]">
-              No availability set yet.
+              {t('sitter.noAvailability')}
             </p>
           )}
           <p className="mt-3 text-sm text-[#717171]">
-            24-hour advance booking recommended
+            {t('sitter.advanceBooking')}
           </p>
         </div>
       </section>
@@ -259,9 +261,9 @@ export default async function SitterProfilePage({
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#DDDDDD] bg-white px-6 py-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden">
         <div className="flex items-center justify-between gap-4">
           <p className="text-base font-semibold text-[#222222]">
-            {formattedPrice}원/시간
+            {formattedPrice}{t('sitter.perHour')}
           </p>
-          <Button variant="primary">Book {firstName}</Button>
+          <Button variant="primary">{t('sitter.bookSitter', { name: firstName })}</Button>
         </div>
       </div>
     </>

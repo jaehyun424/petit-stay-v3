@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Elements,
   PaymentElement,
@@ -35,6 +36,7 @@ interface BookingData {
 
 /* ── Booking Summary ── */
 function BookingSummary({ booking }: { booking: BookingData }) {
+  const t = useTranslations('checkout');
   const sitterName = booking.sitter_profiles?.profiles?.full_name ?? "Sitter";
   const rating = booking.sitter_profiles?.rating_avg;
   const startH = parseInt(booking.start_time.split(":")[0], 10);
@@ -56,7 +58,7 @@ function BookingSummary({ booking }: { booking: BookingData }) {
     <div className="rounded-[12px] bg-[#F5F0EB] p-5">
       <dl className="flex flex-col gap-3 text-sm">
         <div className="flex justify-between">
-          <dt className="text-[#717171]">Sitter</dt>
+          <dt className="text-[#717171]">{t('sitterLabel')}</dt>
           <dd className="font-medium text-[#222222]">
             {sitterName}
             {rating != null && (
@@ -68,18 +70,18 @@ function BookingSummary({ booking }: { booking: BookingData }) {
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">Date</dt>
+          <dt className="text-[#717171]">{t('dateLabel')}</dt>
           <dd className="font-medium text-[#222222]">{dateStr}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">Time</dt>
+          <dt className="text-[#717171]">{t('timeLabel')}</dt>
           <dd className="font-medium text-[#222222]">
             {booking.start_time.slice(0, 5)} – {booking.end_time.slice(0, 5)} (
-            {hours} {hours === 1 ? "hour" : "hours"})
+            {t('hoursCount', { count: hours })})
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">Children</dt>
+          <dt className="text-[#717171]">{t('childrenLabel')}</dt>
           <dd className="font-medium text-[#222222]">
             {childCount} {childCount === 1 ? "child" : "children"}
           </dd>
@@ -88,30 +90,30 @@ function BookingSummary({ booking }: { booking: BookingData }) {
         <hr className="my-3 border-t border-[#DDDDDD]" />
 
         <div className="flex justify-between">
-          <dt className="text-[#717171]">Rate</dt>
+          <dt className="text-[#717171]">{t('rateLabel')}</dt>
           <dd className="font-medium text-[#222222]">
-            {fmt(hourlyRate)}&nbsp;won &times; {hours} hours
+            {t('won', { amount: fmt(hourlyRate) })} &times; {t('hoursCount', { count: hours })}
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">Subtotal</dt>
+          <dt className="text-[#717171]">{t('subtotalLabel')}</dt>
           <dd className="font-medium text-[#222222]">
-            {fmt(booking.net_amount)}&nbsp;won
+            {t('won', { amount: fmt(booking.net_amount) })}
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">Service fee (20%)</dt>
+          <dt className="text-[#717171]">{t('serviceFeeLabel')}</dt>
           <dd className="font-medium text-[#222222]">
-            {fmt(booking.service_fee)}&nbsp;won
+            {t('won', { amount: fmt(booking.service_fee) })}
           </dd>
         </div>
 
         <hr className="my-3 border-t border-[#DDDDDD]" />
 
         <div className="flex justify-between">
-          <dt className="text-[18px] font-bold text-[#222222]">Total</dt>
+          <dt className="text-[18px] font-bold text-[#222222]">{t('totalLabel')}</dt>
           <dd className="text-[18px] font-bold text-[#222222]">
-            {fmt(booking.total_amount)}&nbsp;won
+            {t('won', { amount: fmt(booking.total_amount) })}
           </dd>
         </div>
       </dl>
@@ -129,6 +131,7 @@ function PaymentForm({
   showSummary: boolean;
   setShowSummary: (v: boolean) => void;
 }) {
+  const t = useTranslations('checkout');
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = useState(false);
@@ -153,11 +156,11 @@ function PaymentForm({
 
       // Only reaches here if there's an immediate error (redirect didn't happen)
       if (error) {
-        setErrorMsg(error.message ?? "Payment failed. Please try again.");
+        setErrorMsg(error.message ?? t('paymentFailedNote'));
       }
       setProcessing(false);
     },
-    [stripe, elements, booking.id]
+    [stripe, elements, booking.id, t]
   );
 
   return (
@@ -173,7 +176,7 @@ function PaymentForm({
                 onClick={() => setShowSummary(!showSummary)}
                 className="flex w-full items-center justify-between text-sm font-semibold text-[#222222]"
               >
-                View booking details
+                {t('viewBookingDetails')}
                 <span
                   className={`text-xs transition-transform duration-200 ${
                     showSummary ? "rotate-180" : ""
@@ -192,7 +195,7 @@ function PaymentForm({
             {/* Stripe Payment Element */}
             <section className="mb-8">
               <h2 className="mb-4 text-[18px] font-semibold text-[#222222]">
-                Payment method
+                {t('paymentMethod')}
               </h2>
               <PaymentElement />
             </section>
@@ -200,22 +203,20 @@ function PaymentForm({
             {/* Secure payment notice */}
             <section className="mb-8">
               <h3 className="text-base font-semibold text-[#222222]">
-                Secure payment
+                {t('securePayment')}
               </h3>
               <p className="mt-1 text-sm text-[#717171]">
-                Your payment is protected. You won&#39;t be charged until the
-                sitter confirms your booking.
+                {t('secureNote')}
               </p>
             </section>
 
             {/* Cancellation policy */}
             <section className="mb-8">
               <h3 className="text-base font-semibold text-[#222222]">
-                Cancellation policy
+                {t('cancellation')}
               </h3>
               <p className="mt-1 text-sm text-[#717171]">
-                Free cancellation up to 24 hours before the session.
-                Cancellations within 24 hours may be subject to a fee.
+                {t('cancellationNote')}
               </p>
             </section>
 
@@ -233,12 +234,11 @@ function PaymentForm({
               disabled={!stripe || !elements || processing}
             >
               {processing
-                ? "Processing..."
-                : `Pay ${fmt(booking.total_amount)}\u00A0won`}
+                ? t('processing')
+                : t('pay', { amount: fmt(booking.total_amount) })}
             </Button>
             <p className="mt-3 text-center text-xs text-[#B0B0B0]">
-              By confirming, you agree to our Terms of Service and Privacy
-              Policy
+              {t('agreeNote')}
             </p>
           </div>
 
