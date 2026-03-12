@@ -23,7 +23,8 @@
     "copyright": "© 2026 Petit Stay. All rights reserved."
   },
   "landing": {
-    "heroTitle": "在首爾找到值得信賴的保姆",
+    "heroTitle1": "在首爾尋找值得信賴的",
+    "heroTitle2": "保姆",
     "heroSubtitle": "為旅行家庭提供經過驗證的多語言保姆。幾分鐘即可預約，享受美好夜晚。",
     "heroCta": "尋找保姆",
     "trustVerified": "身份已驗證",
@@ -53,7 +54,12 @@
     "language": "語言",
     "available": "共 {count} 位保姆可預約",
     "noSitters": "目前尚無保姆",
-    "sortBy": "排序：推薦",
+    "sortBy": "排序",
+    "sortRecommended": "推薦",
+    "sortRating": "評分最高",
+    "sortPrice": "價格最低",
+    "sortReviews": "最多評論",
+    "age": "{age}歲",
     "perHour": " 韓元/小時"
   },
   "sitter": {

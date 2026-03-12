@@ -23,7 +23,8 @@
     "copyright": "© 2026 Petit Stay. All rights reserved."
   },
   "landing": {
-    "heroTitle": "서울에서 믿을 수 있는 베이비시터를 찾아보세요",
+    "heroTitle1": "서울에서 믿을 수 있는 ",
+    "heroTitle2": "베이비시터를 찾아보세요",
     "heroSubtitle": "여행 중인 가족을 위한 검증된 다국어 시터. 몇 분 만에 예약하고, 편안한 저녁을 즐기세요.",
     "heroCta": "시터 찾기",
     "trustVerified": "신원 확인 완료",
@@ -53,7 +54,12 @@
     "language": "언어",
     "available": "시터 {count}명 예약 가능",
     "noSitters": "아직 등록된 시터가 없습니다",
-    "sortBy": "정렬: 추천순",
+    "sortBy": "정렬",
+    "sortRecommended": "추천순",
+    "sortRating": "별점 높은순",
+    "sortPrice": "가격 낮은순",
+    "sortReviews": "리뷰 많은순",
+    "age": "{age}세",
     "perHour": "원/시간"
   },
   "sitter": {

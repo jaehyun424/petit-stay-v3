@@ -8,7 +8,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(
-        "bg-[var(--color-bg-card)] border-none rounded-[var(--radius-card)] overflow-hidden shadow-[var(--shadow-md)] transition-shadow duration-200 ease-in-out hover:shadow-[var(--shadow-lg)]",
+        "flex flex-col bg-[var(--color-bg-card)] border-none rounded-[var(--radius-card)] overflow-hidden shadow-[var(--shadow-md)] transition-shadow duration-200 ease-in-out hover:shadow-[var(--shadow-lg)]",
         className
       )}
       {...props}
@@ -37,7 +37,7 @@ const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("px-4 pb-4 pt-3", className)}
+      className={cn("flex-1 flex flex-col px-4 pb-4 pt-3", className)}
       {...props}
     />
   )

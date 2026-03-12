@@ -23,7 +23,8 @@
     "copyright": "© 2026 Petit Stay. All rights reserved."
   },
   "landing": {
-    "heroTitle": "ソウルで信頼できるベビーシッターを見つけよう",
+    "heroTitle1": "ソウルで信頼できる",
+    "heroTitle2": "ベビーシッターを探す",
     "heroSubtitle": "旅行中のご家族のための、身元確認済み・多言語対応シッター。数分で予約、夜のひとときをお楽しみください。",
     "heroCta": "シッターを探す",
     "trustVerified": "本人確認済み",
@@ -53,7 +54,12 @@
     "language": "言語",
     "available": "{count}名のシッターが見つかりました",
     "noSitters": "現在シッターが登録されていません",
-    "sortBy": "並び替え：おすすめ順",
+    "sortBy": "並び替え",
+    "sortRecommended": "おすすめ順",
+    "sortRating": "評価順",
+    "sortPrice": "料金が安い順",
+    "sortReviews": "レビュー数順",
+    "age": "{age}歳",
     "perHour": "ウォン/時間"
   },
   "sitter": {

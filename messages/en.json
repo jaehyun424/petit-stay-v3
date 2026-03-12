@@ -23,7 +23,8 @@
     "copyright": "© 2026 Petit Stay. All rights reserved."
   },
   "landing": {
-    "heroTitle": "Find a trusted babysitter in Seoul",
+    "heroTitle1": "Find a trusted ",
+    "heroTitle2": "babysitter in Seoul",
     "heroSubtitle": "Verified multilingual sitters for traveling families. Book in minutes, enjoy your evening.",
     "heroCta": "Find a sitter",
     "trustVerified": "ID Verified",
@@ -53,7 +54,12 @@
     "language": "Language",
     "available": "{count} sitters available",
     "noSitters": "No sitters available yet",
-    "sortBy": "Sort by: Recommended",
+    "sortBy": "Sort",
+    "sortRecommended": "Recommended",
+    "sortRating": "Highest rated",
+    "sortPrice": "Lowest price",
+    "sortReviews": "Most reviews",
+    "age": "{age} years",
     "perHour": " won/hr"
   },
   "sitter": {

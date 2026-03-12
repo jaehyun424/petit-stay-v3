@@ -6,9 +6,10 @@ import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { getSitters, buildSitterBadges } from "@/src/lib/queries";
 import { getTranslations } from "next-intl/server";
+import { SitterCarousel } from "@/src/components/ui/sitter-carousel";
 
 export default async function Home() {
-  const sitters = await getSitters(4);
+  const sitters = await getSitters(8);
   const t = await getTranslations();
 
   return (
@@ -23,9 +24,9 @@ export default async function Home() {
             <div className="flex flex-1 flex-col gap-6">
               <h1
                 className="text-[32px] leading-[1.2] font-semibold tracking-tight text-[#222222] md:text-[48px]"
-                style={{ fontFamily: "var(--font-serif)" }}
+                style={{ fontFamily: "var(--font-serif)", textWrap: "balance" }}
               >
-                {t('landing.heroTitle')}
+                {t('landing.heroTitle1')}<span className="whitespace-nowrap">{t('landing.heroTitle2')}</span>
               </h1>
               <p className="max-w-md text-base leading-relaxed text-[#717171]">
                 {t('landing.heroSubtitle')}
@@ -145,12 +146,12 @@ export default async function Home() {
             {t('landing.sittersTitle')}
           </h2>
           {sitters && sitters.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+            <SitterCarousel>
               {sitters.map((sitter) => {
                 const badges = buildSitterBadges(sitter);
                 return (
-                  <Link key={sitter.id} href={`/sitters/${sitter.id}`} className="block">
-                    <Card>
+                  <Link key={sitter.id} href={`/sitters/${sitter.id}`} className="block shrink-0 snap-start w-[220px] sm:w-[240px]">
+                    <Card className="h-full">
                       <div className="flex aspect-square w-full items-center justify-center overflow-hidden bg-[#E8E0D8]">
                         {sitter.avatar_url ? (
                           <img
@@ -165,20 +166,20 @@ export default async function Home() {
                         )}
                       </div>
                       <CardContent>
-                        <p className="text-sm font-semibold text-[#222222]">
+                        <p className="text-sm font-semibold text-[#222222] line-clamp-1">
                           {sitter.name}
                         </p>
                         <p className="mt-1 text-xs text-[#717171]">
                           ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count})
                         </p>
-                        <div className="mt-2 flex flex-wrap gap-1">
+                        <div className="mt-2 flex flex-wrap gap-1 overflow-hidden max-h-[52px]">
                           {badges.map((badge) => (
                             <Badge key={badge.label} variant={badge.variant}>
                               {badge.label}
                             </Badge>
                           ))}
                         </div>
-                        <p className="mt-2 text-sm font-semibold text-[#222222]">
+                        <p className="mt-auto pt-2 text-sm font-semibold text-[#222222]">
                           {sitter.hourly_rate.toLocaleString()}{t('landing.perHour')}
                         </p>
                       </CardContent>
@@ -186,7 +187,7 @@ export default async function Home() {
                   </Link>
                 );
               })}
-            </div>
+            </SitterCarousel>
           ) : (
             <p className="text-base text-[#717171]">{t('landing.noSitters')}</p>
           )}
