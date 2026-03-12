@@ -3,48 +3,11 @@ import { Card, CardContent } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
+import { getSitters, buildSitterBadges } from "@/src/lib/queries";
 
-const sitters = [
-  {
-    name: "Emily K.",
-    rating: 4.92,
-    reviews: 47,
-    badges: [
-      { label: "Verified", variant: "verified" as const },
-      { label: "L3 English", variant: "language" as const },
-    ],
-    price: "25,000",
-  },
-  {
-    name: "Sarah L.",
-    rating: 4.85,
-    reviews: 32,
-    badges: [
-      { label: "Verified", variant: "verified" as const },
-      { label: "L2 Japanese", variant: "language" as const },
-    ],
-    price: "30,000",
-  },
-  {
-    name: "Mika T.",
-    rating: 4.97,
-    reviews: 61,
-    badges: [
-      { label: "Verified", variant: "verified" as const },
-      { label: "CPR", variant: "certification" as const },
-    ],
-    price: "28,000",
-  },
-  {
-    name: "Yuna P.",
-    rating: 4.78,
-    reviews: 19,
-    badges: [{ label: "Verified", variant: "verified" as const }],
-    price: "22,000",
-  },
-];
+export default async function Home() {
+  const sitters = await getSitters(4);
 
-export default function Home() {
   return (
     <>
       <Header />
@@ -168,35 +131,42 @@ export default function Home() {
           <h2 className="mb-10 text-[22px] font-semibold text-[#222222]">
             Meet our sitters
           </h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {sitters.map((sitter) => (
-              <Card key={sitter.name}>
-                <div className="flex aspect-square w-full items-center justify-center bg-[#E8E0D8]">
-                  <span className="text-3xl font-semibold text-[#C4B5A6]">
-                    {sitter.name.charAt(0)}
-                  </span>
-                </div>
-                <CardContent>
-                  <p className="text-sm font-semibold text-[#222222]">
-                    {sitter.name}
-                  </p>
-                  <p className="mt-1 text-xs text-[#717171]">
-                    ★ {sitter.rating} ({sitter.reviews})
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-1">
-                    {sitter.badges.map((badge) => (
-                      <Badge key={badge.label} variant={badge.variant}>
-                        {badge.label}
-                      </Badge>
-                    ))}
-                  </div>
-                  <p className="mt-2 text-sm font-semibold text-[#222222]">
-                    {sitter.price}원/시간
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {sitters && sitters.length > 0 ? (
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+              {sitters.map((sitter) => {
+                const badges = buildSitterBadges(sitter);
+                return (
+                  <Card key={sitter.id}>
+                    <div className="flex aspect-square w-full items-center justify-center bg-[#E8E0D8]">
+                      <span className="text-3xl font-semibold text-[#C4B5A6]">
+                        {sitter.name.charAt(0)}
+                      </span>
+                    </div>
+                    <CardContent>
+                      <p className="text-sm font-semibold text-[#222222]">
+                        {sitter.name}
+                      </p>
+                      <p className="mt-1 text-xs text-[#717171]">
+                        ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count})
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {badges.map((badge) => (
+                          <Badge key={badge.label} variant={badge.variant}>
+                            {badge.label}
+                          </Badge>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-sm font-semibold text-[#222222]">
+                        {sitter.hourly_rate.toLocaleString()}원/시간
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-base text-[#717171]">No sitters available yet</p>
+          )}
         </div>
       </section>
 
