@@ -1,0 +1,71 @@
+/* ============================================================
+   Petit Stay V3 — Design Tokens
+   Airbnb + Care.com 기반. 수치 변경 금지.
+   ============================================================ */
+
+@theme {
+  /* ── Colors ── */
+  --color-bg: #FFFFFF;
+  --color-bg-page: #F7F7F7;
+  --color-bg-card: #FFFFFF;
+
+  --color-text-primary: #222222;
+  --color-text-secondary: #717171;
+  --color-text-weak: #B0B0B0;
+
+  --color-border: #DDDDDD;
+  --color-border-hover: #222222;
+
+  --color-cta: #C4956A;
+  --color-cta-hover: #B0845D;
+  --color-cta-text: #FFFFFF;
+
+  --color-success: #6B8F71;
+  --color-warning: #C4956A;
+  --color-error: #C13515;
+
+  /* Badge semantic — beige tone unified, top only gold */
+  --color-badge-verified-bg: #F5F0EB;
+  --color-badge-verified-text: #8B7355;
+  --color-badge-language-bg: #F5F0EB;
+  --color-badge-language-text: #8B7355;
+  --color-badge-cert-bg: #F5F0EB;
+  --color-badge-cert-text: #8B7355;
+  --color-badge-top-bg: #C4956A;
+  --color-badge-top-text: #FFFFFF;
+  --color-badge-default-bg: #F5F0EB;
+  --color-badge-default-text: #8B7355;
+
+  /* Avatar fallback */
+  --color-avatar-fallback-bg: #C4956A;
+  --color-avatar-fallback-text: #FFFFFF;
+
+  /* ── Typography ── */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  /* ── Border Radius ── */
+  --radius-badge: 4px;
+  --radius-button: 8px;
+  --radius-input: 8px;
+  --radius-card: 12px;
+  --radius-modal: 16px;
+  --radius-full: 9999px;
+
+  /* ── Spacing ── */
+  --spacing-section-mobile: 48px;
+  --spacing-section-desktop: 64px;
+  --spacing-grid-gap: 24px;
+  --spacing-page-x-mobile: 24px;
+  --spacing-page-x-desktop: 80px;
+  --spacing-page-max: 1280px;
+
+  /* ── Breakpoints (reference only, use @media) ── */
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1280px;
+}
