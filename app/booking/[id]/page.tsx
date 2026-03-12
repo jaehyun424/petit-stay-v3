@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Button } from "@/src/components/ui/button";
@@ -343,12 +344,20 @@ function CompletedView({ booking }: { booking: BookingData }) {
 
       {/* CTA */}
       <div className="flex flex-col gap-2">
-        <Button variant="primary" className="w-full">
-          Write a review
-        </Button>
-        <p className="text-center text-sm text-[var(--color-text-secondary)]">
-          Your review helps other families find great sitters
-        </p>
+        {booking.reviews.length > 0 ? (
+          <p className="text-center text-sm text-[var(--color-text-secondary)]">
+            You&apos;ve already reviewed this session
+          </p>
+        ) : (
+          <>
+            <Button variant="primary" className="w-full" asChild>
+              <Link href={`/review/${booking.id}`}>Write a review</Link>
+            </Button>
+            <p className="text-center text-sm text-[var(--color-text-secondary)]">
+              Your review helps other families find great sitters
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

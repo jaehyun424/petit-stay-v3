@@ -1,0 +1,89 @@
+import { NextResponse } from 'next/server'
+import { createClient } from '@/src/lib/supabase/server'
+
+export async function POST(request: Request) {
+  const supabase = await createClient()
+
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const body = await request.json()
+  const { bookingId, rating, keywords, comment } = body as {
+    bookingId: string
+    rating: number
+    keywords: string[]
+    comment: string | null
+  }
+
+  if (!bookingId || !rating || rating < 1 || rating > 5) {
+    return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+  }
+
+  // Verify booking exists, belongs to user, and is completed
+  const { data: booking, error: bookingError } = await supabase
+    .from('bookings')
+    .select('id, parent_id, sitter_id, status')
+    .eq('id', bookingId)
+    .single()
+
+  if (bookingError || !booking) {
+    return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+  }
+
+  if (booking.parent_id !== user.id) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  if (booking.status !== 'completed') {
+    return NextResponse.json({ error: 'Booking is not completed' }, { status: 400 })
+  }
+
+  // Check duplicate review
+  const { data: existing } = await supabase
+    .from('reviews')
+    .select('id')
+    .eq('booking_id', bookingId)
+    .single()
+
+  if (existing) {
+    return NextResponse.json({ error: 'Review already submitted' }, { status: 409 })
+  }
+
+  // Insert review
+  const { data: review, error: insertError } = await supabase
+    .from('reviews')
+    .insert({
+      booking_id: bookingId,
+      parent_id: user.id,
+      sitter_id: booking.sitter_id,
+      rating,
+      keywords: keywords ?? [],
+      comment: comment || null,
+    })
+    .select('id')
+    .single()
+
+  if (insertError || !review) {
+    return NextResponse.json({ error: 'Failed to create review' }, { status: 500 })
+  }
+
+  // Recalculate sitter rating_avg and review_count
+  const { data: allReviews } = await supabase
+    .from('reviews')
+    .select('rating')
+    .eq('sitter_id', booking.sitter_id)
+
+  if (allReviews && allReviews.length > 0) {
+    const sum = allReviews.reduce((acc, r) => acc + r.rating, 0)
+    const avg = Math.round((sum / allReviews.length) * 10) / 10
+
+    await supabase
+      .from('sitter_profiles')
+      .update({ rating_avg: avg, review_count: allReviews.length })
+      .eq('id', booking.sitter_id)
+  }
+
+  return NextResponse.json({ reviewId: review.id }, { status: 201 })
+}
