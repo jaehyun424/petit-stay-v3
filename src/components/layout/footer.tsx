@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Logo } from "@/src/components/ui/logo";
 
@@ -10,19 +11,19 @@ export function Footer() {
     <footer className="bg-[#222222]">
       <div className="mx-auto max-w-[1280px] px-6 py-12">
         <Logo variant="white" className="h-6" />
-        <nav className="mt-4 flex flex-wrap gap-6 text-sm text-[#B0B0B0]">
-          <a href="/about" className="transition-colors hover:text-white">
+        <nav aria-label="Footer" className="mt-4 flex flex-wrap gap-6 text-sm text-[#B0B0B0]">
+          <Link href="/about" className="transition-colors hover:text-white">
             {t('footer.about')}
-          </a>
-          <a href="/help" className="transition-colors hover:text-white">
+          </Link>
+          <Link href="/help" className="transition-colors hover:text-white">
             {t('footer.help')}
-          </a>
-          <a href="/privacy" className="transition-colors hover:text-white">
+          </Link>
+          <Link href="/privacy" className="transition-colors hover:text-white">
             {t('footer.privacy')}
-          </a>
-          <a href="/terms" className="transition-colors hover:text-white">
+          </Link>
+          <Link href="/terms" className="transition-colors hover:text-white">
             {t('footer.terms')}
-          </a>
+          </Link>
         </nav>
         <p className="mt-6 text-sm text-[#B0B0B0]">
           {t('footer.copyright')}

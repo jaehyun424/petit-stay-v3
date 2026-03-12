@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
@@ -25,10 +26,10 @@ export default async function SearchPage() {
       {/* Search Filter Bar */}
       <div className="sticky top-0 z-10 border-b border-[#DDDDDD] bg-white">
         <div className="mx-auto flex max-w-[1280px] items-center gap-3 overflow-x-auto px-6 py-3 [&>*]:shrink-0">
-          <Input type="date" placeholder={t('search.date')} />
-          <Input placeholder={t('search.time')} />
-          <Input placeholder={t('search.childAge')} />
-          <Input placeholder={t('search.language')} />
+          <Input type="date" placeholder={t('search.date')} aria-label={t('search.date')} />
+          <Input placeholder={t('search.time')} aria-label={t('search.time')} />
+          <Input placeholder={t('search.childAge')} aria-label={t('search.childAge')} />
+          <Input placeholder={t('search.language')} aria-label={t('search.language')} />
           <Button variant="primary" size="sm">
             {t('common.search')}
           </Button>
@@ -36,7 +37,7 @@ export default async function SearchPage() {
       </div>
 
       {/* Search Results */}
-      <main className="min-h-screen bg-[#F7F7F7]">
+      <main id="main-content" className="min-h-screen bg-[#F7F7F7]">
         <div className="mx-auto max-w-[1280px] px-6 py-8">
           {/* Results Header */}
           <div className="mb-6 flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
@@ -54,31 +55,33 @@ export default async function SearchPage() {
               {sitters.map((sitter) => {
                 const badges = buildSitterBadges(sitter);
                 return (
-                  <Card key={sitter.id}>
-                    <div className="flex aspect-square w-full items-center justify-center bg-[#E8E0D8]">
-                      <span className="text-3xl font-semibold text-[#C4B5A6]">
-                        {sitter.name.charAt(0)}
-                      </span>
-                    </div>
-                    <CardContent>
-                      <p className="text-sm font-semibold text-[#222222]">
-                        {sitter.name}
-                      </p>
-                      <p className="mt-1 text-xs text-[#717171]">
-                        ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count})
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {badges.map((badge) => (
-                          <Badge key={badge.label} variant={badge.variant}>
-                            {badge.label}
-                          </Badge>
-                        ))}
+                  <Link key={sitter.id} href={`/sitters/${sitter.id}`} className="block">
+                    <Card>
+                      <div className="flex aspect-square w-full items-center justify-center bg-[#E8E0D8]">
+                        <span className="text-3xl font-semibold text-[#C4B5A6]">
+                          {sitter.name.charAt(0)}
+                        </span>
                       </div>
-                      <p className="mt-2 text-sm font-semibold text-[#222222]">
-                        {sitter.hourly_rate.toLocaleString()}{t('search.perHour')}
-                      </p>
-                    </CardContent>
-                  </Card>
+                      <CardContent>
+                        <p className="text-sm font-semibold text-[#222222]">
+                          {sitter.name}
+                        </p>
+                        <p className="mt-1 text-xs text-[#717171]">
+                          ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count})
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {badges.map((badge) => (
+                            <Badge key={badge.label} variant={badge.variant}>
+                              {badge.label}
+                            </Badge>
+                          ))}
+                        </div>
+                        <p className="mt-2 text-sm font-semibold text-[#222222]">
+                          {sitter.hourly_rate.toLocaleString()}{t('search.perHour')}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 );
               })}
             </div>

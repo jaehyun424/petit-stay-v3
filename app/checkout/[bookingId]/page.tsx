@@ -306,7 +306,7 @@ export default function CheckoutPage() {
     <div className="flex min-h-screen flex-col bg-white">
       <Header />
 
-      <main className="flex-1 px-6 py-8">
+      <main id="main-content" className="flex-1 px-6 py-8">
         {loading && (
           <div className="flex justify-center py-20">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#DDDDDD] border-t-[#C4956A]" />

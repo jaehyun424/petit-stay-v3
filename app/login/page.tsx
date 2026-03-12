@@ -43,7 +43,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
       <Header />
 
-      <main className="flex flex-1 justify-center px-6 py-16">
+      <main id="main-content" className="flex flex-1 justify-center px-6 py-16">
         <div className="w-full max-w-[400px]">
           {/* Title */}
           <h1 className="text-[26px] font-semibold text-[#222222]">{t('auth.loginTitle')}</h1>
@@ -54,6 +54,7 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
             <Input
+              label={t('auth.email')}
               placeholder={t('auth.email')}
               type="email"
               value={email}
@@ -61,6 +62,7 @@ export default function LoginPage() {
               required
             />
             <Input
+              label={t('auth.password')}
               placeholder={t('auth.password')}
               type="password"
               value={password}

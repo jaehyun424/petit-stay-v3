@@ -354,7 +354,7 @@ export default function PartnerConsolePage() {
     <div className="flex min-h-screen flex-col bg-white">
       <Header />
 
-      <main className="mx-auto w-full max-w-[1280px] flex-1 px-6">
+      <main id="main-content" className="mx-auto w-full max-w-[1280px] flex-1 px-6">
         {/* partner header */}
         <div className="py-6">
           <h1 className="text-[22px] font-semibold text-[#222222]">{account.business_name}</h1>

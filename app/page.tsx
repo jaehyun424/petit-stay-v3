@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
@@ -14,6 +15,7 @@ export default async function Home() {
     <>
       <Header />
 
+      <main id="main-content">
       {/* Hero */}
       <section style={{ background: "linear-gradient(135deg, #F5F0EB 0%, #E8E0D8 50%, rgba(196,149,106,0.12) 100%)" }}>
         <div className="mx-auto max-w-[1280px] px-6 py-16 md:px-20">
@@ -29,7 +31,9 @@ export default async function Home() {
                 {t('landing.heroSubtitle')}
               </p>
               <div>
-                <Button variant="primary">{t('landing.heroCta')}</Button>
+                <Button variant="primary" asChild>
+                  <Link href="/search">{t('landing.heroCta')}</Link>
+                </Button>
               </div>
             </div>
             <div className="flex-1">
@@ -145,31 +149,33 @@ export default async function Home() {
               {sitters.map((sitter) => {
                 const badges = buildSitterBadges(sitter);
                 return (
-                  <Card key={sitter.id}>
-                    <div className="flex aspect-square w-full items-center justify-center bg-[#E8E0D8]">
-                      <span className="text-3xl font-semibold text-[#C4B5A6]">
-                        {sitter.name.charAt(0)}
-                      </span>
-                    </div>
-                    <CardContent>
-                      <p className="text-sm font-semibold text-[#222222]">
-                        {sitter.name}
-                      </p>
-                      <p className="mt-1 text-xs text-[#717171]">
-                        ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count})
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {badges.map((badge) => (
-                          <Badge key={badge.label} variant={badge.variant}>
-                            {badge.label}
-                          </Badge>
-                        ))}
+                  <Link key={sitter.id} href={`/sitters/${sitter.id}`} className="block">
+                    <Card>
+                      <div className="flex aspect-square w-full items-center justify-center bg-[#E8E0D8]">
+                        <span className="text-3xl font-semibold text-[#C4B5A6]">
+                          {sitter.name.charAt(0)}
+                        </span>
                       </div>
-                      <p className="mt-2 text-sm font-semibold text-[#222222]">
-                        {sitter.hourly_rate.toLocaleString()}{t('landing.perHour')}
-                      </p>
-                    </CardContent>
-                  </Card>
+                      <CardContent>
+                        <p className="text-sm font-semibold text-[#222222]">
+                          {sitter.name}
+                        </p>
+                        <p className="mt-1 text-xs text-[#717171]">
+                          ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count})
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {badges.map((badge) => (
+                            <Badge key={badge.label} variant={badge.variant}>
+                              {badge.label}
+                            </Badge>
+                          ))}
+                        </div>
+                        <p className="mt-2 text-sm font-semibold text-[#222222]">
+                          {sitter.hourly_rate.toLocaleString()}{t('landing.perHour')}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 );
               })}
             </div>
@@ -188,11 +194,13 @@ export default async function Home() {
           <Button
             variant="secondary"
             className="border-white text-white hover:bg-white/10"
+            asChild
           >
-            {t('landing.heroCta')}
+            <Link href="/search">{t('landing.heroCta')}</Link>
           </Button>
         </div>
       </section>
+      </main>
 
       <Footer />
     </>

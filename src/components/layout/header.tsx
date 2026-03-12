@@ -53,8 +53,15 @@ export function Header() {
   }
 
   return (
-    <header className="border-b border-[#DDDDDD] bg-white">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4">
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#222222] focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+      <header className="border-b border-[#DDDDDD] bg-white">
+        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4">
         <Link href="/" aria-label="Petit Stay Home">
           <Logo />
         </Link>
@@ -62,7 +69,8 @@ export function Header() {
           <select
             value={currentLocale}
             onChange={(e) => handleLocaleChange(e.target.value)}
-            className="cursor-pointer rounded border border-[#DDDDDD] bg-white px-2 py-1 text-sm text-[#222222]"
+            aria-label="Select language"
+            className="cursor-pointer rounded border border-[#DDDDDD] bg-white px-2 py-1 text-sm text-[#222222] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4956A]"
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
@@ -73,7 +81,7 @@ export function Header() {
           {user ? (
             <button
               onClick={handleLogout}
-              className="cursor-pointer text-sm text-[#222222] underline"
+              className="cursor-pointer text-sm text-[#222222] underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4956A] rounded"
             >
               {t('common.logout')}
             </button>
@@ -85,5 +93,6 @@ export function Header() {
         </div>
       </div>
     </header>
+    </>
   );
 }

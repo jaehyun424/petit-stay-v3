@@ -507,7 +507,7 @@ export default function SitterDashboardPage() {
     <div className="flex min-h-screen flex-col bg-white">
       <Header />
 
-      <main className="mx-auto w-full max-w-[1280px] flex-1 px-6">
+      <main id="main-content" className="mx-auto w-full max-w-[1280px] flex-1 px-6">
         {/* sitter profile header */}
         <div className="flex items-center gap-4 py-6">
           <Avatar size="lg" fallback={profile.full_name.charAt(0)} />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
@@ -65,6 +66,7 @@ export default async function SitterProfilePage({
     <>
       <Header />
 
+      <main id="main-content">
       {/* Section 1: Profile Header */}
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-8">
@@ -103,11 +105,13 @@ export default async function SitterProfilePage({
               )}
 
               <div className="hidden md:block">
-                <Button variant="primary">{t('sitter.bookSitter', { name: firstName })}</Button>
+                <Button variant="primary" asChild>
+                  <Link href={`/book/${id}`}>{t('sitter.bookSitter', { name: firstName })}</Link>
+                </Button>
               </div>
               <div className="md:hidden">
-                <Button variant="primary" className="w-full">
-                  {t('sitter.bookSitter', { name: firstName })}
+                <Button variant="primary" className="w-full" asChild>
+                  <Link href={`/book/${id}`}>{t('sitter.bookSitter', { name: firstName })}</Link>
                 </Button>
               </div>
             </div>
@@ -270,6 +274,7 @@ export default async function SitterProfilePage({
 
       {/* Bottom spacer for mobile sticky CTA */}
       <div className="h-20 md:hidden" />
+      </main>
 
       <Footer />
 
@@ -279,7 +284,9 @@ export default async function SitterProfilePage({
           <p className="text-base font-semibold text-[#222222]">
             {formattedPrice}{t('sitter.perHour')}
           </p>
-          <Button variant="primary">{t('sitter.bookSitter', { name: firstName })}</Button>
+          <Button variant="primary" asChild>
+            <Link href={`/book/${id}`}>{t('sitter.bookSitter', { name: firstName })}</Link>
+          </Button>
         </div>
       </div>
     </>

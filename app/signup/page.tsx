@@ -91,7 +91,7 @@ export default function SignupPage() {
     <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
       <Header />
 
-      <main className="flex flex-1 justify-center px-6 py-16">
+      <main id="main-content" className="flex flex-1 justify-center px-6 py-16">
         <div className="w-full max-w-[400px]">
           {/* Title */}
           <h1 className="text-[26px] font-semibold text-[#222222]">
@@ -141,6 +141,7 @@ export default function SignupPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <Input
+              label={t('auth.fullName')}
               placeholder={t('auth.fullName')}
               type="text"
               value={fullName}
@@ -148,6 +149,7 @@ export default function SignupPage() {
               required
             />
             <Input
+              label={t('auth.email')}
               placeholder={t('auth.email')}
               type="email"
               value={email}
@@ -155,6 +157,7 @@ export default function SignupPage() {
               required
             />
             <Input
+              label={t('auth.password')}
               placeholder={t('auth.password')}
               type="password"
               value={password}
@@ -163,6 +166,7 @@ export default function SignupPage() {
               minLength={6}
             />
             <Input
+              label={t('auth.phone')}
               placeholder={t('auth.phone')}
               type="tel"
               value={phone}

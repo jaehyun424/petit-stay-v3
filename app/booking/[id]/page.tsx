@@ -424,7 +424,7 @@ export default function BookingDetailPage() {
     <div className="flex min-h-screen flex-col bg-[var(--color-bg-page)]">
       <Header />
 
-      <main className="mx-auto w-full max-w-[640px] flex-1 px-6 py-8">
+      <main id="main-content" className="mx-auto w-full max-w-[640px] flex-1 px-6 py-8">
         {/* Status switcher (demo only) */}
         <div className="mb-8 flex gap-2">
           {STATUS_OPTIONS.map((opt) => (
