@@ -13,7 +13,8 @@
     "verified": "已驗證"
   },
   "header": {
-    "brand": "Petit Stay"
+    "brand": "Petit Stay",
+    "skipToMain": "Skip to main content"
   },
   "footer": {
     "about": "關於我們",
@@ -288,5 +289,54 @@
     "a7": "Sitters do not provide overnight care, pool/beach supervision, vehicle transportation, or medication administration.",
     "q8": "What if something goes wrong?",
     "a8": "Contact us at help@petitstay.com. We'll help you right away."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: March 2026",
+    "intro": "Petit Stay (\"Company\") values your personal information and processes it lawfully in accordance with applicable regulations.",
+    "section1Title": "Information We Collect",
+    "section1": "Email address, name, phone number, payment information (card details are securely managed by Stripe), booking history, and child information (name, age, special needs).",
+    "section2Title": "Purpose of Collection",
+    "section2": "Service delivery and booking management, sitter matching and safety management, payment processing, customer support, and service improvement.",
+    "section3Title": "Sharing with Third Parties",
+    "section3": "When a booking is confirmed, child information and contact details are shared with the sitter. Payment is processed through Stripe, and we do not store card numbers directly.",
+    "section4Title": "Retention Period",
+    "section4": "Personal information is deleted immediately upon account deletion. However, if retention is required by law, the information is kept for the legally mandated period.",
+    "section5Title": "Your Rights",
+    "section5": "You may request access, correction, or deletion of your personal information. Please contact us at help@petitstay.com.",
+    "section6Title": "Contact",
+    "section6": "Privacy inquiries: help@petitstay.com"
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: March 2026",
+    "intro": "Thank you for using Petit Stay. Please read these terms carefully.",
+    "section1Title": "Service Overview",
+    "section1": "Petit Stay is a platform that connects babysitters with families in Seoul. The company does not directly employ sitters; sitters operate as independent service providers.",
+    "section2Title": "Booking and Payment",
+    "section2": "Bookings are made through the platform and confirmed when the sitter accepts. Payment is collected at booking time but not charged until the sitter confirms.",
+    "section3Title": "Cancellation Policy",
+    "section3": "Free cancellation is available up to 24 hours before the session. Cancellations after that may incur a fee. If the sitter cancels, a full refund is provided.",
+    "section4Title": "Service Limitations",
+    "section4": "Sitters do not provide the following services: overnight stays, pool and beach supervision, vehicle transportation, or medication administration. The target age range is 3\u20138 years.",
+    "section5Title": "Limitation of Liability",
+    "section5": "Petit Stay serves as an intermediary between sitters and families and is not legally liable for direct incidents during care. However, all bookings are covered by liability insurance.",
+    "section6Title": "Accounts",
+    "section6": "Users must provide accurate information and are responsible for account security. Accounts may be restricted if misuse is detected.",
+    "section7Title": "Changes to Terms",
+    "section7": "Changes to these terms will be announced within the service. Continued use of the service after changes constitutes acceptance of the updated terms.",
+    "section8Title": "Contact",
+    "section8": "Terms inquiries: help@petitstay.com"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An error occurred while loading the page.",
+    "retry": "Try again",
+    "backHome": "Back to home"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to home"
   }
 }

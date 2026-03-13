@@ -58,7 +58,7 @@ export function Header() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#222222] focus:shadow-lg"
       >
-        Skip to main content
+        {t('header.skipToMain')}
       </a>
       <header className="border-b border-[#DDDDDD] bg-white">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4">
