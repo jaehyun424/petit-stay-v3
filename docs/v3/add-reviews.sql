@@ -28,7 +28,7 @@ INSERT INTO auth.users (
   now(), now(), now(), '', '', '', '',
   '{"provider":"email","providers":["email"]}',
   '{"full_name":"Min J."}'
-);
+) ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO auth.identities (
   id, user_id, identity_data, provider, provider_id,
@@ -39,10 +39,11 @@ INSERT INTO auth.identities (
   '{"sub":"a2222222-2222-2222-2222-222222222222","email":"demo-parent2@petitstay.com"}',
   'email', 'a2222222-2222-2222-2222-222222222222',
   now(), now(), now()
-);
+) ON CONFLICT DO NOTHING;
 
 INSERT INTO profiles (id, role, full_name, phone, avatar_url) VALUES
-('a2222222-2222-2222-2222-222222222222', 'parent', 'Min J.', '+82-10-9876-5432', NULL);
+('a2222222-2222-2222-2222-222222222222', 'parent', 'Min J.', '+82-10-9876-5432', NULL)
+ON CONFLICT (id) DO NOTHING;
 
 -- ============================================================
 -- 2. 추가 예약 (completed) — 리뷰 FK 용
