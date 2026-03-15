@@ -109,7 +109,7 @@ export default async function SitterProfilePage({
               </p>
 
               {sitter.bio && (
-                <p className="text-base text-[#717171]">{sitter.bio}</p>
+                <p className="text-base text-[#717171]">{sitter.bio.split('\n')[0]}</p>
               )}
 
               <div className="hidden md:block">
@@ -152,17 +152,13 @@ export default async function SitterProfilePage({
             {t('sitter.about', { name: firstName })}
           </h2>
           {sitter.bio ? (
-            <p
-              className="mt-3 text-base leading-relaxed text-[#717171]"
-              style={{
-                display: "-webkit-box",
-                WebkitLineClamp: 4,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-              }}
-            >
-              {sitter.bio}
-            </p>
+            <div className="mt-3 space-y-2">
+              {sitter.bio.split('\n').filter(Boolean).map((paragraph, i) => (
+                <p key={i} className="text-base leading-relaxed text-[#717171]">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           ) : (
             <p className="mt-3 text-base text-[#717171]">
               {t('sitter.noBio')}
