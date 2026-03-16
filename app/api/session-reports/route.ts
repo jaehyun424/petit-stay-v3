@@ -1,33 +1,29 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
+import { sessionReportSchema } from '@/src/lib/validations'
 
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  let body: unknown
-  try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
-  }
-  const { bookingId, checkInAt, activities, moodBehavior, sleepNotes, additionalNotes } = body as {
-    bookingId: string
-    checkInAt: string
-    activities: string | null
-    moodBehavior: string | null
-    sleepNotes: string | null
-    additionalNotes: string | null
-  }
+    let body: unknown
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    }
 
-  if (!bookingId || !checkInAt) {
-    return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
-  }
+    const parsed = sessionReportSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid input', details: parsed.error.flatten() }, { status: 400 })
+    }
+
+    const { bookingId, checkInAt, activities, moodBehavior, sleepNotes, additionalNotes } = parsed.data
 
   // Verify booking exists and sitter is the current user
   const { data: booking, error: bookingError } = await supabase

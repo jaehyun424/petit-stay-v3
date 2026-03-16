@@ -2,6 +2,7 @@
 export function formatDate(dateStr: string): string {
   if (!dateStr) return ''
   const d = new Date(dateStr + 'T00:00:00')
+  if (isNaN(d.getTime())) return ''
   return d.toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: 'long',
@@ -11,7 +12,9 @@ export function formatDate(dateStr: string): string {
 
 /** Short date: "3월 15일" */
 export function formatDateShort(dateStr: string): string {
+  if (!dateStr) return ''
   const d = new Date(dateStr + 'T00:00:00')
+  if (isNaN(d.getTime())) return ''
   return d.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })
 }
 

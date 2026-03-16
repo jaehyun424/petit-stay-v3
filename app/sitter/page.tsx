@@ -212,7 +212,7 @@ function ScheduleTab({ data }: { data: DashboardData }) {
       <div className="mt-4">
         {weeklySchedule.map((slot, i) => (
           <div
-            key={i}
+            key={slot.day}
             className={`flex items-center justify-between py-3 ${
               i < weeklySchedule.length - 1 ? "border-b border-[var(--color-border)]" : ""
             }`}
@@ -272,7 +272,7 @@ function EarningsTab({ data }: { data: DashboardData }) {
           <div className="mt-4">
             {earnings.map((tx, i) => (
               <div
-                key={i}
+                key={`${tx.date}-${tx.parent_name}-${tx.amount}`}
                 className={`py-3 text-[14px] text-[var(--color-text-primary)] ${
                   i < earnings.length - 1 ? "border-b border-[var(--color-border)]" : ""
                 }`}
@@ -389,8 +389,9 @@ function ProfileTab({
       {/* form fields */}
       <div className="mt-6 space-y-5">
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.displayName")}</label>
+          <label htmlFor="sitter-display-name" className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.displayName")}</label>
           <input
+            id="sitter-display-name"
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -398,8 +399,9 @@ function ProfileTab({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.bio")}</label>
+          <label htmlFor="sitter-bio" className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.bio")}</label>
           <textarea
+            id="sitter-bio"
             rows={4}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
@@ -407,8 +409,9 @@ function ProfileTab({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.hourlyRate")}</label>
+          <label htmlFor="sitter-hourly-rate" className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.hourlyRate")}</label>
           <input
+            id="sitter-hourly-rate"
             type="text"
             value={hourlyRate}
             onChange={(e) => setHourlyRate(e.target.value)}
@@ -416,8 +419,9 @@ function ProfileTab({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.languages")}</label>
+          <label htmlFor="sitter-languages" className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.languages")}</label>
           <input
+            id="sitter-languages"
             type="text"
             value={languages}
             onChange={(e) => setLanguages(e.target.value)}

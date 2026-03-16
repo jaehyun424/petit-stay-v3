@@ -47,6 +47,7 @@ export default async function Home() {
                   preload="metadata"
                   className="w-full aspect-[4/3] rounded-xl object-cover"
                   src="/hero.mp4"
+                  poster="/hero-poster.jpg"
                 />
                 <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-t from-[var(--color-bg-cream)]/30 to-transparent" />
               </div>
@@ -205,7 +206,7 @@ export default async function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-[var(--color-accent)]">
+      <section className="bg-[var(--color-text-primary)]">
         <div className="mx-auto max-w-[1280px] px-6 py-16 text-center">
           <h2 className="mb-6 text-[22px] font-semibold text-white">
             {t('landing.ctaTitle')}

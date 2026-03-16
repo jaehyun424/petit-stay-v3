@@ -310,6 +310,7 @@ export default function ReviewPage() {
             {t('review.tellOthers')}
           </h2>
           <textarea
+            aria-label={t('review.tellOthers')}
             value={reviewText}
             onChange={(e) => {
               if (e.target.value.length <= 500) {

@@ -73,7 +73,9 @@ export function formatAvailability(slots: SitterAvailability[]): string[] {
 }
 
 export function formatRelativeTime(dateStr: string): string {
-  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000)
+  const time = new Date(dateStr).getTime()
+  if (isNaN(time)) return ''
+  const diff = Math.floor((Date.now() - time) / 86400000)
   if (diff < 1) return 'today'
   if (diff < 7) return `${diff} day${diff > 1 ? 's' : ''} ago`
   if (diff < 30) { const w = Math.floor(diff / 7); return `${w} week${w > 1 ? 's' : ''} ago` }

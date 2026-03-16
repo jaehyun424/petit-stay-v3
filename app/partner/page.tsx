@@ -105,7 +105,7 @@ function DashboardTab({ data }: { data: PartnerData }) {
           <div className="mt-4">
             {recentActivity.map((item, i) => (
               <p
-                key={i}
+                key={`${item.date}-${item.parent_name}`}
                 className={`py-3 text-[14px] text-[var(--color-text-primary)] ${
                   i < recentActivity.length - 1 ? "border-b border-[var(--color-border)]" : ""
                 }`}

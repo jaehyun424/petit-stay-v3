@@ -311,7 +311,7 @@ function CompletedView({ booking }: { booking: BookingData }) {
           <div className="mt-4 flex flex-col">
             {sections.map((section, i) => (
               <div
-                key={i}
+                key={section.title}
                 className={`py-3 ${i < sections.length - 1 ? "border-b border-[var(--color-border)]" : ""}`}
               >
                 <p className="text-sm font-medium text-[var(--color-text-primary)]">

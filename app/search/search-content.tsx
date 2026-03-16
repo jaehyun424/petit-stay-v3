@@ -287,8 +287,15 @@ export function SearchContent() {
 
           {/* Error State */}
           {fetchError && (
-            <div className="flex flex-col items-center justify-center py-20">
-              <p className="text-sm text-red-600">{t("common.error")}</p>
+            <div className="flex flex-col items-center justify-center gap-4 py-20">
+              <p className="text-sm text-[var(--color-error-text)]">{t("common.error")}</p>
+              <button
+                type="button"
+                onClick={() => { setFetchError(false); setLoading(true); window.location.reload(); }}
+                className="text-sm font-medium text-[var(--color-text-primary)] underline"
+              >
+                {t("common.retry")}
+              </button>
             </div>
           )}
 

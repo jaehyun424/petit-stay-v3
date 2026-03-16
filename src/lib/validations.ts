@@ -40,3 +40,12 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
 });
+
+export const sessionReportSchema = z.object({
+  bookingId: z.string().uuid(),
+  checkInAt: z.string().min(1),
+  activities: z.string().max(2000).nullable().optional(),
+  moodBehavior: z.string().max(2000).nullable().optional(),
+  sleepNotes: z.string().max(2000).nullable().optional(),
+  additionalNotes: z.string().max(2000).nullable().optional(),
+});

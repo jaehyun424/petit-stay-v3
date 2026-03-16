@@ -40,8 +40,8 @@ function BookingSummary({ booking }: { booking: BookingData }) {
   const tCommon = useTranslations('common');
   const sitterName = booking.sitter_profiles?.profiles?.full_name ?? tCommon('unknownSitter');
   const rating = booking.sitter_profiles?.rating_avg;
-  const startH = parseInt(booking.start_time.split(":")[0], 10);
-  const endH = parseInt(booking.end_time.split(":")[0], 10);
+  const startH = parseInt(booking.start_time.split(":")[0], 10) || 0;
+  const endH = parseInt(booking.end_time.split(":")[0], 10) || 0;
   const startM = parseInt(booking.start_time.split(":")[1], 10) || 0;
   const endM = parseInt(booking.end_time.split(":")[1], 10) || 0;
   const hours = endH - startH + (endM - startM) / 60;

@@ -177,7 +177,7 @@ export default async function SitterProfilePage({
             <ul className="mt-4">
               {certificationLines.map((q, i) => (
                 <li
-                  key={i}
+                  key={q}
                   className={`py-3 text-base text-[var(--color-text-primary)] ${
                     i < certificationLines.length - 1
                       ? "border-b border-[var(--color-border)]"
@@ -259,8 +259,8 @@ export default async function SitterProfilePage({
           </h2>
           {availabilityLines.length > 0 ? (
             <div className="mt-3 space-y-1">
-              {availabilityLines.map((line, i) => (
-                <p key={i} className="text-base text-[var(--color-text-primary)]">
+              {availabilityLines.map((line) => (
+                <p key={line} className="text-base text-[var(--color-text-primary)]">
                   {line}
                 </p>
               ))}
