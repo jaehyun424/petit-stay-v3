@@ -206,7 +206,7 @@ export default async function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-[var(--color-text-primary)]">
+      <section className="bg-[var(--color-accent)]">
         <div className="mx-auto max-w-[1280px] px-6 py-16 text-center">
           <h2 className="mb-6 text-[22px] font-semibold text-white">
             {t('landing.ctaTitle')}
