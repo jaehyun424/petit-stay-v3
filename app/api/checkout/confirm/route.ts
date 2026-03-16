@@ -23,7 +23,12 @@ export async function POST(request: Request) {
   }
 
   // Verify payment on Stripe side
-  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+  let paymentIntent
+  try {
+    paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+  } catch {
+    return NextResponse.json({ error: 'Payment verification failed' }, { status: 502 })
+  }
 
   if (paymentIntent.status !== 'succeeded') {
     return NextResponse.json({ error: 'Payment not completed' }, { status: 400 })
@@ -50,6 +55,10 @@ export async function POST(request: Request) {
 
   if (booking.status === 'confirmed') {
     return NextResponse.json({ success: true })
+  }
+
+  if (booking.status !== 'pending') {
+    return NextResponse.json({ error: 'Booking cannot be confirmed' }, { status: 400 })
   }
 
   // Update booking status

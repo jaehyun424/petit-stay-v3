@@ -40,11 +40,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Booking already paid' }, { status: 400 })
   }
 
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: booking.total_amount,
-    currency: 'krw',
-    metadata: { bookingId: booking.id },
-  })
+  if (booking.status === 'cancelled') {
+    return NextResponse.json({ error: 'Booking is cancelled' }, { status: 400 })
+  }
 
-  return NextResponse.json({ clientSecret: paymentIntent.client_secret })
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: booking.total_amount,
+      currency: 'krw',
+      metadata: { bookingId: booking.id },
+    })
+
+    return NextResponse.json({ clientSecret: paymentIntent.client_secret })
+  } catch {
+    return NextResponse.json({ error: 'Payment service error' }, { status: 502 })
+  }
 }
