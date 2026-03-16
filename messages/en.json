@@ -224,7 +224,8 @@
     "sendResetLink": "Send reset link",
     "sending": "Sending...",
     "resetPasswordSent": "Reset link sent! Check your email.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "comingSoon": "Coming soon"
   },
   "bookingDetail": {
     "confirmed": "Booking confirmed ✓",
@@ -257,7 +258,10 @@
     "statusConfirmed": "Confirmed",
     "statusInProgress": "In Progress",
     "statusCompleted": "Completed",
-    "notFound": "Booking not found"
+    "notFound": "Booking not found",
+    "contactSitterAlert": "Contact feature is coming soon. Please email help@petitstay.com.",
+    "cancelConfirm": "Are you sure you want to cancel?",
+    "cancelAlert": "Cancellation feature is coming soon."
   },
   "about": {
     "title": "About Petit Stay",

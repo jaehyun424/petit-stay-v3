@@ -193,7 +193,7 @@ export default async function SitterProfilePage({
       )}
 
       {/* Section 5: Reviews */}
-      <section className="bg-white">
+      <section id="reviews" className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-8">
           <h2 className="text-lg font-semibold text-[#222222]">
             {t('sitter.reviews')}{" "}
@@ -242,7 +242,7 @@ export default async function SitterProfilePage({
 
           {sitter.review_count > 3 && (
             <a
-              href="#"
+              href="#reviews"
               className="mt-4 inline-block text-sm text-[#222222] underline"
             >
               {t('sitter.seeAllReviews', { count: sitter.review_count })}

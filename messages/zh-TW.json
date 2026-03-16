@@ -224,7 +224,8 @@
     "sendResetLink": "發送重設連結",
     "sending": "發送中...",
     "resetPasswordSent": "重設連結已發送！請查看您的電子郵件。",
-    "cancel": "取消"
+    "cancel": "取消",
+    "comingSoon": "即將推出"
   },
   "bookingDetail": {
     "confirmed": "預約已確認 ✓",
@@ -257,7 +258,10 @@
     "statusConfirmed": "已確認",
     "statusInProgress": "進行中",
     "statusCompleted": "已完成",
-    "notFound": "找不到預約"
+    "notFound": "找不到預約",
+    "contactSitterAlert": "聯繫功能即將推出，請發送郵件至 help@petitstay.com。",
+    "cancelConfirm": "確定要取消嗎？",
+    "cancelAlert": "取消功能即將推出。"
   },
   "about": {
     "title": "About Petit Stay",

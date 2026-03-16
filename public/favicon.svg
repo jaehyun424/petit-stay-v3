@@ -2,9 +2,9 @@
   <rect width="32" height="32" rx="7" fill="#C4956A"/>
   <g fill="#FFF" transform="translate(16,16) scale(0.85) translate(-15.5,-16)">
     <!-- Back ear (thinner, slightly left) -->
-    <ellipse cx="12.5" cy="7" rx="1.8" ry="7" transform="rotate(-10 12.5 7)"/>
+    <ellipse cx="12.5" cy="7" rx="1.8" ry="5" transform="rotate(-10 12.5 7)"/>
     <!-- Front ear (wider, slightly right, tip above square) -->
-    <ellipse cx="17" cy="6" rx="2.3" ry="7.5" transform="rotate(8 17 6)"/>
+    <ellipse cx="17" cy="6" rx="2.3" ry="5.5" transform="rotate(8 17 6)"/>
     <!-- Head -->
     <circle cx="15.5" cy="17.5" r="6"/>
     <!-- Body -->

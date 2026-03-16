@@ -224,7 +224,8 @@
     "sendResetLink": "リセットリンクを送信",
     "sending": "送信中...",
     "resetPasswordSent": "リセットリンクを送信しました！メールをご確認ください。",
-    "cancel": "キャンセル"
+    "cancel": "キャンセル",
+    "comingSoon": "準備中"
   },
   "bookingDetail": {
     "confirmed": "予約確定 ✓",
@@ -257,7 +258,10 @@
     "statusConfirmed": "確定",
     "statusInProgress": "進行中",
     "statusCompleted": "完了",
-    "notFound": "予約が見つかりません"
+    "notFound": "予約が見つかりません",
+    "contactSitterAlert": "連絡機能は準備中です。help@petitstay.comまでお問い合わせください。",
+    "cancelConfirm": "本当にキャンセルしますか？",
+    "cancelAlert": "キャンセル機能は準備中です。"
   },
   "about": {
     "title": "About Petit Stay",

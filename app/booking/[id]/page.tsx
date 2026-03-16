@@ -200,12 +200,17 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
 
       {/* Actions */}
       <div className="flex flex-col gap-3">
-        <Button variant="secondary" className="w-full">
+        <Button variant="secondary" className="w-full" onClick={() => alert(t('contactSitterAlert'))}>
           {t('contactSitter')}
         </Button>
         <Button
           variant="ghost"
           className="w-full text-[var(--color-error)] no-underline hover:text-[var(--color-error)]"
+          onClick={() => {
+            if (window.confirm(t('cancelConfirm'))) {
+              alert(t('cancelAlert'));
+            }
+          }}
         >
           {t('cancelBooking')}
         </Button>

@@ -11,9 +11,9 @@
   <!-- Rabbit silhouette right -->
   <g transform="translate(850,315)" fill="#C4956A">
     <!-- Left ear -->
-    <ellipse cx="-28" cy="-80" rx="16" ry="52" transform="rotate(-10,  -28, -80)"/>
+    <ellipse cx="-28" cy="-80" rx="16" ry="40" transform="rotate(-10,  -28, -80)"/>
     <!-- Right ear -->
-    <ellipse cx="28" cy="-80" rx="16" ry="52" transform="rotate(10, 28, -80)"/>
+    <ellipse cx="28" cy="-80" rx="16" ry="40" transform="rotate(10, 28, -80)"/>
     <!-- Head -->
     <circle cx="0" cy="0" r="52"/>
     <!-- Eye left -->

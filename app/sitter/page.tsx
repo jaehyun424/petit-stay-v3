@@ -240,7 +240,8 @@ function ScheduleTab({ data }: { data: DashboardData }) {
         ))}
       </div>
       <div className="mt-6">
-        <Button variant="secondary">Edit availability</Button>
+        <Button variant="secondary" disabled className="opacity-50 cursor-not-allowed">Edit availability</Button>
+        <p className="mt-1 text-xs text-[#B0B0B0]">Coming soon</p>
       </div>
     </div>
   );

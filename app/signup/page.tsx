@@ -227,12 +227,13 @@ export default function SignupPage() {
 
           {/* Social buttons */}
           <div className="flex flex-col gap-3">
-            <Button variant="secondary" className="w-full">
+            <Button variant="secondary" className="w-full opacity-50 cursor-not-allowed" disabled>
               {t('auth.continueGoogle')}
             </Button>
-            <Button variant="secondary" className="w-full">
+            <Button variant="secondary" className="w-full opacity-50 cursor-not-allowed" disabled>
               {t('auth.continueKakao')}
             </Button>
+            <p className="text-center text-xs text-[#B0B0B0]">{t('auth.comingSoon')}</p>
           </div>
 
           {/* Login link */}
