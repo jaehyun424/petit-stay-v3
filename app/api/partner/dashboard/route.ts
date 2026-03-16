@@ -9,22 +9,29 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // Check role
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('role, created_at')
-    .eq('id', user.id)
-    .single()
+  // Demo account bypass — demo@petitstay.com can view as Grand Hyatt Seoul
+  const isDemoUser = user.email === 'demo@petitstay.com'
+  const DEMO_PARTNER_ID = 'c1111111-1111-1111-1111-111111111111'
+  const effectivePartnerId = isDemoUser ? DEMO_PARTNER_ID : user.id
 
-  if (profileError || !profile || profile.role !== 'partner') {
-    return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+  // Check role (skip for demo user)
+  if (!isDemoUser) {
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError || !profile || profile.role !== 'partner') {
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+    }
   }
 
   // Partner account
   const { data: account } = await supabase
     .from('partner_accounts')
     .select('business_name, business_type, referral_code, created_at')
-    .eq('id', user.id)
+    .eq('id', effectivePartnerId)
     .single()
 
   if (!account) {
@@ -50,7 +57,7 @@ export async function GET() {
         session_reports (id, check_in_at, check_out_at, activities, mood_behavior, sleep_notes, additional_notes)
       )
     `)
-    .eq('partner_id', user.id)
+    .eq('partner_id', effectivePartnerId)
     .order('created_at', { ascending: false })
 
   const referrals = allReferrals ?? []

@@ -9,14 +9,19 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Demo account bypass — demo@petitstay.com can view as Emily K.
+  const isDemoUser = user.email === 'demo@petitstay.com'
+  const DEMO_SITTER_ID = 'b1111111-1111-1111-1111-111111111111'
+  const effectiveSitterId = isDemoUser ? DEMO_SITTER_ID : user.id
+
   // Check role
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('full_name, avatar_url, role, created_at')
-    .eq('id', user.id)
+    .eq('id', effectiveSitterId)
     .single()
 
-  if (profileError || !profile || profile.role !== 'sitter') {
+  if (profileError || !profile || (!isDemoUser && profile.role !== 'sitter')) {
     return NextResponse.json({ error: 'Access denied' }, { status: 403 })
   }
 
@@ -24,7 +29,7 @@ export async function GET() {
   const { data: sitterProfile } = await supabase
     .from('sitter_profiles')
     .select('is_verified, languages, rating_avg, review_count, bio, hourly_rate')
-    .eq('id', user.id)
+    .eq('id', effectiveSitterId)
     .single()
 
   // This month boundaries
@@ -36,7 +41,7 @@ export async function GET() {
   const { count: monthSessions } = await supabase
     .from('bookings')
     .select('id', { count: 'exact', head: true })
-    .eq('sitter_id', user.id)
+    .eq('sitter_id', effectiveSitterId)
     .eq('status', 'completed')
     .gte('date', monthStart)
 
@@ -44,7 +49,7 @@ export async function GET() {
   const { data: monthEarningsData } = await supabase
     .from('bookings')
     .select('net_amount')
-    .eq('sitter_id', user.id)
+    .eq('sitter_id', effectiveSitterId)
     .eq('status', 'completed')
     .gte('date', monthStart)
 
@@ -57,7 +62,7 @@ export async function GET() {
   const { count: pendingCount } = await supabase
     .from('bookings')
     .select('id', { count: 'exact', head: true })
-    .eq('sitter_id', user.id)
+    .eq('sitter_id', effectiveSitterId)
     .eq('status', 'pending')
 
   // Upcoming sessions (confirmed + pending, date >= today, limit 3)
@@ -68,7 +73,7 @@ export async function GET() {
       profiles!bookings_parent_id_fkey (full_name),
       booking_children (id)
     `)
-    .eq('sitter_id', user.id)
+    .eq('sitter_id', effectiveSitterId)
     .in('status', ['confirmed', 'pending'])
     .gte('date', today)
     .order('date', { ascending: true })
@@ -92,7 +97,7 @@ export async function GET() {
       profiles!bookings_parent_id_fkey (full_name),
       booking_children (id, name, age, special_notes)
     `)
-    .eq('sitter_id', user.id)
+    .eq('sitter_id', effectiveSitterId)
     .eq('status', 'pending')
     .order('date', { ascending: true })
 
@@ -114,7 +119,7 @@ export async function GET() {
   const { data: availabilityData } = await supabase
     .from('sitter_availability')
     .select('day_of_week, start_time, end_time, is_active')
-    .eq('sitter_id', user.id)
+    .eq('sitter_id', effectiveSitterId)
     .order('day_of_week')
 
   const availability = availabilityData ?? []
@@ -126,7 +131,7 @@ export async function GET() {
       id, date, start_time, end_time, net_amount, total_amount, service_fee, status,
       profiles!bookings_parent_id_fkey (full_name)
     `)
-    .eq('sitter_id', user.id)
+    .eq('sitter_id', effectiveSitterId)
     .eq('status', 'completed')
     .gte('date', monthStart)
     .order('date', { ascending: false })

@@ -125,26 +125,24 @@ export default function MyPage() {
         id="main-content"
         className="mx-auto w-full max-w-[720px] flex-1 px-6 py-8"
       >
-        <h1 className="text-[22px] font-semibold text-[#222222]">
-          {t("myPage.title")}
-        </h1>
-
-        {/* Demo role switcher */}
-        <div className="mt-4">
-          <p className="text-xs text-[#B0B0B0]">{t("myPage.demoMode")}</p>
-          <div className="mt-1.5 flex gap-2">
-            <span className="rounded-full bg-[#222222] px-4 py-1.5 text-sm font-medium text-white">
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-[22px] font-semibold text-[#222222]">
+            {t("myPage.title")}
+          </h1>
+          {/* Demo role switcher — compact inline pills */}
+          <div className="flex gap-1.5">
+            <span className="rounded-full bg-[#222222] px-3 py-1 text-xs font-medium text-white">
               {t("myPage.parentMode")}
             </span>
             <Link
               href="/sitter"
-              className="rounded-full bg-[#F5F0EB] px-4 py-1.5 text-sm font-medium text-[#717171] transition-colors hover:text-[#222222]"
+              className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
             >
               {t("myPage.sitterMode")}
             </Link>
             <Link
               href="/partner"
-              className="rounded-full bg-[#F5F0EB] px-4 py-1.5 text-sm font-medium text-[#717171] transition-colors hover:text-[#222222]"
+              className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
             >
               {t("myPage.partnerMode")}
             </Link>

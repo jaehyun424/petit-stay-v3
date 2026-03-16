@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
@@ -599,6 +600,25 @@ export default function SitterDashboardPage() {
       <Header />
 
       <main id="main-content" className="mx-auto w-full max-w-[1280px] flex-1 px-6">
+        {/* Demo role switcher */}
+        <div className="flex items-center gap-1.5 pt-6">
+          <Link
+            href="/my"
+            className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
+          >
+            {t("myPage.parentMode")}
+          </Link>
+          <span className="rounded-full bg-[#222222] px-3 py-1 text-xs font-medium text-white">
+            {t("myPage.sitterMode")}
+          </span>
+          <Link
+            href="/partner"
+            className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
+          >
+            {t("myPage.partnerMode")}
+          </Link>
+        </div>
+
         {/* sitter profile header */}
         <div className="flex items-center gap-4 py-6">
           <Avatar size="lg" src={profile.avatar_url ?? undefined} fallback={profile.full_name.charAt(0)} />

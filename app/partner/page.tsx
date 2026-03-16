@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
@@ -383,6 +384,25 @@ export default function PartnerConsolePage() {
       <Header />
 
       <main id="main-content" className="mx-auto w-full max-w-[1280px] flex-1 px-6">
+        {/* Demo role switcher */}
+        <div className="flex items-center gap-1.5 pt-6">
+          <Link
+            href="/my"
+            className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
+          >
+            {t("myPage.parentMode")}
+          </Link>
+          <Link
+            href="/sitter"
+            className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
+          >
+            {t("myPage.sitterMode")}
+          </Link>
+          <span className="rounded-full bg-[#222222] px-3 py-1 text-xs font-medium text-white">
+            {t("myPage.partnerMode")}
+          </span>
+        </div>
+
         {/* partner header */}
         <div className="py-6">
           <h1 className="text-[22px] font-semibold text-[#222222]">{account.business_name}</h1>
