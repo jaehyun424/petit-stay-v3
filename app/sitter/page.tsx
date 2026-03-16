@@ -359,7 +359,7 @@ function ProfileTab({
           />
         ) : (
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-bg-cream)]">
-            <span className="text-2xl font-semibold text-[#C4B5A6]">
+            <span className="text-2xl font-semibold text-[var(--color-avatar-text)]">
               {profile.full_name.charAt(0)}
             </span>
           </div>

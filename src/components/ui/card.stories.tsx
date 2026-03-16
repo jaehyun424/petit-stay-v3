@@ -16,7 +16,7 @@ function CardImagePlaceholder() {
   return (
     <div
       className="w-full aspect-square flex items-center justify-center"
-      style={{ background: "#E8E0D8" }}
+      style={{ background: "var(--color-avatar-bg)" }}
     >
       <svg
         width="48"
@@ -25,10 +25,10 @@ function CardImagePlaceholder() {
         fill="none"
         aria-hidden="true"
       >
-        <circle cx="12" cy="8" r="4" fill="#C4B5A6" />
+        <circle cx="12" cy="8" r="4" fill="var(--color-avatar-text)" />
         <path
           d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"
-          fill="#C4B5A6"
+          fill="var(--color-avatar-text)"
         />
       </svg>
     </div>

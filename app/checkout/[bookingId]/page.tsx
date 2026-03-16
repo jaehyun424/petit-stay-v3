@@ -223,7 +223,7 @@ function PaymentForm({
 
             {/* Error message */}
             {errorMsg && (
-              <div className="mb-4 rounded-[8px] bg-[#FFEBEE] p-3 text-sm text-[#D32F2F]">
+              <div className="mb-4 rounded-[8px] bg-[var(--color-error-bg)] p-3 text-sm text-[var(--color-error-text)]">
                 {errorMsg}
               </div>
             )}
@@ -316,7 +316,7 @@ export default function CheckoutPage() {
 
         {error && (
           <div className="mx-auto max-w-[480px] py-20 text-center">
-            <p className="text-sm text-[#D32F2F]">{error}</p>
+            <p className="text-sm text-[var(--color-error-text)]">{error}</p>
           </div>
         )}
 

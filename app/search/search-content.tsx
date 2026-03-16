@@ -304,7 +304,7 @@ export function SearchContent() {
                     className="block"
                   >
                     <Card className="h-full">
-                      <div className="flex aspect-square w-full items-center justify-center overflow-hidden bg-[#E8E0D8]">
+                      <div className="flex aspect-square w-full items-center justify-center overflow-hidden bg-[var(--color-avatar-bg)]">
                         {sitter.avatar_url ? (
                           <img
                             src={sitter.avatar_url}
@@ -312,7 +312,7 @@ export function SearchContent() {
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <span className="text-3xl font-semibold text-[#C4B5A6]">
+                          <span className="text-3xl font-semibold text-[var(--color-avatar-text)]">
                             {sitter.name.charAt(0)}
                           </span>
                         )}

@@ -18,7 +18,7 @@ export default async function Home() {
 
       <main id="main-content">
       {/* Hero */}
-      <section style={{ background: "linear-gradient(135deg, #F5F0EB 0%, #E8E0D8 50%, rgba(196,149,106,0.12) 100%)" }}>
+      <section style={{ background: "linear-gradient(135deg, var(--color-bg-cream) 0%, var(--color-avatar-bg) 50%, rgba(196,149,106,0.12) 100%)" }}>
         <div className="mx-auto max-w-[1280px] px-6 py-16 md:px-20">
           <div className="flex flex-col gap-10 md:flex-row md:items-center md:gap-16">
             <div className="flex flex-1 flex-col gap-6">
@@ -161,7 +161,7 @@ export default async function Home() {
                 return (
                   <Link key={sitter.id} href={`/sitters/${sitter.id}`} className="block shrink-0 snap-start w-[220px] sm:w-[240px]">
                     <Card className="h-full">
-                      <div className="flex aspect-square w-full items-center justify-center overflow-hidden bg-[#E8E0D8]">
+                      <div className="flex aspect-square w-full items-center justify-center overflow-hidden bg-[var(--color-avatar-bg)]">
                         {sitter.avatar_url ? (
                           <img
                             src={sitter.avatar_url}
@@ -169,7 +169,7 @@ export default async function Home() {
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <span className="text-3xl font-semibold text-[#C4B5A6]">
+                          <span className="text-3xl font-semibold text-[var(--color-avatar-text)]">
                             {sitter.name.charAt(0)}
                           </span>
                         )}

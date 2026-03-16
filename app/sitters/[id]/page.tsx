@@ -72,7 +72,7 @@ export default async function SitterProfilePage({
         <div className="mx-auto max-w-[1280px] px-6 py-8">
           <div className="flex flex-col gap-8 md:flex-row">
             {/* Profile Photo */}
-            <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-[#E8E0D8] md:w-[280px] md:shrink-0">
+            <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-[var(--color-avatar-bg)] md:w-[280px] md:shrink-0">
               {sitter.avatar_url ? (
                 <img
                   src={sitter.avatar_url}
@@ -80,7 +80,7 @@ export default async function SitterProfilePage({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <span className="text-[48px] font-semibold text-[#C4B5A6]">
+                <span className="text-[48px] font-semibold text-[var(--color-avatar-text)]">
                   {initial}
                 </span>
               )}
@@ -130,7 +130,7 @@ export default async function SitterProfilePage({
       {/* Section 2: Video Introduction Placeholder */}
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-4">
-          <div className="flex aspect-video w-full items-center justify-center rounded-xl bg-[#E8E0D8]">
+          <div className="flex aspect-video w-full items-center justify-center rounded-xl bg-[var(--color-avatar-bg)]">
             <svg
               width="48"
               height="48"
@@ -138,7 +138,7 @@ export default async function SitterProfilePage({
               fill="none"
               aria-hidden="true"
             >
-              <path d="M18 14L36 24L18 34V14Z" fill="#C4B5A6" />
+              <path d="M18 14L36 24L18 34V14Z" fill="var(--color-avatar-text)" />
             </svg>
           </div>
           <p className="mt-3 text-sm text-[var(--color-text-secondary)]">{t('sitter.videoIntro')}</p>

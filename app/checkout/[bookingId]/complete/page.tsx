@@ -69,9 +69,9 @@ export default function CompletePage() {
 
           {succeeded && confirmed && (
             <>
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#E8F5E9]">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-success-bg)]">
                 <svg
-                  className="h-8 w-8 text-[#4CAF50]"
+                  className="h-8 w-8 text-[var(--color-success-icon)]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -100,9 +100,9 @@ export default function CompletePage() {
 
           {(error || (!succeeded && !confirming)) && (
             <>
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#FFEBEE]">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-error-bg)]">
                 <svg
-                  className="h-8 w-8 text-[#F44336]"
+                  className="h-8 w-8 text-[var(--color-error-icon)]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

@@ -46,6 +46,17 @@
   --color-avatar-fallback-bg: #C4956A;
   --color-avatar-fallback-text: #FFFFFF;
 
+  /* Avatar placeholder (no-photo) */
+  --color-avatar-bg: #E8E0D8;
+  --color-avatar-text: #C4B5A6;
+
+  /* Feedback semantic */
+  --color-error-bg: #FFEBEE;
+  --color-error-text: #D32F2F;
+  --color-success-bg: #E8F5E9;
+  --color-success-icon: #4CAF50;
+  --color-error-icon: #F44336;
+
   /* ── Typography ── */
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   --font-serif: "Lora", Georgia, "Times New Roman", serif;
