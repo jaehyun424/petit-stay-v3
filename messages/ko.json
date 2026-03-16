@@ -13,7 +13,9 @@
     "verified": "인증됨",
     "childCount": "아이 {count}명",
     "previousSlide": "이전",
-    "nextSlide": "다음"
+    "nextSlide": "다음",
+    "unknownSitter": "시터",
+    "profilePhoto": "프로필 사진"
   },
   "header": {
     "brand": "Petit Stay",

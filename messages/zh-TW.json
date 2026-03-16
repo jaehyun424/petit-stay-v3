@@ -13,7 +13,9 @@
     "verified": "已驗證",
     "childCount": "{count}位孩子",
     "previousSlide": "上一個",
-    "nextSlide": "下一個"
+    "nextSlide": "下一個",
+    "unknownSitter": "保姆",
+    "profilePhoto": "個人照片"
   },
   "header": {
     "brand": "Petit Stay",

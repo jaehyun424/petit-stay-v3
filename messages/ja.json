@@ -13,7 +13,9 @@
     "verified": "認証済み",
     "childCount": "お子さま{count}名",
     "previousSlide": "前へ",
-    "nextSlide": "次へ"
+    "nextSlide": "次へ",
+    "unknownSitter": "シッター",
+    "profilePhoto": "プロフィール写真"
   },
   "header": {
     "brand": "Petit Stay",

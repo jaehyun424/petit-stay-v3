@@ -100,7 +100,7 @@ export default function ReviewPage() {
       }
       const data = await res.json();
       const sp = data.sitter_profiles;
-      const sitterName = sp?.profiles?.full_name ?? "Unknown";
+      const sitterName = sp?.profiles?.full_name ?? t('common.unknownSitter');
 
       setBookingInfo({
         sitter_name: sitterName,

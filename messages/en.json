@@ -13,7 +13,9 @@
     "verified": "Verified",
     "childCount": "{count} children",
     "previousSlide": "Previous",
-    "nextSlide": "Next"
+    "nextSlide": "Next",
+    "unknownSitter": "Sitter",
+    "profilePhoto": "Profile photo"
   },
   "header": {
     "brand": "Petit Stay",

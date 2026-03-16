@@ -366,7 +366,7 @@ function ProfileTab({
         {avatarPreview ? (
           <img
             src={avatarPreview}
-            alt="Profile photo"
+            alt={t('common.profilePhoto')}
             className="h-24 w-24 rounded-full object-cover"
           />
         ) : (

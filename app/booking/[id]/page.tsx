@@ -91,15 +91,15 @@ function getCancellationDeadline(dateStr: string, startTime: string): string {
   return d.toLocaleDateString("ko-KR", { month: "long", day: "numeric" }) + " " + time;
 }
 
-function getSitterName(booking: BookingData): string {
-  return booking.sitter_profiles?.profiles?.full_name ?? "Unknown";
+function getSitterName(booking: BookingData, fallback: string): string {
+  return booking.sitter_profiles?.profiles?.full_name ?? fallback;
 }
 
 /* ── Confirmed ── */
 function ConfirmedView({ booking, onCancel, cancelling }: { booking: BookingData; onCancel: () => void; cancelling: boolean }) {
   const t = useTranslations('bookingDetail');
   const tCommon = useTranslations('common');
-  const sitterName = getSitterName(booking);
+  const sitterName = getSitterName(booking, tCommon('unknownSitter'));
   const isVerified = booking.sitter_profiles?.is_verified ?? false;
   const childCount = booking.booking_children?.length ?? 0;
   const contact = booking.booking_emergency_contacts?.[0];
@@ -222,7 +222,8 @@ function ConfirmedView({ booking, onCancel, cancelling }: { booking: BookingData
 /* ── In Progress ── */
 function InProgressView({ booking }: { booking: BookingData }) {
   const t = useTranslations('bookingDetail');
-  const sitterName = getSitterName(booking);
+  const tCommon = useTranslations('common');
+  const sitterName = getSitterName(booking, tCommon('unknownSitter'));
   const report = booking.session_reports?.[0];
 
   const timeline = report
@@ -290,7 +291,8 @@ function InProgressView({ booking }: { booking: BookingData }) {
 /* ── Completed ── */
 function CompletedView({ booking }: { booking: BookingData }) {
   const t = useTranslations('bookingDetail');
-  const sitterName = getSitterName(booking);
+  const tCommon = useTranslations('common');
+  const sitterName = getSitterName(booking, tCommon('unknownSitter'));
   const report = booking.session_reports?.[0];
 
   const sections = report
@@ -364,7 +366,8 @@ function CompletedView({ booking }: { booking: BookingData }) {
 /* ── Cancelled ── */
 function CancelledView({ booking }: { booking: BookingData }) {
   const t = useTranslations('bookingDetail');
-  const sitterName = getSitterName(booking);
+  const tCommon = useTranslations('common');
+  const sitterName = getSitterName(booking, tCommon('unknownSitter'));
 
   return (
     <div className="flex flex-col gap-6">

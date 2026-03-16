@@ -59,14 +59,15 @@ const LANG_CODE_TO_NAMES: Record<string, string[]> = {
 };
 
 function buildBadges(
-  sitter: Pick<Sitter, "is_verified" | "languages" | "certifications">
+  sitter: Pick<Sitter, "is_verified" | "languages" | "certifications">,
+  verifiedLabel: string,
 ): { label: string; variant: "verified" | "language" | "certification" }[] {
   const badges: {
     label: string;
     variant: "verified" | "language" | "certification";
   }[] = [];
   if (sitter.is_verified)
-    badges.push({ label: "Verified", variant: "verified" });
+    badges.push({ label: verifiedLabel, variant: "verified" });
   for (const lang of sitter.languages)
     badges.push({ label: `${lang.level} ${lang.lang}`, variant: "language" });
   for (const cert of sitter.certifications)
@@ -283,7 +284,7 @@ export function SearchContent() {
           {displayedSitters.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-6">
               {displayedSitters.map((sitter) => {
-                const badges = buildBadges(sitter);
+                const badges = buildBadges(sitter, t('common.verified'));
                 return (
                   <Link
                     key={sitter.id}

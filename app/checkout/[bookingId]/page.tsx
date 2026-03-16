@@ -38,7 +38,7 @@ interface BookingData {
 function BookingSummary({ booking }: { booking: BookingData }) {
   const t = useTranslations('checkout');
   const tCommon = useTranslations('common');
-  const sitterName = booking.sitter_profiles?.profiles?.full_name ?? "Sitter";
+  const sitterName = booking.sitter_profiles?.profiles?.full_name ?? tCommon('unknownSitter');
   const rating = booking.sitter_profiles?.rating_avg;
   const startH = parseInt(booking.start_time.split(":")[0], 10);
   const endH = parseInt(booking.end_time.split(":")[0], 10);
