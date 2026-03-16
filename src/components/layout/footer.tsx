@@ -8,10 +8,10 @@ export function Footer() {
   const t = useTranslations();
 
   return (
-    <footer className="bg-[#222222]">
+    <footer className="bg-[var(--color-text-primary)]">
       <div className="mx-auto max-w-[1280px] px-6 py-12">
         <Logo variant="white" className="h-6" />
-        <nav aria-label="Footer" className="mt-4 flex flex-wrap gap-6 text-sm text-[#B0B0B0]">
+        <nav aria-label="Footer" className="mt-4 flex flex-wrap gap-6 text-sm text-[var(--color-text-weak)]">
           <Link href="/about" className="transition-colors hover:text-white">
             {t('footer.about')}
           </Link>
@@ -25,7 +25,7 @@ export function Footer() {
             {t('footer.terms')}
           </Link>
         </nav>
-        <p className="mt-6 text-sm text-[#B0B0B0]">
+        <p className="mt-6 text-sm text-[var(--color-text-weak)]">
           {t('footer.copyright')}
         </p>
       </div>

@@ -62,11 +62,11 @@ export function Header() {
     <>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#222222] focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--color-text-primary)] focus:shadow-lg"
       >
         {t('header.skipToMain')}
       </a>
-      <header className="border-b border-[#DDDDDD] bg-white">
+      <header className="border-b border-[var(--color-border)] bg-white">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4">
         <Link href="/" aria-label={t('header.homeLabel')}>
           <Logo />
@@ -76,7 +76,7 @@ export function Header() {
             value={currentLocale}
             onChange={(e) => handleLocaleChange(e.target.value)}
             aria-label={t('header.selectLanguage')}
-            className="cursor-pointer rounded border border-[#DDDDDD] bg-white px-2 py-1 text-sm text-[#222222] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4956A]"
+            className="cursor-pointer rounded border border-[var(--color-border)] bg-white px-2 py-1 text-sm text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
           >
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
@@ -86,18 +86,18 @@ export function Header() {
           </select>
           {user ? (
             <>
-              <Link href="/my" className="text-sm text-[#222222] underline">
+              <Link href="/my" className="text-sm text-[var(--color-text-primary)] underline">
                 {t('header.myPage')}
               </Link>
               <button
                 onClick={handleLogout}
-                className="cursor-pointer text-sm text-[#222222] underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4956A] rounded"
+                className="cursor-pointer text-sm text-[var(--color-text-primary)] underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] rounded"
               >
                 {t('common.logout')}
               </button>
             </>
           ) : (
-            <Link href="/login" className="text-sm text-[#222222] underline">
+            <Link href="/login" className="text-sm text-[var(--color-text-primary)] underline">
               {t('common.login')}
             </Link>
           )}

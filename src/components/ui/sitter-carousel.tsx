@@ -48,7 +48,7 @@ export function SitterCarousel({ children }: SitterCarouselProps) {
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#DDDDDD] bg-white shadow-md transition-colors hover:border-[#C4956A]"
+          className="absolute left-0 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-white shadow-md transition-colors hover:border-[var(--color-accent)]"
           aria-label={t('common.previousSlide')}
         >
           <svg
@@ -78,7 +78,7 @@ export function SitterCarousel({ children }: SitterCarouselProps) {
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#DDDDDD] bg-white shadow-md transition-colors hover:border-[#C4956A]"
+          className="absolute right-0 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-white shadow-md transition-colors hover:border-[var(--color-accent)]"
           aria-label={t('common.nextSlide')}
         >
           <svg
