@@ -28,13 +28,28 @@ export async function GET() {
   }
 
   // Partner account
-  const { data: account } = await supabase
+  const { data: account, error: accountError } = await supabase
     .from('partner_accounts')
     .select('business_name, business_type, referral_code, created_at')
     .eq('id', effectivePartnerId)
     .single()
 
-  if (!account) {
+  if (accountError || !account) {
+    // For demo user, return fallback account data so dashboard renders
+    if (isDemoUser) {
+      return NextResponse.json({
+        account: {
+          business_name: 'Grand Hyatt Seoul',
+          business_type: 'hotel',
+          referral_code: 'GRANDHYATT',
+          created_at: '2025-01-01T00:00:00Z',
+        },
+        stats: { monthReferrals: 0, monthCompleted: 0, monthTotalValue: 0 },
+        recentActivity: [],
+        bookings: [],
+        reports: [],
+      })
+    }
     return NextResponse.json({ error: 'Partner account not found' }, { status: 404 })
   }
 
@@ -43,24 +58,33 @@ export async function GET() {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0]
 
   // All referrals for this partner
-  const { data: allReferrals } = await supabase
-    .from('partner_referrals')
-    .select(`
-      id, created_at, booking_id,
-      bookings!partner_referrals_booking_id_fkey (
-        id, date, start_time, end_time, status, total_amount,
-        profiles!bookings_parent_id_fkey (full_name),
-        sitter_profiles!bookings_sitter_id_fkey (
-          profiles!sitter_profiles_id_fkey (full_name)
-        ),
-        booking_children (id),
-        session_reports (id, check_in_at, check_out_at, activities, mood_behavior, sleep_notes, additional_notes)
-      )
-    `)
-    .eq('partner_id', effectivePartnerId)
-    .order('created_at', { ascending: false })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let referrals: any[] = []
+  try {
+    const { data: allReferrals, error: referralError } = await supabase
+      .from('partner_referrals')
+      .select(`
+        id, created_at, booking_id,
+        bookings!partner_referrals_booking_id_fkey (
+          id, date, start_time, end_time, status, total_amount,
+          profiles!bookings_parent_id_fkey (full_name),
+          sitter_profiles!bookings_sitter_id_fkey (
+            profiles!sitter_profiles_id_fkey (full_name)
+          ),
+          booking_children (id),
+          session_reports (id, check_in_at, check_out_at, activities, mood_behavior, sleep_notes, additional_notes)
+        )
+      `)
+      .eq('partner_id', effectivePartnerId)
+      .order('created_at', { ascending: false })
 
-  const referrals = allReferrals ?? []
+    if (!referralError) {
+      referrals = allReferrals ?? []
+    }
+  } catch {
+    // If partner_referrals table doesn't exist or query fails, continue with empty array
+    referrals = []
+  }
 
   // Stats: this month
   const monthReferrals = referrals.filter(r => r.created_at >= monthStart)

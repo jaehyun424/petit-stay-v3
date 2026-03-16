@@ -601,19 +601,19 @@ export default function SitterDashboardPage() {
 
       <main id="main-content" className="mx-auto w-full max-w-[1280px] flex-1 px-6">
         {/* Demo role switcher */}
-        <div className="flex items-center gap-1.5 pt-6">
+        <div className="flex gap-2 pt-6">
           <Link
             href="/my"
-            className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
           >
             {t("myPage.parentMode")}
           </Link>
-          <span className="rounded-full bg-[#222222] px-3 py-1 text-xs font-medium text-white">
+          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[#222222] text-white">
             {t("myPage.sitterMode")}
           </span>
           <Link
             href="/partner"
-            className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
           >
             {t("myPage.partnerMode")}
           </Link>

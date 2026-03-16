@@ -125,32 +125,31 @@ export default function MyPage() {
         id="main-content"
         className="mx-auto w-full max-w-[720px] flex-1 px-6 py-8"
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-[22px] font-semibold text-[#222222]">
-            {t("myPage.title")}
-          </h1>
-          {/* Demo role switcher — compact inline pills */}
-          <div className="flex gap-1.5">
-            <span className="rounded-full bg-[#222222] px-3 py-1 text-xs font-medium text-white">
-              {t("myPage.parentMode")}
-            </span>
-            <Link
-              href="/sitter"
-              className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
-            >
-              {t("myPage.sitterMode")}
-            </Link>
-            <Link
-              href="/partner"
-              className="rounded-full border border-[#DDDDDD] px-3 py-1 text-xs font-medium text-[#717171] transition-colors hover:text-[#222222]"
-            >
-              {t("myPage.partnerMode")}
-            </Link>
-          </div>
+        <h1 className="text-[22px] font-semibold text-[#222222]">
+          {t("myPage.title")}
+        </h1>
+
+        {/* Demo role switcher */}
+        <div className="mt-4 flex gap-2">
+          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[#222222] text-white">
+            {t("myPage.parentMode")}
+          </span>
+          <Link
+            href="/sitter"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+          >
+            {t("myPage.sitterMode")}
+          </Link>
+          <Link
+            href="/partner"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+          >
+            {t("myPage.partnerMode")}
+          </Link>
         </div>
 
         {/* Tab filters */}
-        <div className="mt-6 flex gap-2">
+        <div className="mt-4 flex gap-2">
           {STATUS_FILTERS.map((f) => (
             <button
               key={f}
