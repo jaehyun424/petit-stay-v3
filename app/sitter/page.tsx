@@ -12,7 +12,7 @@ import { Button } from "@/src/components/ui/button";
 const TABS = ["Dashboard", "Requests", "Schedule", "Earnings", "Profile"] as const;
 type Tab = (typeof TABS)[number];
 
-const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const DAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
 
 interface DashboardData {
   profile: {
@@ -89,10 +89,10 @@ function DashboardTab({ data }: { data: DashboardData }) {
   const t = useTranslations();
   const { stats, upcomingSessions } = data;
   const statCards = [
-    { label: "This month", value: `${stats.monthSessions} sessions`, accent: false },
-    { label: "This month", value: `${formatWon(stats.monthEarnings)} earned`, accent: false },
-    { label: "This month", value: `${stats.avgRating.toFixed(2)} avg rating`, accent: false },
-    { label: "This month", value: `${stats.pendingCount} pending requests`, accent: true },
+    { label: t("sitterDashboard.thisMonth"), value: t("sitterDashboard.statSessions", { count: stats.monthSessions }), accent: false },
+    { label: t("sitterDashboard.thisMonth"), value: t("sitterDashboard.statEarned", { amount: formatWon(stats.monthEarnings) }), accent: false },
+    { label: t("sitterDashboard.thisMonth"), value: t("sitterDashboard.statRating", { rating: stats.avgRating.toFixed(2) }), accent: false },
+    { label: t("sitterDashboard.thisMonth"), value: t("sitterDashboard.statPending", { count: stats.pendingCount }), accent: true },
   ];
 
   return (
@@ -115,9 +115,9 @@ function DashboardTab({ data }: { data: DashboardData }) {
 
       {/* upcoming sessions */}
       <div>
-        <h2 className="text-[18px] font-semibold text-[#222222]">Upcoming sessions</h2>
+        <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.upcomingSessions")}</h2>
         {upcomingSessions.length === 0 ? (
-          <p className="mt-4 text-[14px] text-[#717171]">No upcoming sessions</p>
+          <p className="mt-4 text-[14px] text-[#717171]">{t("sitterDashboard.noUpcomingSessions")}</p>
         ) : (
           <div className="mt-4">
             {upcomingSessions.map((session, i) => (
@@ -131,7 +131,7 @@ function DashboardTab({ data }: { data: DashboardData }) {
                   {formatDate(session.date)} · {formatTime(session.start_time)}–{formatTime(session.end_time)} · {session.parent_name} · {t('common.childCount', { count: session.child_count })}
                 </p>
                 <Badge variant={session.status === "confirmed" ? "verified" : "default"}>
-                  {session.status === "confirmed" ? "Confirmed" : "Pending"}
+                  {session.status === "confirmed" ? t("sitterDashboard.confirmed") : t("sitterDashboard.pending")}
                 </Badge>
               </div>
             ))}
@@ -156,9 +156,9 @@ function RequestsTab({
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">Booking requests</h2>
+      <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.bookingRequests")}</h2>
       {pendingRequests.length === 0 ? (
-        <p className="mt-4 text-[14px] text-[#717171]">No pending requests</p>
+        <p className="mt-4 text-[14px] text-[#717171]">{t("sitterDashboard.noPendingRequests")}</p>
       ) : (
         <div className="mt-4 space-y-4">
           {pendingRequests.map((req) => (
@@ -168,14 +168,14 @@ function RequestsTab({
             >
               <p className="text-[16px] font-semibold text-[#222222]">{req.parent_name}</p>
               <p className="mt-1 text-[14px] text-[#717171]">
-                {t('common.childCount', { count: req.children.length })} ({req.children.map(c => `age ${c.age}`).join(", ")})
+                {t('common.childCount', { count: req.children.length })} ({req.children.map(c => t('sitterDashboard.childAge', { age: c.age })).join(", ")})
               </p>
               <p className="mt-1 text-[14px] text-[#717171]">
                 {formatDate(req.date)} · {formatTime(req.start_time)}–{formatTime(req.end_time)}
               </p>
               {req.special_notes && (
                 <p className="mt-2 text-[14px] text-[#222222]">
-                  <span className="text-[#717171]">Special notes: </span>
+                  <span className="text-[#717171]">{t("sitterDashboard.specialNotes")} </span>
                   {req.special_notes}
                 </p>
               )}
@@ -185,7 +185,7 @@ function RequestsTab({
                   onClick={() => onAction(req.id, "accept")}
                   disabled={actionLoading === req.id}
                 >
-                  {actionLoading === req.id ? "..." : "Accept"}
+                  {actionLoading === req.id ? "..." : t("sitterDashboard.accept")}
                 </Button>
                 <Button
                   variant="ghost"
@@ -194,7 +194,7 @@ function RequestsTab({
                   onClick={() => onAction(req.id, "decline")}
                   disabled={actionLoading === req.id}
                 >
-                  Decline
+                  {t("sitterDashboard.decline")}
                 </Button>
               </div>
             </div>
@@ -206,23 +206,24 @@ function RequestsTab({
 }
 
 function ScheduleTab({ data }: { data: DashboardData }) {
+  const t = useTranslations();
   const { availability } = data;
 
   // Build full week schedule
   const weeklySchedule = Array.from({ length: 7 }, (_, i) => {
     const slots = availability.filter(a => a.day_of_week === i && a.is_active);
-    if (slots.length === 0) return { day: DAY_NAMES[i], hours: "Off", active: false };
+    if (slots.length === 0) return { day: t(`sitterDashboard.${DAY_KEYS[i]}`), hours: t("sitterDashboard.off"), active: false };
     const hours = slots.map(s => `${formatTime(s.start_time)} – ${formatTime(s.end_time)}`).join(", ");
-    return { day: DAY_NAMES[i], hours, active: true };
+    return { day: t(`sitterDashboard.${DAY_KEYS[i]}`), hours, active: true };
   });
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">Your availability</h2>
+      <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.yourAvailability")}</h2>
       <div className="mt-4">
         {weeklySchedule.map((slot, i) => (
           <div
-            key={slot.day}
+            key={i}
             className={`flex items-center justify-between py-3 ${
               i < weeklySchedule.length - 1 ? "border-b border-[#DDDDDD]" : ""
             }`}
@@ -243,40 +244,41 @@ function ScheduleTab({ data }: { data: DashboardData }) {
         ))}
       </div>
       <div className="mt-6">
-        <Button variant="secondary" disabled className="opacity-50 cursor-not-allowed">Edit availability</Button>
-        <p className="mt-1 text-xs text-[#B0B0B0]">Coming soon</p>
+        <Button variant="secondary" disabled className="opacity-50 cursor-not-allowed">{t("sitterDashboard.editAvailability")}</Button>
+        <p className="mt-1 text-xs text-[#B0B0B0]">{t("sitterDashboard.comingSoon")}</p>
       </div>
     </div>
   );
 }
 
 function EarningsTab({ data }: { data: DashboardData }) {
+  const t = useTranslations();
   const { earnings, earningsSummary } = data;
   const now = new Date();
-  const monthName = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const monthName = now.toLocaleDateString("ko-KR", { month: "long", year: "numeric" });
 
   return (
     <div className="space-y-8">
       {/* monthly summary */}
       <div className="rounded-[12px] bg-[#F5F0EB] p-5">
         <h2 className="text-[18px] font-semibold text-[#222222]">{monthName}</h2>
-        <p className="mt-2 text-[26px] font-bold text-[#222222]">Total earned: {formatWon(earningsSummary.total)}</p>
+        <p className="mt-2 text-[26px] font-bold text-[#222222]">{t("sitterDashboard.totalEarned", { amount: formatWon(earningsSummary.total) })}</p>
         <p className="mt-1 text-[14px] text-[#717171]">
-          {earningsSummary.sessions} sessions · Avg {formatWon(earningsSummary.avgPerSession)}/session
+          {t("sitterDashboard.sessionsSummary", { count: earningsSummary.sessions, avg: formatWon(earningsSummary.avgPerSession) })}
         </p>
         <p className="mt-1 text-[14px] text-[#717171]">
-          Platform fee (20%): -{formatWon(earningsSummary.platformFee)}
+          {t("sitterDashboard.platformFee", { amount: formatWon(earningsSummary.platformFee) })}
         </p>
         <p className="mt-2 text-[18px] font-semibold text-[#222222]">
-          Net payout: {formatWon(earningsSummary.netPayout)}
+          {t("sitterDashboard.netPayout", { amount: formatWon(earningsSummary.netPayout) })}
         </p>
       </div>
 
       {/* recent transactions */}
       <div>
-        <h2 className="text-[18px] font-semibold text-[#222222]">Recent transactions</h2>
+        <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.recentTransactions")}</h2>
         {earnings.length === 0 ? (
-          <p className="mt-4 text-[14px] text-[#717171]">No transactions this month</p>
+          <p className="mt-4 text-[14px] text-[#717171]">{t("sitterDashboard.noTransactions")}</p>
         ) : (
           <div className="mt-4">
             {earnings.map((tx, i) => (
@@ -286,7 +288,7 @@ function EarningsTab({ data }: { data: DashboardData }) {
                   i < earnings.length - 1 ? "border-b border-[#DDDDDD]" : ""
                 }`}
               >
-                {formatDate(tx.date)} · {tx.parent_name} · {tx.hours}hrs · {formatWon(tx.amount)} · {tx.status} ✓
+                {formatDate(tx.date)} · {tx.parent_name} · {tx.hours}h · {formatWon(tx.amount)} · {tx.status} ✓
               </div>
             ))}
           </div>
@@ -305,6 +307,7 @@ function ProfileTab({
   onSave: (fields: { fullName: string; bio: string; hourlyRate: number; languages: string; avatarUrl?: string }) => void;
   saving: boolean;
 }) {
+  const t = useTranslations();
   const { profile } = data;
   const [fullName, setFullName] = useState(profile.full_name);
   const [bio, setBio] = useState(profile.bio ?? "");
@@ -325,13 +328,13 @@ function ProfileTab({
     // Validate type
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
-      setUploadError("Only JPG, PNG, or WebP files are allowed.");
+      setUploadError(t("sitterDashboard.errorFileType"));
       return;
     }
 
     // Validate size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setUploadError("File size must be under 5MB.");
+      setUploadError(t("sitterDashboard.errorFileSize"));
       return;
     }
 
@@ -345,7 +348,7 @@ function ProfileTab({
       setUploadedAvatarUrl(url);
       setAvatarPreview(url);
     } catch {
-      setUploadError("Upload failed. Please try again.");
+      setUploadError(t("sitterDashboard.errorUploadFailed"));
       setAvatarPreview(profile.avatar_url);
       setUploadedAvatarUrl(undefined);
     } finally {
@@ -355,7 +358,7 @@ function ProfileTab({
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">Edit your profile</h2>
+      <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.editProfile")}</h2>
 
       {/* photo */}
       <div className="mt-6 flex items-center gap-4">
@@ -379,7 +382,7 @@ function ProfileTab({
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
           >
-            {uploading ? "Uploading..." : "Change photo"}
+            {uploading ? t("sitterDashboard.uploading") : t("sitterDashboard.changePhoto")}
           </button>
           {uploadError && (
             <p className="text-[13px] text-[#C13515]">{uploadError}</p>
@@ -397,7 +400,7 @@ function ProfileTab({
       {/* form fields */}
       <div className="mt-6 space-y-5">
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Display name</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.displayName")}</label>
           <input
             type="text"
             value={fullName}
@@ -406,7 +409,7 @@ function ProfileTab({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Bio</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.bio")}</label>
           <textarea
             rows={4}
             value={bio}
@@ -415,7 +418,7 @@ function ProfileTab({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Hourly rate</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.hourlyRate")}</label>
           <input
             type="text"
             value={hourlyRate}
@@ -424,7 +427,7 @@ function ProfileTab({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">Languages</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.languages")}</label>
           <input
             type="text"
             value={languages}
@@ -447,7 +450,7 @@ function ProfileTab({
           }
           disabled={saving}
         >
-          {saving ? "Saving..." : "Save changes"}
+          {saving ? t("sitterDashboard.saving") : t("sitterDashboard.saveChanges")}
         </Button>
       </div>
     </div>
@@ -457,6 +460,7 @@ function ProfileTab({
 /* ───────────────────── main page ───────────────────── */
 
 export default function SitterDashboardPage() {
+  const t = useTranslations();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("Dashboard");
   const [data, setData] = useState<DashboardData | null>(null);
@@ -464,6 +468,14 @@ export default function SitterDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+
+  const tabLabels: Record<Tab, string> = {
+    Dashboard: t("sitterDashboard.tabDashboard"),
+    Requests: t("sitterDashboard.tabRequests"),
+    Schedule: t("sitterDashboard.tabSchedule"),
+    Earnings: t("sitterDashboard.tabEarnings"),
+    Profile: t("sitterDashboard.tabProfile"),
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -473,19 +485,19 @@ export default function SitterDashboardPage() {
         return;
       }
       if (res.status === 403) {
-        setError("Access denied. This page is for sitters only.");
+        setError("accessDenied");
         setLoading(false);
         return;
       }
       if (!res.ok) {
-        setError("Failed to load dashboard");
+        setError("loadFailed");
         setLoading(false);
         return;
       }
       const json = await res.json();
       setData(json);
     } catch {
-      setError("Failed to load dashboard");
+      setError("loadFailed");
     } finally {
       setLoading(false);
     }
@@ -555,7 +567,7 @@ export default function SitterDashboardPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#717171]">Loading...</p>
+          <p className="text-[16px] text-[#717171]">{t("sitterDashboard.loading")}</p>
         </main>
         <Footer />
       </div>
@@ -563,11 +575,14 @@ export default function SitterDashboardPage() {
   }
 
   if (error) {
+    const errorText = error === "accessDenied"
+      ? t("sitterDashboard.accessDenied")
+      : t("sitterDashboard.loadFailed");
     return (
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#C13515]">{error}</p>
+          <p className="text-[16px] text-[#C13515]">{errorText}</p>
         </main>
         <Footer />
       </div>
@@ -590,13 +605,13 @@ export default function SitterDashboardPage() {
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-[20px] font-semibold text-[#222222]">{profile.full_name}</h1>
-              {profile.is_verified && <Badge variant="verified">Verified</Badge>}
+              {profile.is_verified && <Badge variant="verified">{t("sitterDashboard.verified")}</Badge>}
               {profile.languages.map((l) => (
                 <Badge key={l.lang} variant="language">{l.level} {l.lang}</Badge>
               ))}
             </div>
             <p className="mt-1 text-[14px] text-[#717171]">
-              Active sitter · Member since {memberYear}
+              {t("sitterDashboard.activeSitter", { year: memberYear })}
             </p>
           </div>
         </div>
@@ -615,7 +630,7 @@ export default function SitterDashboardPage() {
                     : "border-transparent font-normal text-[#717171] hover:text-[#222222]"
                 }`}
               >
-                {tab}
+                {tabLabels[tab]}
               </button>
             ))}
           </nav>

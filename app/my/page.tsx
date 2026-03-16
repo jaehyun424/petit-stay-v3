@@ -129,6 +129,28 @@ export default function MyPage() {
           {t("myPage.title")}
         </h1>
 
+        {/* Demo role switcher */}
+        <div className="mt-4">
+          <p className="text-xs text-[#B0B0B0]">{t("myPage.demoMode")}</p>
+          <div className="mt-1.5 flex gap-2">
+            <span className="rounded-full bg-[#222222] px-4 py-1.5 text-sm font-medium text-white">
+              {t("myPage.parentMode")}
+            </span>
+            <Link
+              href="/sitter"
+              className="rounded-full bg-[#F5F0EB] px-4 py-1.5 text-sm font-medium text-[#717171] transition-colors hover:text-[#222222]"
+            >
+              {t("myPage.sitterMode")}
+            </Link>
+            <Link
+              href="/partner"
+              className="rounded-full bg-[#F5F0EB] px-4 py-1.5 text-sm font-medium text-[#717171] transition-colors hover:text-[#222222]"
+            >
+              {t("myPage.partnerMode")}
+            </Link>
+          </div>
+        </div>
+
         {/* Tab filters */}
         <div className="mt-6 flex gap-2">
           {STATUS_FILTERS.map((f) => (

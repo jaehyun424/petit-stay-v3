@@ -70,25 +70,27 @@ function formatWon(amount: number) {
   return `₩${amount.toLocaleString()}`;
 }
 
-function statusLabel(status: string) {
-  const map: Record<string, string> = {
-    completed: "Completed",
-    confirmed: "Confirmed",
-    pending: "Pending",
-    in_progress: "In Progress",
-    cancelled: "Cancelled",
-  };
-  return map[status] ?? status;
-}
-
 /* ───────────────────── tab content ───────────────────── */
 
 function DashboardTab({ data }: { data: PartnerData }) {
+  const t = useTranslations();
   const { stats, recentActivity } = data;
+
+  const statusText = (status: string) => {
+    const map: Record<string, string> = {
+      completed: t("partnerDashboard.statusCompleted"),
+      confirmed: t("partnerDashboard.statusConfirmed"),
+      pending: t("partnerDashboard.statusPending"),
+      in_progress: t("partnerDashboard.statusInProgress"),
+      cancelled: t("partnerDashboard.statusCancelled"),
+    };
+    return map[status] ?? status;
+  };
+
   const dashboardStats = [
-    { label: "This month", value: `${stats.monthReferrals} referrals` },
-    { label: "This month", value: `${stats.monthCompleted} completed` },
-    { label: "This month", value: `${formatWon(stats.monthTotalValue)} total value` },
+    { label: t("partnerDashboard.thisMonth"), value: t("partnerDashboard.statReferrals", { count: stats.monthReferrals }) },
+    { label: t("partnerDashboard.thisMonth"), value: t("partnerDashboard.statCompleted", { count: stats.monthCompleted }) },
+    { label: t("partnerDashboard.thisMonth"), value: t("partnerDashboard.statTotalValue", { amount: formatWon(stats.monthTotalValue) }) },
   ];
 
   return (
@@ -107,9 +109,9 @@ function DashboardTab({ data }: { data: PartnerData }) {
 
       {/* recent activity */}
       <div>
-        <h2 className="text-[18px] font-semibold text-[#222222]">Recent activity</h2>
+        <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.recentActivity")}</h2>
         {recentActivity.length === 0 ? (
-          <p className="mt-4 text-[14px] text-[#717171]">No recent activity</p>
+          <p className="mt-4 text-[14px] text-[#717171]">{t("partnerDashboard.noRecentActivity")}</p>
         ) : (
           <div className="mt-4">
             {recentActivity.map((item, i) => (
@@ -119,7 +121,7 @@ function DashboardTab({ data }: { data: PartnerData }) {
                   i < recentActivity.length - 1 ? "border-b border-[#DDDDDD]" : ""
                 }`}
               >
-                {formatDate(item.date)} · {item.parent_name} booked {item.sitter_name} via your QR · {statusLabel(item.status)} {item.status === "completed" ? "✓" : ""}
+                {formatDate(item.date)} · {t("partnerDashboard.bookedViaQR", { parent: item.parent_name, sitter: item.sitter_name })} · {statusText(item.status)} {item.status === "completed" ? "✓" : ""}
               </p>
             ))}
           </div>
@@ -130,6 +132,7 @@ function DashboardTab({ data }: { data: PartnerData }) {
 }
 
 function QRCodeTab({ data }: { data: PartnerData }) {
+  const t = useTranslations();
   const { account } = data;
   const [copied, setCopied] = useState(false);
   const shareLink = `petitstay.com/ref/${account.referral_code}`;
@@ -144,42 +147,54 @@ function QRCodeTab({ data }: { data: PartnerData }) {
     <div className="space-y-8">
       {/* QR placeholder */}
       <div className="flex flex-col items-center">
-        <h2 className="text-[18px] font-semibold text-[#222222]">Your referral QR code</h2>
+        <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.yourQRCode")}</h2>
         <div className="mt-4 flex h-[200px] w-[200px] items-center justify-center rounded-[12px] bg-[#F5F0EB]">
           <span className="text-[32px] font-semibold text-[#8B7355]">QR</span>
         </div>
         <p className="mt-3 text-[14px] text-[#717171]">
-          Scan to find a sitter through {account.business_name}
+          {t("partnerDashboard.scanToFind", { name: account.business_name })}
         </p>
       </div>
 
       {/* share link */}
       <div>
-        <p className="text-[16px] font-semibold text-[#222222]">Share link</p>
+        <p className="text-[16px] font-semibold text-[#222222]">{t("partnerDashboard.shareLink")}</p>
         <p className="mt-1 text-[14px] text-[#717171]">{shareLink}</p>
         <div className="mt-3">
           <Button variant="secondary" size="sm" onClick={handleCopy}>
-            {copied ? "Copied!" : "Copy link"}
+            {copied ? t("partnerDashboard.copied") : t("partnerDashboard.copyLink")}
           </Button>
         </div>
       </div>
 
       {/* guidance */}
       <p className="text-[14px] text-[#717171]">
-        Place this QR code at your front desk or in guest rooms
+        {t("partnerDashboard.qrPlacement")}
       </p>
     </div>
   );
 }
 
 function BookingsTab({ data }: { data: PartnerData }) {
+  const t = useTranslations();
   const { bookings } = data;
+
+  const statusText = (status: string) => {
+    const map: Record<string, string> = {
+      completed: t("partnerDashboard.statusCompleted"),
+      confirmed: t("partnerDashboard.statusConfirmed"),
+      pending: t("partnerDashboard.statusPending"),
+      in_progress: t("partnerDashboard.statusInProgress"),
+      cancelled: t("partnerDashboard.statusCancelled"),
+    };
+    return map[status] ?? status;
+  };
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">Guest bookings</h2>
+      <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.guestBookings")}</h2>
       {bookings.length === 0 ? (
-        <p className="mt-4 text-[14px] text-[#717171]">No bookings yet</p>
+        <p className="mt-4 text-[14px] text-[#717171]">{t("partnerDashboard.noBookings")}</p>
       ) : (
         <div className="mt-4">
           {bookings.map((booking, i) => (
@@ -201,7 +216,7 @@ function BookingsTab({ data }: { data: PartnerData }) {
                       : "default"
                 }
               >
-                {statusLabel(booking.status)}
+                {statusText(booking.status)}
               </Badge>
             </div>
           ))}
@@ -218,12 +233,12 @@ function ReportsTab({ data }: { data: PartnerData }) {
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">Session reports</h2>
+      <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.sessionReports")}</h2>
       <p className="mt-1 text-[14px] text-[#717171]">
-        View care reports from completed sessions
+        {t("partnerDashboard.viewCareReports")}
       </p>
       {reports.length === 0 ? (
-        <p className="mt-4 text-[14px] text-[#717171]">No reports yet</p>
+        <p className="mt-4 text-[14px] text-[#717171]">{t("partnerDashboard.noReports")}</p>
       ) : (
         <div className="mt-4 space-y-4">
           {reports.map((report) => (
@@ -235,34 +250,34 @@ function ReportsTab({ data }: { data: PartnerData }) {
                 {formatDate(report.date)} · {report.parent_name} · {report.sitter_name}
               </p>
               <p className="mt-1 text-[14px] text-[#717171]">
-                Session: {formatTime(report.start_time)}–{formatTime(report.end_time)} · {t('common.childCount', { count: report.child_count })}
+                {t("partnerDashboard.session")} {formatTime(report.start_time)}–{formatTime(report.end_time)} · {t('common.childCount', { count: report.child_count })}
               </p>
-              <p className="mt-1 text-[14px] text-[#6B8F71]">Status: Completed ✓</p>
+              <p className="mt-1 text-[14px] text-[#6B8F71]">{t("partnerDashboard.completedCheck")}</p>
 
               {expandedId === report.id && (
                 <div className="mt-3 space-y-2 border-t border-[#DDDDDD] pt-3">
                   {report.activities && (
                     <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">Activities: </span>{report.activities}
+                      <span className="text-[#717171]">{t("partnerDashboard.activities")} </span>{report.activities}
                     </p>
                   )}
                   {report.mood_behavior && (
                     <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">Mood & behavior: </span>{report.mood_behavior}
+                      <span className="text-[#717171]">{t("partnerDashboard.moodBehavior")} </span>{report.mood_behavior}
                     </p>
                   )}
                   {report.sleep_notes && (
                     <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">Sleep notes: </span>{report.sleep_notes}
+                      <span className="text-[#717171]">{t("partnerDashboard.sleepNotes")} </span>{report.sleep_notes}
                     </p>
                   )}
                   {report.additional_notes && (
                     <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">Additional notes: </span>{report.additional_notes}
+                      <span className="text-[#717171]">{t("partnerDashboard.additionalNotes")} </span>{report.additional_notes}
                     </p>
                   )}
                   {!report.activities && !report.mood_behavior && !report.sleep_notes && !report.additional_notes && (
-                    <p className="text-[14px] text-[#717171]">No details recorded</p>
+                    <p className="text-[14px] text-[#717171]">{t("partnerDashboard.noDetails")}</p>
                   )}
                 </div>
               )}
@@ -273,7 +288,7 @@ function ReportsTab({ data }: { data: PartnerData }) {
                   size="sm"
                   onClick={() => setExpandedId(expandedId === report.id ? null : report.id)}
                 >
-                  {expandedId === report.id ? "Hide report" : "View report"}
+                  {expandedId === report.id ? t("partnerDashboard.hideReport") : t("partnerDashboard.viewReport")}
                 </Button>
               </div>
             </div>
@@ -287,11 +302,19 @@ function ReportsTab({ data }: { data: PartnerData }) {
 /* ───────────────────── main page ───────────────────── */
 
 export default function PartnerConsolePage() {
+  const t = useTranslations();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("Dashboard");
   const [data, setData] = useState<PartnerData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const tabLabels: Record<Tab, string> = {
+    Dashboard: t("partnerDashboard.tabDashboard"),
+    "QR Code": t("partnerDashboard.tabQRCode"),
+    Bookings: t("partnerDashboard.tabBookings"),
+    Reports: t("partnerDashboard.tabReports"),
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -301,19 +324,19 @@ export default function PartnerConsolePage() {
         return;
       }
       if (res.status === 403) {
-        setError("Access denied. This page is for channel partners only.");
+        setError("accessDenied");
         setLoading(false);
         return;
       }
       if (!res.ok) {
-        setError("Failed to load dashboard");
+        setError("loadFailed");
         setLoading(false);
         return;
       }
       const json = await res.json();
       setData(json);
     } catch {
-      setError("Failed to load dashboard");
+      setError("loadFailed");
     } finally {
       setLoading(false);
     }
@@ -328,7 +351,7 @@ export default function PartnerConsolePage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#717171]">Loading...</p>
+          <p className="text-[16px] text-[#717171]">{t("partnerDashboard.loading")}</p>
         </main>
         <Footer />
       </div>
@@ -336,11 +359,14 @@ export default function PartnerConsolePage() {
   }
 
   if (error) {
+    const errorText = error === "accessDenied"
+      ? t("partnerDashboard.accessDenied")
+      : t("partnerDashboard.loadFailed");
     return (
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#C13515]">{error}</p>
+          <p className="text-[16px] text-[#C13515]">{errorText}</p>
         </main>
         <Footer />
       </div>
@@ -360,7 +386,7 @@ export default function PartnerConsolePage() {
         {/* partner header */}
         <div className="py-6">
           <h1 className="text-[22px] font-semibold text-[#222222]">{account.business_name}</h1>
-          <p className="mt-1 text-[14px] text-[#717171]">Channel partner · Since {memberYear}</p>
+          <p className="mt-1 text-[14px] text-[#717171]">{t("partnerDashboard.channelPartner", { year: memberYear })}</p>
         </div>
 
         {/* tab navigation */}
@@ -377,7 +403,7 @@ export default function PartnerConsolePage() {
                     : "border-transparent font-normal text-[#717171] hover:text-[#222222]"
                 }`}
               >
-                {tab}
+                {tabLabels[tab]}
               </button>
             ))}
           </nav>
