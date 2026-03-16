@@ -87,9 +87,9 @@ function DashboardTab({ data }: { data: PartnerData }) {
       {/* stat cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {dashboardStats.map((s) => (
-          <div key={s.value} className="rounded-[12px] bg-[#F5F0EB] p-5">
-            <p className="text-[14px] text-[#717171]">{s.label}</p>
-            <p className="mt-1 text-[26px] font-semibold leading-tight text-[#222222]">
+          <div key={s.value} className="rounded-[12px] bg-[var(--color-bg-cream)] p-5">
+            <p className="text-[14px] text-[var(--color-text-secondary)]">{s.label}</p>
+            <p className="mt-1 text-[26px] font-semibold leading-tight text-[var(--color-text-primary)]">
               {s.value}
             </p>
           </div>
@@ -98,16 +98,16 @@ function DashboardTab({ data }: { data: PartnerData }) {
 
       {/* recent activity */}
       <div>
-        <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.recentActivity")}</h2>
+        <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("partnerDashboard.recentActivity")}</h2>
         {recentActivity.length === 0 ? (
-          <p className="mt-4 text-[14px] text-[#717171]">{t("partnerDashboard.noRecentActivity")}</p>
+          <p className="mt-4 text-[14px] text-[var(--color-text-secondary)]">{t("partnerDashboard.noRecentActivity")}</p>
         ) : (
           <div className="mt-4">
             {recentActivity.map((item, i) => (
               <p
                 key={i}
-                className={`py-3 text-[14px] text-[#222222] ${
-                  i < recentActivity.length - 1 ? "border-b border-[#DDDDDD]" : ""
+                className={`py-3 text-[14px] text-[var(--color-text-primary)] ${
+                  i < recentActivity.length - 1 ? "border-b border-[var(--color-border)]" : ""
                 }`}
               >
                 {formatDateShort(item.date)} · {t("partnerDashboard.bookedViaQR", { parent: item.parent_name, sitter: item.sitter_name })} · {statusText(item.status)} {item.status === "completed" ? "✓" : ""}
@@ -140,19 +140,19 @@ function QRCodeTab({ data }: { data: PartnerData }) {
     <div className="space-y-8">
       {/* QR placeholder */}
       <div className="flex flex-col items-center">
-        <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.yourQRCode")}</h2>
-        <div className="mt-4 flex h-[200px] w-[200px] items-center justify-center rounded-[12px] bg-[#F5F0EB]">
-          <span className="text-[32px] font-semibold text-[#8B7355]">QR</span>
+        <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("partnerDashboard.yourQRCode")}</h2>
+        <div className="mt-4 flex h-[200px] w-[200px] items-center justify-center rounded-[12px] bg-[var(--color-bg-cream)]">
+          <span className="text-[32px] font-semibold text-[var(--color-accent-dark)]">QR</span>
         </div>
-        <p className="mt-3 text-[14px] text-[#717171]">
+        <p className="mt-3 text-[14px] text-[var(--color-text-secondary)]">
           {t("partnerDashboard.scanToFind", { name: account.business_name })}
         </p>
       </div>
 
       {/* share link */}
       <div>
-        <p className="text-[16px] font-semibold text-[#222222]">{t("partnerDashboard.shareLink")}</p>
-        <p className="mt-1 text-[14px] text-[#717171]">{shareLink}</p>
+        <p className="text-[16px] font-semibold text-[var(--color-text-primary)]">{t("partnerDashboard.shareLink")}</p>
+        <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">{shareLink}</p>
         <div className="mt-3">
           <Button variant="secondary" size="sm" onClick={handleCopy}>
             {copied ? t("partnerDashboard.copied") : t("partnerDashboard.copyLink")}
@@ -161,7 +161,7 @@ function QRCodeTab({ data }: { data: PartnerData }) {
       </div>
 
       {/* guidance */}
-      <p className="text-[14px] text-[#717171]">
+      <p className="text-[14px] text-[var(--color-text-secondary)]">
         {t("partnerDashboard.qrPlacement")}
       </p>
     </div>
@@ -185,19 +185,19 @@ function BookingsTab({ data }: { data: PartnerData }) {
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.guestBookings")}</h2>
+      <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("partnerDashboard.guestBookings")}</h2>
       {bookings.length === 0 ? (
-        <p className="mt-4 text-[14px] text-[#717171]">{t("partnerDashboard.noBookings")}</p>
+        <p className="mt-4 text-[14px] text-[var(--color-text-secondary)]">{t("partnerDashboard.noBookings")}</p>
       ) : (
         <div className="mt-4">
           {bookings.map((booking, i) => (
             <div
               key={booking.id}
               className={`flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between ${
-                i < bookings.length - 1 ? "border-b border-[#DDDDDD]" : ""
+                i < bookings.length - 1 ? "border-b border-[var(--color-border)]" : ""
               }`}
             >
-              <p className="text-[14px] text-[#222222]">
+              <p className="text-[14px] text-[var(--color-text-primary)]">
                 {formatDateShort(booking.date)} · {booking.parent_name} · {booking.sitter_name} · {formatTime(booking.start_time)}–{formatTime(booking.end_time)}
               </p>
               <Badge
@@ -226,12 +226,12 @@ function ReportsTab({ data }: { data: PartnerData }) {
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">{t("partnerDashboard.sessionReports")}</h2>
-      <p className="mt-1 text-[14px] text-[#717171]">
+      <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("partnerDashboard.sessionReports")}</h2>
+      <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
         {t("partnerDashboard.viewCareReports")}
       </p>
       {reports.length === 0 ? (
-        <p className="mt-4 text-[14px] text-[#717171]">{t("partnerDashboard.noReports")}</p>
+        <p className="mt-4 text-[14px] text-[var(--color-text-secondary)]">{t("partnerDashboard.noReports")}</p>
       ) : (
         <div className="mt-4 space-y-4">
           {reports.map((report) => (
@@ -239,38 +239,38 @@ function ReportsTab({ data }: { data: PartnerData }) {
               key={report.id}
               className="rounded-[12px] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.05)]"
             >
-              <p className="text-[14px] text-[#222222]">
+              <p className="text-[14px] text-[var(--color-text-primary)]">
                 {formatDateShort(report.date)} · {report.parent_name} · {report.sitter_name}
               </p>
-              <p className="mt-1 text-[14px] text-[#717171]">
+              <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
                 {t("partnerDashboard.session")} {formatTime(report.start_time)}–{formatTime(report.end_time)} · {t('common.childCount', { count: report.child_count })}
               </p>
-              <p className="mt-1 text-[14px] text-[#6B8F71]">{t("partnerDashboard.completedCheck")}</p>
+              <p className="mt-1 text-[14px] text-[var(--color-success)]">{t("partnerDashboard.completedCheck")}</p>
 
               {expandedId === report.id && (
-                <div className="mt-3 space-y-2 border-t border-[#DDDDDD] pt-3">
+                <div className="mt-3 space-y-2 border-t border-[var(--color-border)] pt-3">
                   {report.activities && (
-                    <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">{t("partnerDashboard.activities")} </span>{report.activities}
+                    <p className="text-[14px] text-[var(--color-text-primary)]">
+                      <span className="text-[var(--color-text-secondary)]">{t("partnerDashboard.activities")} </span>{report.activities}
                     </p>
                   )}
                   {report.mood_behavior && (
-                    <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">{t("partnerDashboard.moodBehavior")} </span>{report.mood_behavior}
+                    <p className="text-[14px] text-[var(--color-text-primary)]">
+                      <span className="text-[var(--color-text-secondary)]">{t("partnerDashboard.moodBehavior")} </span>{report.mood_behavior}
                     </p>
                   )}
                   {report.sleep_notes && (
-                    <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">{t("partnerDashboard.sleepNotes")} </span>{report.sleep_notes}
+                    <p className="text-[14px] text-[var(--color-text-primary)]">
+                      <span className="text-[var(--color-text-secondary)]">{t("partnerDashboard.sleepNotes")} </span>{report.sleep_notes}
                     </p>
                   )}
                   {report.additional_notes && (
-                    <p className="text-[14px] text-[#222222]">
-                      <span className="text-[#717171]">{t("partnerDashboard.additionalNotes")} </span>{report.additional_notes}
+                    <p className="text-[14px] text-[var(--color-text-primary)]">
+                      <span className="text-[var(--color-text-secondary)]">{t("partnerDashboard.additionalNotes")} </span>{report.additional_notes}
                     </p>
                   )}
                   {!report.activities && !report.mood_behavior && !report.sleep_notes && !report.additional_notes && (
-                    <p className="text-[14px] text-[#717171]">{t("partnerDashboard.noDetails")}</p>
+                    <p className="text-[14px] text-[var(--color-text-secondary)]">{t("partnerDashboard.noDetails")}</p>
                   )}
                 </div>
               )}
@@ -344,7 +344,7 @@ export default function PartnerConsolePage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#717171]">{t("partnerDashboard.loading")}</p>
+          <p className="text-[16px] text-[var(--color-text-secondary)]">{t("partnerDashboard.loading")}</p>
         </main>
         <Footer />
       </div>
@@ -359,7 +359,7 @@ export default function PartnerConsolePage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#C13515]">{errorText}</p>
+          <p className="text-[16px] text-[var(--color-error)]">{errorText}</p>
         </main>
         <Footer />
       </div>
@@ -380,29 +380,29 @@ export default function PartnerConsolePage() {
         <div className="flex gap-2 pt-6">
           <Link
             href="/my"
-            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-bg-cream)] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
           >
             {t("myPage.parentMode")}
           </Link>
           <Link
             href="/sitter"
-            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-bg-cream)] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
           >
             {t("myPage.sitterMode")}
           </Link>
-          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[#222222] text-white">
+          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-text-primary)] text-white">
             {t("myPage.partnerMode")}
           </span>
         </div>
 
         {/* partner header */}
         <div className="py-6">
-          <h1 className="text-[22px] font-semibold text-[#222222]">{account.business_name}</h1>
-          <p className="mt-1 text-[14px] text-[#717171]">{t("partnerDashboard.channelPartner", { year: memberYear })}</p>
+          <h1 className="text-[22px] font-semibold text-[var(--color-text-primary)]">{account.business_name}</h1>
+          <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">{t("partnerDashboard.channelPartner", { year: memberYear })}</p>
         </div>
 
         {/* tab navigation */}
-        <div className="border-b border-[#DDDDDD]">
+        <div className="border-b border-[var(--color-border)]">
           <nav className="-mb-px flex gap-0 overflow-x-auto">
             {TABS.map((tab) => (
               <button
@@ -411,8 +411,8 @@ export default function PartnerConsolePage() {
                 onClick={() => setActiveTab(tab)}
                 className={`shrink-0 cursor-pointer border-b-2 px-4 py-3 text-[14px] transition-colors ${
                   activeTab === tab
-                    ? "border-[#C4956A] font-semibold text-[#222222]"
-                    : "border-transparent font-normal text-[#717171] hover:text-[#222222]"
+                    ? "border-[var(--color-accent)] font-semibold text-[var(--color-text-primary)]"
+                    : "border-transparent font-normal text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                 }`}
               >
                 {tabLabels[tab]}

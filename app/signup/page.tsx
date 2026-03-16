@@ -92,15 +92,15 @@ export default function SignupPage() {
         <Header />
         <main className="flex flex-1 justify-center px-6 py-16">
           <div className="w-full max-w-[400px] text-center">
-            <h1 className="text-[26px] font-semibold text-[#222222]">
+            <h1 className="text-[26px] font-semibold text-[var(--color-text-primary)]">
               {t('auth.checkEmail')}
             </h1>
-            <p className="mt-4 text-sm text-[#717171]">
+            <p className="mt-4 text-sm text-[var(--color-text-secondary)]">
               {t('auth.confirmEmail', { email })}
             </p>
             <Link
               href="/login"
-              className="mt-8 inline-block text-sm text-[#222222] underline"
+              className="mt-8 inline-block text-sm text-[var(--color-text-primary)] underline"
             >
               {t('auth.backToLogin')}
             </Link>
@@ -118,10 +118,10 @@ export default function SignupPage() {
       <main id="main-content" className="flex flex-1 justify-center px-6 py-16">
         <div className="w-full max-w-[400px]">
           {/* Title */}
-          <h1 className="text-[26px] font-semibold text-[#222222]">
+          <h1 className="text-[26px] font-semibold text-[var(--color-text-primary)]">
             {t('auth.signupTitle')}
           </h1>
-          <p className="mt-2 text-sm text-[#717171]">
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
             {t('auth.signupDesc')}
           </p>
 
@@ -130,16 +130,16 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => setRole("parent")}
-              className={`cursor-pointer rounded-xl bg-[#F5F0EB] p-5 text-left transition-colors ${
+              className={`cursor-pointer rounded-xl bg-[var(--color-bg-cream)] p-5 text-left transition-colors ${
                 role === "parent"
-                  ? "border-2 border-[#C4956A]"
-                  : "border border-[#DDDDDD]"
+                  ? "border-2 border-[var(--color-accent)]"
+                  : "border border-[var(--color-border)]"
               }`}
             >
-              <p className="text-sm font-semibold text-[#222222]">
+              <p className="text-sm font-semibold text-[var(--color-text-primary)]">
                 {t('auth.imParent')}
               </p>
-              <p className="mt-1 text-xs text-[#717171]">
+              <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                 {t('auth.parentDesc')}
               </p>
             </button>
@@ -147,16 +147,16 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => setRole("sitter")}
-              className={`cursor-pointer rounded-xl bg-[#F5F0EB] p-5 text-left transition-colors ${
+              className={`cursor-pointer rounded-xl bg-[var(--color-bg-cream)] p-5 text-left transition-colors ${
                 role === "sitter"
-                  ? "border-2 border-[#C4956A]"
-                  : "border border-[#DDDDDD]"
+                  ? "border-2 border-[var(--color-accent)]"
+                  : "border border-[var(--color-border)]"
               }`}
             >
-              <p className="text-sm font-semibold text-[#222222]">
+              <p className="text-sm font-semibold text-[var(--color-text-primary)]">
                 {t('auth.imSitter')}
               </p>
-              <p className="mt-1 text-xs text-[#717171]">
+              <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                 {t('auth.sitterDesc')}
               </p>
             </button>
@@ -198,12 +198,12 @@ export default function SignupPage() {
             />
 
             {/* Terms checkbox */}
-            <label className="flex items-start gap-3 text-sm text-[#717171]">
+            <label className="flex items-start gap-3 text-sm text-[var(--color-text-secondary)]">
               <input
                 type="checkbox"
                 checked={agreed}
                 onChange={(e) => setAgreed(e.target.checked)}
-                className="mt-0.5 h-4 w-4 shrink-0 accent-[#C4956A]"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
               />
               <span>{t('auth.agreeTerms')}</span>
             </label>
@@ -224,9 +224,9 @@ export default function SignupPage() {
 
           {/* Divider */}
           <div className="my-8 flex items-center gap-4">
-            <div className="h-px flex-1 bg-[#DDDDDD]" />
-            <span className="text-sm text-[#B0B0B0]">{t('auth.orDivider')}</span>
-            <div className="h-px flex-1 bg-[#DDDDDD]" />
+            <div className="h-px flex-1 bg-[var(--color-border)]" />
+            <span className="text-sm text-[var(--color-text-light)]">{t('auth.orDivider')}</span>
+            <div className="h-px flex-1 bg-[var(--color-border)]" />
           </div>
 
           {/* Social buttons */}
@@ -237,13 +237,13 @@ export default function SignupPage() {
             <Button variant="secondary" className="w-full opacity-50 cursor-not-allowed" disabled>
               {t('auth.continueKakao')}
             </Button>
-            <p className="text-center text-xs text-[#B0B0B0]">{t('auth.comingSoon')}</p>
+            <p className="text-center text-xs text-[var(--color-text-light)]">{t('auth.comingSoon')}</p>
           </div>
 
           {/* Login link */}
-          <p className="mt-8 text-center text-sm text-[#717171]">
+          <p className="mt-8 text-center text-sm text-[var(--color-text-secondary)]">
             {t('auth.hasAccount')}{" "}
-            <Link href="/login" className="text-[#222222] underline">
+            <Link href="/login" className="text-[var(--color-text-primary)] underline">
               {t('common.login')}
             </Link>
           </p>

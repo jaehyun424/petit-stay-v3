@@ -89,11 +89,11 @@ function DashboardTab({ data }: { data: DashboardData }) {
       {/* stat cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {statCards.map((s) => (
-          <div key={s.value} className="rounded-[12px] bg-[#F5F0EB] p-5">
-            <p className="text-[14px] text-[#717171]">{s.label}</p>
+          <div key={s.value} className="rounded-[12px] bg-[var(--color-bg-cream)] p-5">
+            <p className="text-[14px] text-[var(--color-text-secondary)]">{s.label}</p>
             <p
               className={`mt-1 text-[26px] font-semibold leading-tight ${
-                s.accent ? "text-[#C4956A]" : "text-[#222222]"
+                s.accent ? "text-[var(--color-accent)]" : "text-[var(--color-text-primary)]"
               }`}
             >
               {s.value}
@@ -104,19 +104,19 @@ function DashboardTab({ data }: { data: DashboardData }) {
 
       {/* upcoming sessions */}
       <div>
-        <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.upcomingSessions")}</h2>
+        <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("sitterDashboard.upcomingSessions")}</h2>
         {upcomingSessions.length === 0 ? (
-          <p className="mt-4 text-[14px] text-[#717171]">{t("sitterDashboard.noUpcomingSessions")}</p>
+          <p className="mt-4 text-[14px] text-[var(--color-text-secondary)]">{t("sitterDashboard.noUpcomingSessions")}</p>
         ) : (
           <div className="mt-4">
             {upcomingSessions.map((session, i) => (
               <div
                 key={session.id}
                 className={`flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between ${
-                  i < upcomingSessions.length - 1 ? "border-b border-[#DDDDDD]" : ""
+                  i < upcomingSessions.length - 1 ? "border-b border-[var(--color-border)]" : ""
                 }`}
               >
-                <p className="text-[14px] text-[#222222]">
+                <p className="text-[14px] text-[var(--color-text-primary)]">
                   {formatDateShort(session.date)} · {formatTime(session.start_time)}–{formatTime(session.end_time)} · {session.parent_name} · {t('common.childCount', { count: session.child_count })}
                 </p>
                 <Badge variant={session.status === "confirmed" ? "verified" : "default"}>
@@ -145,9 +145,9 @@ function RequestsTab({
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.bookingRequests")}</h2>
+      <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("sitterDashboard.bookingRequests")}</h2>
       {pendingRequests.length === 0 ? (
-        <p className="mt-4 text-[14px] text-[#717171]">{t("sitterDashboard.noPendingRequests")}</p>
+        <p className="mt-4 text-[14px] text-[var(--color-text-secondary)]">{t("sitterDashboard.noPendingRequests")}</p>
       ) : (
         <div className="mt-4 space-y-4">
           {pendingRequests.map((req) => (
@@ -155,16 +155,16 @@ function RequestsTab({
               key={req.id}
               className="rounded-[12px] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.05)]"
             >
-              <p className="text-[16px] font-semibold text-[#222222]">{req.parent_name}</p>
-              <p className="mt-1 text-[14px] text-[#717171]">
+              <p className="text-[16px] font-semibold text-[var(--color-text-primary)]">{req.parent_name}</p>
+              <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
                 {t('common.childCount', { count: req.children.length })} ({req.children.map(c => t('sitterDashboard.childAge', { age: c.age })).join(", ")})
               </p>
-              <p className="mt-1 text-[14px] text-[#717171]">
+              <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
                 {formatDateShort(req.date)} · {formatTime(req.start_time)}–{formatTime(req.end_time)}
               </p>
               {req.special_notes && (
-                <p className="mt-2 text-[14px] text-[#222222]">
-                  <span className="text-[#717171]">{t("sitterDashboard.specialNotes")} </span>
+                <p className="mt-2 text-[14px] text-[var(--color-text-primary)]">
+                  <span className="text-[var(--color-text-secondary)]">{t("sitterDashboard.specialNotes")} </span>
                   {req.special_notes}
                 </p>
               )}
@@ -179,7 +179,7 @@ function RequestsTab({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-[#C13515] no-underline hover:underline"
+                  className="text-[var(--color-error)] no-underline hover:underline"
                   onClick={() => onAction(req.id, "decline")}
                   disabled={actionLoading === req.id}
                 >
@@ -208,24 +208,24 @@ function ScheduleTab({ data }: { data: DashboardData }) {
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.yourAvailability")}</h2>
+      <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("sitterDashboard.yourAvailability")}</h2>
       <div className="mt-4">
         {weeklySchedule.map((slot, i) => (
           <div
             key={i}
             className={`flex items-center justify-between py-3 ${
-              i < weeklySchedule.length - 1 ? "border-b border-[#DDDDDD]" : ""
+              i < weeklySchedule.length - 1 ? "border-b border-[var(--color-border)]" : ""
             }`}
           >
             <span
               className={`text-[14px] font-medium ${
-                slot.active ? "text-[#222222]" : "text-[#B0B0B0]"
+                slot.active ? "text-[var(--color-text-primary)]" : "text-[var(--color-text-light)]"
               }`}
             >
               {slot.day}
             </span>
             <span
-              className={`text-[14px] ${slot.active ? "text-[#222222]" : "text-[#B0B0B0]"}`}
+              className={`text-[14px] ${slot.active ? "text-[var(--color-text-primary)]" : "text-[var(--color-text-light)]"}`}
             >
               {slot.active ? `${slot.hours} ✓` : slot.hours}
             </span>
@@ -234,7 +234,7 @@ function ScheduleTab({ data }: { data: DashboardData }) {
       </div>
       <div className="mt-6">
         <Button variant="secondary" disabled className="opacity-50 cursor-not-allowed">{t("sitterDashboard.editAvailability")}</Button>
-        <p className="mt-1 text-xs text-[#B0B0B0]">{t("sitterDashboard.comingSoon")}</p>
+        <p className="mt-1 text-xs text-[var(--color-text-light)]">{t("sitterDashboard.comingSoon")}</p>
       </div>
     </div>
   );
@@ -249,32 +249,32 @@ function EarningsTab({ data }: { data: DashboardData }) {
   return (
     <div className="space-y-8">
       {/* monthly summary */}
-      <div className="rounded-[12px] bg-[#F5F0EB] p-5">
-        <h2 className="text-[18px] font-semibold text-[#222222]">{monthName}</h2>
-        <p className="mt-2 text-[26px] font-bold text-[#222222]">{t("sitterDashboard.totalEarned", { amount: formatWon(earningsSummary.total) })}</p>
-        <p className="mt-1 text-[14px] text-[#717171]">
+      <div className="rounded-[12px] bg-[var(--color-bg-cream)] p-5">
+        <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{monthName}</h2>
+        <p className="mt-2 text-[26px] font-bold text-[var(--color-text-primary)]">{t("sitterDashboard.totalEarned", { amount: formatWon(earningsSummary.total) })}</p>
+        <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
           {t("sitterDashboard.sessionsSummary", { count: earningsSummary.sessions, avg: formatWon(earningsSummary.avgPerSession) })}
         </p>
-        <p className="mt-1 text-[14px] text-[#717171]">
+        <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
           {t("sitterDashboard.platformFee", { amount: formatWon(earningsSummary.platformFee) })}
         </p>
-        <p className="mt-2 text-[18px] font-semibold text-[#222222]">
+        <p className="mt-2 text-[18px] font-semibold text-[var(--color-text-primary)]">
           {t("sitterDashboard.netPayout", { amount: formatWon(earningsSummary.netPayout) })}
         </p>
       </div>
 
       {/* recent transactions */}
       <div>
-        <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.recentTransactions")}</h2>
+        <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("sitterDashboard.recentTransactions")}</h2>
         {earnings.length === 0 ? (
-          <p className="mt-4 text-[14px] text-[#717171]">{t("sitterDashboard.noTransactions")}</p>
+          <p className="mt-4 text-[14px] text-[var(--color-text-secondary)]">{t("sitterDashboard.noTransactions")}</p>
         ) : (
           <div className="mt-4">
             {earnings.map((tx, i) => (
               <div
                 key={i}
-                className={`py-3 text-[14px] text-[#222222] ${
-                  i < earnings.length - 1 ? "border-b border-[#DDDDDD]" : ""
+                className={`py-3 text-[14px] text-[var(--color-text-primary)] ${
+                  i < earnings.length - 1 ? "border-b border-[var(--color-border)]" : ""
                 }`}
               >
                 {formatDateShort(tx.date)} · {tx.parent_name} · {tx.hours}h · {formatWon(tx.amount)} · {tx.status} ✓
@@ -347,7 +347,7 @@ function ProfileTab({
 
   return (
     <div>
-      <h2 className="text-[18px] font-semibold text-[#222222]">{t("sitterDashboard.editProfile")}</h2>
+      <h2 className="text-[18px] font-semibold text-[var(--color-text-primary)]">{t("sitterDashboard.editProfile")}</h2>
 
       {/* photo */}
       <div className="mt-6 flex items-center gap-4">
@@ -358,7 +358,7 @@ function ProfileTab({
             className="h-24 w-24 rounded-full object-cover"
           />
         ) : (
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#F5F0EB]">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-bg-cream)]">
             <span className="text-2xl font-semibold text-[#C4B5A6]">
               {profile.full_name.charAt(0)}
             </span>
@@ -367,14 +367,14 @@ function ProfileTab({
         <div className="flex flex-col gap-1">
           <button
             type="button"
-            className="text-[14px] text-[#222222] underline"
+            className="text-[14px] text-[var(--color-text-primary)] underline"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
           >
             {uploading ? t("sitterDashboard.uploading") : t("sitterDashboard.changePhoto")}
           </button>
           {uploadError && (
-            <p className="text-[13px] text-[#C13515]">{uploadError}</p>
+            <p className="text-[13px] text-[var(--color-error)]">{uploadError}</p>
           )}
           <input
             ref={fileInputRef}
@@ -389,39 +389,39 @@ function ProfileTab({
       {/* form fields */}
       <div className="mt-6 space-y-5">
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.displayName")}</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.displayName")}</label>
           <input
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="h-12 w-full rounded-[8px] border border-[#DDDDDD] px-4 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
+            className="h-12 w-full rounded-[8px] border border-[var(--color-border)] px-4 text-[16px] text-[var(--color-text-primary)] outline-none focus:border-[var(--color-text-primary)]"
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.bio")}</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.bio")}</label>
           <textarea
             rows={4}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="w-full rounded-[8px] border border-[#DDDDDD] px-4 py-3 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
+            className="w-full rounded-[8px] border border-[var(--color-border)] px-4 py-3 text-[16px] text-[var(--color-text-primary)] outline-none focus:border-[var(--color-text-primary)]"
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.hourlyRate")}</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.hourlyRate")}</label>
           <input
             type="text"
             value={hourlyRate}
             onChange={(e) => setHourlyRate(e.target.value)}
-            className="h-12 w-full rounded-[8px] border border-[#DDDDDD] px-4 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
+            className="h-12 w-full rounded-[8px] border border-[var(--color-border)] px-4 text-[16px] text-[var(--color-text-primary)] outline-none focus:border-[var(--color-text-primary)]"
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-[14px] font-medium text-[#222222]">{t("sitterDashboard.languages")}</label>
+          <label className="mb-1.5 block text-[14px] font-medium text-[var(--color-text-primary)]">{t("sitterDashboard.languages")}</label>
           <input
             type="text"
             value={languages}
             onChange={(e) => setLanguages(e.target.value)}
-            className="h-12 w-full rounded-[8px] border border-[#DDDDDD] px-4 text-[16px] text-[#222222] outline-none focus:border-[#222222]"
+            className="h-12 w-full rounded-[8px] border border-[var(--color-border)] px-4 text-[16px] text-[var(--color-text-primary)] outline-none focus:border-[var(--color-text-primary)]"
           />
         </div>
       </div>
@@ -564,7 +564,7 @@ export default function SitterDashboardPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#717171]">{t("sitterDashboard.loading")}</p>
+          <p className="text-[16px] text-[var(--color-text-secondary)]">{t("sitterDashboard.loading")}</p>
         </main>
         <Footer />
       </div>
@@ -579,7 +579,7 @@ export default function SitterDashboardPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6">
-          <p className="text-[16px] text-[#C13515]">{errorText}</p>
+          <p className="text-[16px] text-[var(--color-error)]">{errorText}</p>
         </main>
         <Footer />
       </div>
@@ -600,16 +600,16 @@ export default function SitterDashboardPage() {
         <div className="flex gap-2 pt-6">
           <Link
             href="/my"
-            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-bg-cream)] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
           >
             {t("myPage.parentMode")}
           </Link>
-          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[#222222] text-white">
+          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-text-primary)] text-white">
             {t("myPage.sitterMode")}
           </span>
           <Link
             href="/partner"
-            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-bg-cream)] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
           >
             {t("myPage.partnerMode")}
           </Link>
@@ -620,20 +620,20 @@ export default function SitterDashboardPage() {
           <Avatar size="lg" src={profile.avatar_url ?? undefined} fallback={profile.full_name.charAt(0)} />
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-[20px] font-semibold text-[#222222]">{profile.full_name}</h1>
+              <h1 className="text-[20px] font-semibold text-[var(--color-text-primary)]">{profile.full_name}</h1>
               {profile.is_verified && <Badge variant="verified">{t("sitterDashboard.verified")}</Badge>}
               {profile.languages.map((l) => (
                 <Badge key={l.lang} variant="language">{l.level} {l.lang}</Badge>
               ))}
             </div>
-            <p className="mt-1 text-[14px] text-[#717171]">
+            <p className="mt-1 text-[14px] text-[var(--color-text-secondary)]">
               {t("sitterDashboard.activeSitter", { year: memberYear })}
             </p>
           </div>
         </div>
 
         {/* tab navigation */}
-        <div className="border-b border-[#DDDDDD]">
+        <div className="border-b border-[var(--color-border)]">
           <nav className="-mb-px flex gap-0 overflow-x-auto">
             {TABS.map((tab) => (
               <button
@@ -642,8 +642,8 @@ export default function SitterDashboardPage() {
                 onClick={() => setActiveTab(tab)}
                 className={`shrink-0 cursor-pointer border-b-2 px-4 py-3 text-[14px] transition-colors ${
                   activeTab === tab
-                    ? "border-[#C4956A] font-semibold text-[#222222]"
-                    : "border-transparent font-normal text-[#717171] hover:text-[#222222]"
+                    ? "border-[var(--color-accent)] font-semibold text-[var(--color-text-primary)]"
+                    : "border-transparent font-normal text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                 }`}
               >
                 {tabLabels[tab]}

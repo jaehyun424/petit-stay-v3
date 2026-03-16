@@ -91,7 +91,7 @@ function ConfirmedView({ booking, onCancel, cancelling }: { booking: BookingData
   return (
     <div className="flex flex-col gap-6">
       {/* Banner */}
-      <div className="rounded-[var(--radius-card)] bg-[#F5F0EB] p-5">
+      <div className="rounded-[var(--radius-card)] bg-[var(--color-bg-cream)] p-5">
         <p className="text-lg font-semibold text-[var(--color-text-primary)]">
           {t('confirmed')}
         </p>
@@ -291,7 +291,7 @@ function CompletedView({ booking }: { booking: BookingData }) {
   return (
     <div className="flex flex-col gap-6">
       {/* Banner */}
-      <div className="rounded-[var(--radius-card)] bg-[#F5F0EB] p-5">
+      <div className="rounded-[var(--radius-card)] bg-[var(--color-bg-cream)] p-5">
         <p className="text-lg font-semibold text-[var(--color-text-primary)]">
           {t('completed')}
         </p>
@@ -355,7 +355,7 @@ function CancelledView({ booking }: { booking: BookingData }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="rounded-[var(--radius-card)] bg-[#F5F0EB] p-5">
+      <div className="rounded-[var(--radius-card)] bg-[var(--color-bg-cream)] p-5">
         <p className="text-lg font-semibold text-[var(--color-text-primary)]">
           {t('cancelled')}
         </p>
@@ -452,7 +452,7 @@ export default function BookingDetailPage() {
       <div className="flex min-h-screen flex-col bg-[var(--color-bg-page)]">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">{t('common.loading')}</p>
+          <p className="text-[var(--color-text-secondary)]">{t('common.loading')}</p>
         </main>
         <Footer />
       </div>
@@ -464,7 +464,7 @@ export default function BookingDetailPage() {
       <div className="flex min-h-screen flex-col bg-[var(--color-bg-page)]">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">{error || t('bookingDetail.notFound')}</p>
+          <p className="text-[var(--color-text-secondary)]">{error || t('bookingDetail.notFound')}</p>
         </main>
         <Footer />
       </div>

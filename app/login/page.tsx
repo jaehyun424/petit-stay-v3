@@ -83,8 +83,8 @@ export default function LoginPage() {
       <main id="main-content" className="flex flex-1 justify-center px-6 py-16">
         <div className="w-full max-w-[400px]">
           {/* Title */}
-          <h1 className="text-[26px] font-semibold text-[#222222]">{t('auth.loginTitle')}</h1>
-          <p className="mt-2 text-sm text-[#717171]">
+          <h1 className="text-[26px] font-semibold text-[var(--color-text-primary)]">{t('auth.loginTitle')}</h1>
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
             {t('auth.loginWelcome')}
           </p>
 
@@ -116,7 +116,7 @@ export default function LoginPage() {
                   setResetSent(false);
                   setResetError(null);
                 }}
-                className="cursor-pointer text-sm text-[#222222] underline"
+                className="cursor-pointer text-sm text-[var(--color-text-primary)] underline"
               >
                 {t('auth.forgotPassword')}
               </button>
@@ -138,23 +138,23 @@ export default function LoginPage() {
 
           {/* Forgot password inline form */}
           {showReset && (
-            <div className="mt-6 rounded-xl border border-[#DDDDDD] bg-[#F5F0EB] p-5">
-              <h2 className="text-sm font-semibold text-[#222222]">
+            <div className="mt-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-cream)] p-5">
+              <h2 className="text-sm font-semibold text-[var(--color-text-primary)]">
                 {t('auth.resetPassword')}
               </h2>
-              <p className="mt-1 text-xs text-[#717171]">
+              <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                 {t('auth.resetPasswordDesc')}
               </p>
 
               {resetSent ? (
                 <div className="mt-3">
-                  <p className="text-sm text-[#222222]">
+                  <p className="text-sm text-[var(--color-text-primary)]">
                     {t('auth.resetPasswordSent')}
                   </p>
                   <button
                     type="button"
                     onClick={() => setShowReset(false)}
-                    className="mt-2 cursor-pointer text-sm text-[#717171] underline"
+                    className="mt-2 cursor-pointer text-sm text-[var(--color-text-secondary)] underline"
                   >
                     {t('auth.cancel')}
                   </button>
@@ -196,9 +196,9 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="my-8 flex items-center gap-4">
-            <div className="h-px flex-1 bg-[#DDDDDD]" />
-            <span className="text-sm text-[#B0B0B0]">{t('auth.orDivider')}</span>
-            <div className="h-px flex-1 bg-[#DDDDDD]" />
+            <div className="h-px flex-1 bg-[var(--color-border)]" />
+            <span className="text-sm text-[var(--color-text-light)]">{t('auth.orDivider')}</span>
+            <div className="h-px flex-1 bg-[var(--color-border)]" />
           </div>
 
           {/* Social buttons */}
@@ -209,13 +209,13 @@ export default function LoginPage() {
             <Button variant="secondary" className="w-full opacity-50 cursor-not-allowed" disabled>
               {t('auth.continueKakao')}
             </Button>
-            <p className="text-center text-xs text-[#B0B0B0]">{t('auth.comingSoon')}</p>
+            <p className="text-center text-xs text-[var(--color-text-light)]">{t('auth.comingSoon')}</p>
           </div>
 
           {/* Sign up link */}
-          <p className="mt-8 text-center text-sm text-[#717171]">
+          <p className="mt-8 text-center text-sm text-[var(--color-text-secondary)]">
             {t('auth.noAccount')}{" "}
-            <Link href="/signup" className="text-[#222222] underline">
+            <Link href="/signup" className="text-[var(--color-text-primary)] underline">
               {t('common.signup')}
             </Link>
           </p>

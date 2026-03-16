@@ -57,11 +57,11 @@ export default function CompletePage() {
         <div className="mx-auto max-w-[480px] text-center">
           {succeeded && confirming && (
             <>
-              <div className="mx-auto mb-6 h-16 w-16 animate-spin rounded-full border-4 border-[#DDDDDD] border-t-[#C4956A]" />
-              <h1 className="text-[24px] font-bold text-[#222222]">
+              <div className="mx-auto mb-6 h-16 w-16 animate-spin rounded-full border-4 border-[var(--color-border)] border-t-[var(--color-accent)]" />
+              <h1 className="text-[24px] font-bold text-[var(--color-text-primary)]">
                 {t('confirmingPayment')}
               </h1>
-              <p className="mt-2 text-sm text-[#717171]">
+              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
                 {t('verifyingPayment')}
               </p>
             </>
@@ -84,10 +84,10 @@ export default function CompletePage() {
                   />
                 </svg>
               </div>
-              <h1 className="text-[24px] font-bold text-[#222222]">
+              <h1 className="text-[24px] font-bold text-[var(--color-text-primary)]">
                 {t('paymentConfirmed')}
               </h1>
-              <p className="mt-2 text-sm text-[#717171]">
+              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
                 {t('bookingConfirmedNote')}
               </p>
               <div className="mt-8">
@@ -115,10 +115,10 @@ export default function CompletePage() {
                   />
                 </svg>
               </div>
-              <h1 className="text-[24px] font-bold text-[#222222]">
+              <h1 className="text-[24px] font-bold text-[var(--color-text-primary)]">
                 {t('paymentFailed')}
               </h1>
-              <p className="mt-2 text-sm text-[#717171]">
+              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
                 {error || t('paymentFailedNote')}
               </p>
               <div className="mt-8">

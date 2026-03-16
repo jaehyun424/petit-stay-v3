@@ -15,10 +15,10 @@ export default function NotFound() {
 
       <main className="flex flex-1 items-center justify-center px-6">
         <div className="text-center">
-          <h1 className="text-[22px] font-semibold text-[#222222]">
+          <h1 className="text-[22px] font-semibold text-[var(--color-text-primary)]">
             {t("title")}
           </h1>
-          <p className="mt-3 text-base text-[#717171]">
+          <p className="mt-3 text-base text-[var(--color-text-secondary)]">
             {t("description")}
           </p>
           <div className="mt-8">

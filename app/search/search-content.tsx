@@ -198,20 +198,20 @@ export function SearchContent() {
   return (
     <>
       {/* Search Filter Bar */}
-      <div className="sticky top-0 z-10 border-b border-[#DDDDDD] bg-white">
+      <div className="sticky top-0 z-10 border-b border-[var(--color-border)] bg-white">
         <div className="mx-auto flex max-w-[1280px] items-center gap-3 overflow-x-auto px-6 py-3 [&>*]:shrink-0">
           <input
             type="date"
             aria-label={t("search.date")}
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="h-10 rounded-lg border border-[#DDDDDD] bg-white px-3 text-sm text-[#222222] outline-none focus:border-[#C4956A]"
+            className="h-10 rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text-primary)] outline-none focus:border-[var(--color-accent)]"
           />
           <select
             aria-label={t("search.time")}
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="h-10 rounded-lg border border-[#DDDDDD] bg-white px-3 text-sm text-[#222222] outline-none focus:border-[#C4956A]"
+            className="h-10 rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text-primary)] outline-none focus:border-[var(--color-accent)]"
           >
             <option value="">{t("search.time")}</option>
             <option value="18:00">18:00</option>
@@ -228,7 +228,7 @@ export function SearchContent() {
             aria-label={t("search.childAge")}
             value={childAge}
             onChange={(e) => setChildAge(e.target.value)}
-            className="h-10 rounded-lg border border-[#DDDDDD] bg-white px-3 text-sm text-[#222222] outline-none focus:border-[#C4956A]"
+            className="h-10 rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text-primary)] outline-none focus:border-[var(--color-accent)]"
           >
             <option value="">{t("search.childAge")}</option>
             <option value="3">{t("search.age", { age: 3 })}</option>
@@ -242,7 +242,7 @@ export function SearchContent() {
             aria-label={t("search.language")}
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="h-10 rounded-lg border border-[#DDDDDD] bg-white px-3 text-sm text-[#222222] outline-none focus:border-[#C4956A]"
+            className="h-10 rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text-primary)] outline-none focus:border-[var(--color-accent)]"
           >
             <option value="">{t("search.language")}</option>
             <option value="en">English</option>
@@ -257,11 +257,11 @@ export function SearchContent() {
       </div>
 
       {/* Search Results */}
-      <main id="main-content" className="min-h-screen bg-[#F7F7F7]">
+      <main id="main-content" className="min-h-screen bg-[var(--color-bg-light)]">
         <div className="mx-auto max-w-[1280px] px-6 py-8">
           {/* Results Header */}
           <div className="mb-6 flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
-            <p className="text-base font-semibold text-[#222222]">
+            <p className="text-base font-semibold text-[var(--color-text-primary)]">
               {loading
                 ? t("common.loading")
                 : displayedSitters.length > 0
@@ -274,7 +274,7 @@ export function SearchContent() {
               aria-label={t("search.sortBy")}
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="h-9 rounded-lg border border-[#DDDDDD] bg-white px-3 text-sm text-[#717171] outline-none focus:border-[#C4956A]"
+              className="h-9 rounded-lg border border-[var(--color-border)] bg-white px-3 text-sm text-[var(--color-text-secondary)] outline-none focus:border-[var(--color-accent)]"
             >
               <option value="recommended">
                 {t("search.sortRecommended")}
@@ -318,10 +318,10 @@ export function SearchContent() {
                         )}
                       </div>
                       <CardContent>
-                        <p className="text-sm font-semibold text-[#222222] line-clamp-1">
+                        <p className="text-sm font-semibold text-[var(--color-text-primary)] line-clamp-1">
                           {sitter.name}
                         </p>
-                        <p className="mt-1 text-xs text-[#717171]">
+                        <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                           ★ {sitter.rating_avg.toFixed(2)} (
                           {sitter.review_count})
                         </p>
@@ -332,7 +332,7 @@ export function SearchContent() {
                             </Badge>
                           ))}
                         </div>
-                        <p className="mt-auto pt-2 text-sm font-semibold text-[#222222]">
+                        <p className="mt-auto pt-2 text-sm font-semibold text-[var(--color-text-primary)]">
                           {sitter.hourly_rate.toLocaleString()}
                           {t("search.perHour")}
                         </p>
@@ -344,7 +344,7 @@ export function SearchContent() {
             </div>
           ) : !loading && !fetchError ? (
             <div className="flex flex-col items-center justify-center py-20">
-              <p className="text-sm text-[#717171]">
+              <p className="text-sm text-[var(--color-text-secondary)]">
                 {hasActiveFilter
                   ? t("search.noFilterResults")
                   : t("search.noSitters")}

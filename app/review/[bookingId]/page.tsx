@@ -152,7 +152,7 @@ export default function ReviewPage() {
       <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
         <Header />
         <main className="flex flex-1 items-center justify-center">
-          <p className="text-[#717171]">{t('common.loading')}</p>
+          <p className="text-[var(--color-text-secondary)]">{t('common.loading')}</p>
         </main>
         <Footer />
       </div>
@@ -164,7 +164,7 @@ export default function ReviewPage() {
       <div className="flex min-h-screen flex-col bg-[var(--color-bg)]">
         <Header />
         <main className="flex flex-1 items-center justify-center">
-          <p className="text-[#717171]">{error || t('review.bookingNotFound')}</p>
+          <p className="text-[var(--color-text-secondary)]">{error || t('review.bookingNotFound')}</p>
         </main>
         <Footer />
       </div>
@@ -293,8 +293,8 @@ export default function ReviewPage() {
                   onClick={() => toggleTag(label)}
                   className={`cursor-pointer rounded-[4px] px-4 py-2 text-sm font-medium transition-colors ${
                     isSelected
-                      ? "bg-[#C4956A] text-white"
-                      : "bg-[#F5F0EB] text-[#8B7355]"
+                      ? "bg-[var(--color-accent)] text-white"
+                      : "bg-[var(--color-bg-cream)] text-[var(--color-accent-dark)]"
                   }`}
                 >
                   {label}
@@ -317,7 +317,7 @@ export default function ReviewPage() {
               }
             }}
             placeholder={t('review.placeholder')}
-            className="mt-4 h-[120px] w-full resize-none rounded-[8px] border border-[#DDDDDD] bg-[var(--color-bg)] px-4 py-4 text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-weak)] outline-none transition-[border-color] duration-200 focus:border-2 focus:border-[var(--color-border-hover)] focus:px-[15px] focus:py-[15px]"
+            className="mt-4 h-[120px] w-full resize-none rounded-[8px] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-4 text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-weak)] outline-none transition-[border-color] duration-200 focus:border-2 focus:border-[var(--color-border-hover)] focus:px-[15px] focus:py-[15px]"
           />
           <p className="mt-2 text-right text-sm text-[var(--color-text-weak)]">
             {reviewText.length} / 500

@@ -106,7 +106,7 @@ export default function MyPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">{t("common.loading")}</p>
+          <p className="text-[var(--color-text-secondary)]">{t("common.loading")}</p>
         </main>
         <Footer />
       </div>
@@ -121,24 +121,24 @@ export default function MyPage() {
         id="main-content"
         className="mx-auto w-full max-w-[720px] flex-1 px-6 py-8"
       >
-        <h1 className="text-[22px] font-semibold text-[#222222]">
+        <h1 className="text-[22px] font-semibold text-[var(--color-text-primary)]">
           {t("myPage.title")}
         </h1>
 
         {/* Demo role switcher */}
         <div className="mt-4 flex gap-2">
-          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[#222222] text-white">
+          <span className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-text-primary)] text-white">
             {t("myPage.parentMode")}
           </span>
           <Link
             href="/sitter"
-            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-bg-cream)] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
           >
             {t("myPage.sitterMode")}
           </Link>
           <Link
             href="/partner"
-            className="rounded-full px-4 py-2 text-sm font-medium bg-[#F5F0EB] text-[#717171] transition-colors hover:text-[#222222]"
+            className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-bg-cream)] text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
           >
             {t("myPage.partnerMode")}
           </Link>
@@ -153,8 +153,8 @@ export default function MyPage() {
               onClick={() => setFilter(f)}
               className={`cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                 filter === f
-                  ? "bg-[#222222] text-white"
-                  : "bg-[#F5F0EB] text-[#717171] hover:text-[#222222]"
+                  ? "bg-[var(--color-text-primary)] text-white"
+                  : "bg-[var(--color-bg-cream)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
               }`}
             >
               {t(tabKeys[f])}
@@ -173,7 +173,7 @@ export default function MyPage() {
         <div className="mt-6 flex flex-col gap-4">
           {filteredBookings.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16">
-              <p className="text-base text-[#717171]">
+              <p className="text-base text-[var(--color-text-secondary)]">
                 {t("myPage.noBookings")}
               </p>
             </div>
@@ -185,14 +185,14 @@ export default function MyPage() {
                 <Link
                   key={booking.id}
                   href={`/booking/${booking.id}`}
-                  className="block rounded-[12px] border border-[#DDDDDD] bg-white p-5 transition-shadow hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+                  className="block rounded-[12px] border border-[var(--color-border)] bg-white p-5 transition-shadow hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col gap-1">
-                      <p className="text-base font-semibold text-[#222222]">
+                      <p className="text-base font-semibold text-[var(--color-text-primary)]">
                         {sitterName}
                       </p>
-                      <p className="text-sm text-[#717171]">
+                      <p className="text-sm text-[var(--color-text-secondary)]">
                         {formatDate(booking.date)} ·{" "}
                         {formatTime(booking.start_time)} –{" "}
                         {formatTime(booking.end_time)}

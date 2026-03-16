@@ -6,9 +6,9 @@ import { useTranslations } from "next-intl";
 
 function QA({ question, answer }: { question: string; answer: string }) {
   return (
-    <div className="border-b border-[#DDDDDD] py-4">
-      <p className="text-base font-semibold text-[#222222]">{question}</p>
-      <p className="mt-1 text-sm text-[#717171]">{answer}</p>
+    <div className="border-b border-[var(--color-border)] py-4">
+      <p className="text-base font-semibold text-[var(--color-text-primary)]">{question}</p>
+      <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{answer}</p>
     </div>
   );
 }
@@ -20,7 +20,7 @@ export default function HelpPage() {
     <div className="flex min-h-screen flex-col bg-white">
       <Header />
       <main className="mx-auto w-full max-w-[800px] flex-1 px-6 py-16">
-        <h1 className="text-[26px] font-semibold text-[#222222]">
+        <h1 className="text-[26px] font-semibold text-[var(--color-text-primary)]">
           {t("help.title")}
         </h1>
 

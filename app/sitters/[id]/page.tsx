@@ -32,7 +32,7 @@ export async function generateMetadata({
 function Stars({ count }: { count: number }) {
   const full = Math.round(count);
   return (
-    <span className="text-sm text-[#222222]" aria-label={`${full} out of 5 stars`}>
+    <span className="text-sm text-[var(--color-text-primary)]" aria-label={`${full} out of 5 stars`}>
       {"★".repeat(full)}
       {"☆".repeat(5 - full)}
     </span>
@@ -88,7 +88,7 @@ export default async function SitterProfilePage({
 
             {/* Info */}
             <div className="flex flex-col gap-4">
-              <h1 className="text-[26px] font-semibold text-[#222222]">
+              <h1 className="text-[26px] font-semibold text-[var(--color-text-primary)]">
                 {sitter.name}
               </h1>
 
@@ -100,16 +100,16 @@ export default async function SitterProfilePage({
                 ))}
               </div>
 
-              <p className="text-base text-[#222222]">
+              <p className="text-base text-[var(--color-text-primary)]">
                 ★ {sitter.rating_avg.toFixed(2)} ({t('sitter.reviewCountText', { count: sitter.review_count })})
               </p>
 
-              <p className="text-[22px] font-semibold text-[#222222]">
+              <p className="text-[22px] font-semibold text-[var(--color-text-primary)]">
                 {formattedPrice}{t('sitter.perHour')}
               </p>
 
               {sitter.bio && (
-                <p className="text-base text-[#717171]">{sitter.bio.split('\n\n')[0]}</p>
+                <p className="text-base text-[var(--color-text-secondary)]">{sitter.bio.split('\n\n')[0]}</p>
               )}
 
               <div className="hidden md:block">
@@ -141,26 +141,26 @@ export default async function SitterProfilePage({
               <path d="M18 14L36 24L18 34V14Z" fill="#C4B5A6" />
             </svg>
           </div>
-          <p className="mt-3 text-sm text-[#717171]">{t('sitter.videoIntro')}</p>
+          <p className="mt-3 text-sm text-[var(--color-text-secondary)]">{t('sitter.videoIntro')}</p>
         </div>
       </section>
 
       {/* Section 3: About */}
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-6">
-          <h2 className="text-lg font-semibold text-[#222222]">
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
             {t('sitter.about', { name: firstName })}
           </h2>
           {sitter.bio ? (
             <div className="mt-3 space-y-2">
               {sitter.bio.split('\n\n').filter(Boolean).map((paragraph, i) => (
-                <p key={i} className="text-base leading-relaxed text-[#717171]">
+                <p key={i} className="text-base leading-relaxed text-[var(--color-text-secondary)]">
                   {paragraph}
                 </p>
               ))}
             </div>
           ) : (
-            <p className="mt-3 text-base text-[#717171]">
+            <p className="mt-3 text-base text-[var(--color-text-secondary)]">
               {t('sitter.noBio')}
             </p>
           )}
@@ -169,18 +169,18 @@ export default async function SitterProfilePage({
 
       {/* Section 4: Qualifications & Experience */}
       {certificationLines.length > 0 && (
-        <section className="bg-[#F5F0EB]">
+        <section className="bg-[var(--color-bg-cream)]">
           <div className="mx-auto max-w-[1280px] px-6 py-8">
-            <h2 className="text-lg font-semibold text-[#222222]">
+            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
               {t('sitter.qualifications')}
             </h2>
             <ul className="mt-4">
               {certificationLines.map((q, i) => (
                 <li
                   key={i}
-                  className={`py-3 text-base text-[#222222] ${
+                  className={`py-3 text-base text-[var(--color-text-primary)] ${
                     i < certificationLines.length - 1
-                      ? "border-b border-[#DDDDDD]"
+                      ? "border-b border-[var(--color-border)]"
                       : ""
                   }`}
                 >
@@ -195,7 +195,7 @@ export default async function SitterProfilePage({
       {/* Section 5: Reviews */}
       <section id="reviews" className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-8">
-          <h2 className="text-lg font-semibold text-[#222222]">
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
             {t('sitter.reviews')}{" "}
             <span className="font-semibold">{t('sitter.reviewCount', { count: sitter.review_count })}</span>
           </h2>
@@ -207,7 +207,7 @@ export default async function SitterProfilePage({
                   key={review.id}
                   className={`py-4 ${
                     i < sitter.reviews.length - 1
-                      ? "border-b border-[#DDDDDD]"
+                      ? "border-b border-[var(--color-border)]"
                       : ""
                   }`}
                 >
@@ -217,19 +217,19 @@ export default async function SitterProfilePage({
                       fallback={review.parent_name.charAt(0)}
                     />
                     <div>
-                      <p className="text-sm font-semibold text-[#222222]">
+                      <p className="text-sm font-semibold text-[var(--color-text-primary)]">
                         {review.parent_name}
                       </p>
                       <div className="flex items-center gap-2">
                         <Stars count={review.rating} />
-                        <span className="text-xs text-[#717171]">
+                        <span className="text-xs text-[var(--color-text-secondary)]">
                           {formatRelativeTime(review.created_at)}
                         </span>
                       </div>
                     </div>
                   </div>
                   {review.comment && (
-                    <p className="mt-2 text-base text-[#717171]">
+                    <p className="mt-2 text-base text-[var(--color-text-secondary)]">
                       {review.comment}
                     </p>
                   )}
@@ -237,13 +237,13 @@ export default async function SitterProfilePage({
               ))}
             </div>
           ) : (
-            <p className="mt-4 text-base text-[#717171]">{t('sitter.noReviews')}</p>
+            <p className="mt-4 text-base text-[var(--color-text-secondary)]">{t('sitter.noReviews')}</p>
           )}
 
           {sitter.review_count > 3 && (
             <a
               href="#reviews"
-              className="mt-4 inline-block text-sm text-[#222222] underline"
+              className="mt-4 inline-block text-sm text-[var(--color-text-primary)] underline"
             >
               {t('sitter.seeAllReviews', { count: sitter.review_count })}
             </a>
@@ -254,23 +254,23 @@ export default async function SitterProfilePage({
       {/* Section 6: Availability */}
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-6">
-          <h2 className="text-lg font-semibold text-[#222222]">
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
             {t('sitter.availability')}
           </h2>
           {availabilityLines.length > 0 ? (
             <div className="mt-3 space-y-1">
               {availabilityLines.map((line, i) => (
-                <p key={i} className="text-base text-[#222222]">
+                <p key={i} className="text-base text-[var(--color-text-primary)]">
                   {line}
                 </p>
               ))}
             </div>
           ) : (
-            <p className="mt-3 text-base text-[#717171]">
+            <p className="mt-3 text-base text-[var(--color-text-secondary)]">
               {t('sitter.noAvailability')}
             </p>
           )}
-          <p className="mt-3 text-sm text-[#717171]">
+          <p className="mt-3 text-sm text-[var(--color-text-secondary)]">
             {t('sitter.advanceBooking')}
           </p>
         </div>
@@ -283,9 +283,9 @@ export default async function SitterProfilePage({
       <Footer />
 
       {/* Section 7: Sticky Bottom CTA (mobile only) */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#DDDDDD] bg-white px-6 py-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--color-border)] bg-white px-6 py-3 pb-[max(12px,env(safe-area-inset-bottom))] md:hidden">
         <div className="flex items-center justify-between gap-4">
-          <p className="text-base font-semibold text-[#222222]">
+          <p className="text-base font-semibold text-[var(--color-text-primary)]">
             {formattedPrice}{t('sitter.perHour')}
           </p>
           <Button variant="primary" asChild>

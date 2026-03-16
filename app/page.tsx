@@ -23,12 +23,12 @@ export default async function Home() {
           <div className="flex flex-col gap-10 md:flex-row md:items-center md:gap-16">
             <div className="flex flex-1 flex-col gap-6">
               <h1
-                className="text-[32px] leading-[1.2] font-semibold tracking-tight text-[#222222] md:text-[48px]"
+                className="text-[32px] leading-[1.2] font-semibold tracking-tight text-[var(--color-text-primary)] md:text-[48px]"
                 style={{ fontFamily: "var(--font-serif)", textWrap: "balance" }}
               >
                 {t('landing.heroTitle1')}<span className="whitespace-nowrap">{t('landing.heroTitle2')}</span>
               </h1>
-              <p className="max-w-md text-base leading-relaxed text-[#717171]">
+              <p className="max-w-md text-base leading-relaxed text-[var(--color-text-secondary)]">
                 {t('landing.heroSubtitle')}
               </p>
               <div>
@@ -47,7 +47,7 @@ export default async function Home() {
                   className="w-full aspect-[4/3] rounded-xl object-cover"
                   src="/hero.mp4"
                 />
-                <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-t from-[#F5F0EB]/30 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-t from-[var(--color-bg-cream)]/30 to-transparent" />
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@ export default async function Home() {
       </section>
 
       {/* Trust Bar */}
-      <section className="bg-[#F5F0EB]">
+      <section className="bg-[var(--color-bg-cream)]">
         <div className="mx-auto max-w-[1280px] px-6 py-12">
           <div className="flex flex-col gap-8 md:flex-row md:justify-between">
             <div className="flex flex-1 items-start gap-4">
@@ -66,10 +66,10 @@ export default async function Home() {
                 </svg>
               </div>
               <div>
-                <p className="text-base font-semibold text-[#222222]">
+                <p className="text-base font-semibold text-[var(--color-text-primary)]">
                   {t('landing.trustVerified')}
                 </p>
-                <p className="mt-1 text-sm text-[#717171]">
+                <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
                   {t('landing.trustVerifiedDesc')}
                 </p>
               </div>
@@ -81,10 +81,10 @@ export default async function Home() {
                 </svg>
               </div>
               <div>
-                <p className="text-base font-semibold text-[#222222]">
+                <p className="text-base font-semibold text-[var(--color-text-primary)]">
                   {t('landing.trustInsured')}
                 </p>
-                <p className="mt-1 text-sm text-[#717171]">
+                <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
                   {t('landing.trustInsuredDesc')}
                 </p>
               </div>
@@ -96,10 +96,10 @@ export default async function Home() {
                 </svg>
               </div>
               <div>
-                <p className="text-base font-semibold text-[#222222]">
+                <p className="text-base font-semibold text-[var(--color-text-primary)]">
                   {t('landing.trustReviews')}
                 </p>
-                <p className="mt-1 text-sm text-[#717171]">
+                <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
                   {t('landing.trustReviewsDesc')}
                 </p>
               </div>
@@ -111,7 +111,7 @@ export default async function Home() {
       {/* How It Works */}
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-16">
-          <h2 className="mb-10 text-[22px] font-semibold text-[#222222]">
+          <h2 className="mb-10 text-[22px] font-semibold text-[var(--color-text-primary)]">
             {t('landing.howTitle')}
           </h2>
           <div className="flex flex-col gap-10 md:flex-row md:gap-16">
@@ -133,13 +133,13 @@ export default async function Home() {
               },
             ].map((step) => (
               <div key={step.num} className="flex-1">
-                <span className="block text-[32px] font-bold text-[#C4956A]">
+                <span className="block text-[32px] font-bold text-[var(--color-accent)]">
                   {step.num}
                 </span>
-                <h3 className="mt-2 text-lg font-semibold text-[#222222]">
+                <h3 className="mt-2 text-lg font-semibold text-[var(--color-text-primary)]">
                   {step.title}
                 </h3>
-                <p className="mt-1 text-sm font-normal text-[#717171]">
+                <p className="mt-1 text-sm font-normal text-[var(--color-text-secondary)]">
                   {step.desc}
                 </p>
               </div>
@@ -151,7 +151,7 @@ export default async function Home() {
       {/* Sitter Preview */}
       <section className="bg-white">
         <div className="mx-auto max-w-[1280px] px-6 py-16">
-          <h2 className="mb-10 text-[22px] font-semibold text-[#222222]">
+          <h2 className="mb-10 text-[22px] font-semibold text-[var(--color-text-primary)]">
             {t('landing.sittersTitle')}
           </h2>
           {sitters && sitters.length > 0 ? (
@@ -175,10 +175,10 @@ export default async function Home() {
                         )}
                       </div>
                       <CardContent>
-                        <p className="text-sm font-semibold text-[#222222] line-clamp-1">
+                        <p className="text-sm font-semibold text-[var(--color-text-primary)] line-clamp-1">
                           {sitter.name}
                         </p>
-                        <p className="mt-1 text-xs text-[#717171]">
+                        <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                           ★ {sitter.rating_avg.toFixed(2)} ({sitter.review_count})
                         </p>
                         <div className="mt-2 flex flex-wrap gap-1 overflow-hidden max-h-[52px]">
@@ -188,7 +188,7 @@ export default async function Home() {
                             </Badge>
                           ))}
                         </div>
-                        <p className="mt-auto pt-2 text-sm font-semibold text-[#222222]">
+                        <p className="mt-auto pt-2 text-sm font-semibold text-[var(--color-text-primary)]">
                           {sitter.hourly_rate.toLocaleString()}{t('landing.perHour')}
                         </p>
                       </CardContent>
@@ -198,13 +198,13 @@ export default async function Home() {
               })}
             </SitterCarousel>
           ) : (
-            <p className="text-base text-[#717171]">{t('landing.noSitters')}</p>
+            <p className="text-base text-[var(--color-text-secondary)]">{t('landing.noSitters')}</p>
           )}
         </div>
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-[#C4956A]">
+      <section className="bg-[var(--color-accent)]">
         <div className="mx-auto max-w-[1280px] px-6 py-16 text-center">
           <h2 className="mb-6 text-[22px] font-semibold text-white">
             {t('landing.ctaTitle')}

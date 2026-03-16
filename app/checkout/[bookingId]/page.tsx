@@ -56,64 +56,64 @@ function BookingSummary({ booking }: { booking: BookingData }) {
   );
 
   return (
-    <div className="rounded-[12px] bg-[#F5F0EB] p-5">
+    <div className="rounded-[12px] bg-[var(--color-bg-cream)] p-5">
       <dl className="flex flex-col gap-3 text-sm">
         <div className="flex justify-between">
-          <dt className="text-[#717171]">{t('sitterLabel')}</dt>
-          <dd className="font-medium text-[#222222]">
+          <dt className="text-[var(--color-text-secondary)]">{t('sitterLabel')}</dt>
+          <dd className="font-medium text-[var(--color-text-primary)]">
             {sitterName}
             {rating != null && (
               <>
                 {" "}
-                <span className="text-[#C4956A]">&#9733;</span> {rating.toFixed(2)}
+                <span className="text-[var(--color-accent)]">&#9733;</span> {rating.toFixed(2)}
               </>
             )}
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">{t('dateLabel')}</dt>
-          <dd className="font-medium text-[#222222]">{dateStr}</dd>
+          <dt className="text-[var(--color-text-secondary)]">{t('dateLabel')}</dt>
+          <dd className="font-medium text-[var(--color-text-primary)]">{dateStr}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">{t('timeLabel')}</dt>
-          <dd className="font-medium text-[#222222]">
+          <dt className="text-[var(--color-text-secondary)]">{t('timeLabel')}</dt>
+          <dd className="font-medium text-[var(--color-text-primary)]">
             {booking.start_time.slice(0, 5)} – {booking.end_time.slice(0, 5)} (
             {t('hoursCount', { count: hours })})
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">{t('childrenLabel')}</dt>
-          <dd className="font-medium text-[#222222]">
+          <dt className="text-[var(--color-text-secondary)]">{t('childrenLabel')}</dt>
+          <dd className="font-medium text-[var(--color-text-primary)]">
             {tCommon('childCount', { count: childCount })}
           </dd>
         </div>
 
-        <hr className="my-3 border-t border-[#DDDDDD]" />
+        <hr className="my-3 border-t border-[var(--color-border)]" />
 
         <div className="flex justify-between">
-          <dt className="text-[#717171]">{t('rateLabel')}</dt>
-          <dd className="font-medium text-[#222222]">
+          <dt className="text-[var(--color-text-secondary)]">{t('rateLabel')}</dt>
+          <dd className="font-medium text-[var(--color-text-primary)]">
             {t('won', { amount: fmt(hourlyRate) })} &times; {t('hoursCount', { count: hours })}
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">{t('subtotalLabel')}</dt>
-          <dd className="font-medium text-[#222222]">
+          <dt className="text-[var(--color-text-secondary)]">{t('subtotalLabel')}</dt>
+          <dd className="font-medium text-[var(--color-text-primary)]">
             {t('won', { amount: fmt(booking.net_amount) })}
           </dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-[#717171]">{t('serviceFeeLabel')}</dt>
-          <dd className="font-medium text-[#222222]">
+          <dt className="text-[var(--color-text-secondary)]">{t('serviceFeeLabel')}</dt>
+          <dd className="font-medium text-[var(--color-text-primary)]">
             {t('won', { amount: fmt(booking.service_fee) })}
           </dd>
         </div>
 
-        <hr className="my-3 border-t border-[#DDDDDD]" />
+        <hr className="my-3 border-t border-[var(--color-border)]" />
 
         <div className="flex justify-between">
-          <dt className="text-[18px] font-bold text-[#222222]">{t('totalLabel')}</dt>
-          <dd className="text-[18px] font-bold text-[#222222]">
+          <dt className="text-[18px] font-bold text-[var(--color-text-primary)]">{t('totalLabel')}</dt>
+          <dd className="text-[18px] font-bold text-[var(--color-text-primary)]">
             {t('won', { amount: fmt(booking.total_amount) })}
           </dd>
         </div>
@@ -175,7 +175,7 @@ function PaymentForm({
               <button
                 type="button"
                 onClick={() => setShowSummary(!showSummary)}
-                className="flex w-full items-center justify-between text-sm font-semibold text-[#222222]"
+                className="flex w-full items-center justify-between text-sm font-semibold text-[var(--color-text-primary)]"
               >
                 {t('viewBookingDetails')}
                 <span
@@ -195,7 +195,7 @@ function PaymentForm({
 
             {/* Stripe Payment Element */}
             <section className="mb-8">
-              <h2 className="mb-4 text-[18px] font-semibold text-[#222222]">
+              <h2 className="mb-4 text-[18px] font-semibold text-[var(--color-text-primary)]">
                 {t('paymentMethod')}
               </h2>
               <PaymentElement />
@@ -203,20 +203,20 @@ function PaymentForm({
 
             {/* Secure payment notice */}
             <section className="mb-8">
-              <h3 className="text-base font-semibold text-[#222222]">
+              <h3 className="text-base font-semibold text-[var(--color-text-primary)]">
                 {t('securePayment')}
               </h3>
-              <p className="mt-1 text-sm text-[#717171]">
+              <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
                 {t('secureNote')}
               </p>
             </section>
 
             {/* Cancellation policy */}
             <section className="mb-8">
-              <h3 className="text-base font-semibold text-[#222222]">
+              <h3 className="text-base font-semibold text-[var(--color-text-primary)]">
                 {t('cancellation')}
               </h3>
-              <p className="mt-1 text-sm text-[#717171]">
+              <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
                 {t('cancellationNote')}
               </p>
             </section>
@@ -238,7 +238,7 @@ function PaymentForm({
                 ? t('processing')
                 : t('pay', { amount: fmt(booking.total_amount) })}
             </Button>
-            <p className="mt-3 text-center text-xs text-[#B0B0B0]">
+            <p className="mt-3 text-center text-xs text-[var(--color-text-light)]">
               {t('agreeNote')}
             </p>
           </div>
@@ -310,7 +310,7 @@ export default function CheckoutPage() {
       <main id="main-content" className="flex-1 px-6 py-8">
         {loading && (
           <div className="flex justify-center py-20">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#DDDDDD] border-t-[#C4956A]" />
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--color-border)] border-t-[var(--color-accent)]" />
           </div>
         )}
 

@@ -1,5 +1,6 @@
 import { createClient } from '@/src/lib/supabase/server'
 import type { SitterLanguage, SitterCertification, SitterAvailability } from '@/src/lib/supabase/types'
+import { asProfileJoin, asSitterProfileJoin, asReviewerProfileJoin } from '@/src/lib/database.types'
 
 // ── Return types ──
 
@@ -110,8 +111,7 @@ export async function getSitters(limit?: number): Promise<SitterListItem[] | nul
   if (error || !data) return null
 
   return data.map((row) => {
-    // Supabase doesn't type nested joins correctly — manual cast required
-    const p = row.profiles as unknown as { full_name: string; avatar_url: string | null } | null
+    const p = asProfileJoin(row.profiles)
     return {
       id: row.id,
       name: p?.full_name ?? 'Unknown',
@@ -149,8 +149,7 @@ export async function getSitterById(id: string): Promise<SitterDetail | null> {
 
   if (error || !sitter) return null
 
-  // Supabase doesn't type nested joins correctly — manual cast required
-  const sp = sitter.profiles as unknown as { full_name: string; avatar_url: string | null } | null
+  const sp = asProfileJoin(sitter.profiles)
 
   const reviews = await getSitterReviews(id, 3)
 
@@ -249,12 +248,7 @@ export async function getBookingById(id: string): Promise<BookingDetail | null> 
 
   if (error || !data) return null
 
-  // Supabase doesn't type nested joins correctly — manual cast required
-  const sp = data.sitter_profiles as unknown as {
-    is_verified: boolean
-    rating_avg: number
-    profiles: { full_name: string; avatar_url: string | null } | null
-  } | null
+  const sp = asSitterProfileJoin(data.sitter_profiles)
 
   return {
     id: data.id,
@@ -309,7 +303,6 @@ export async function getSitterReviews(sitterId: string, limit?: number): Promis
     keywords: row.keywords ?? [],
     comment: row.comment,
     created_at: row.created_at,
-    // Supabase doesn't type nested joins correctly — manual cast required
-    parent_name: (row.profiles as unknown as { full_name: string } | null)?.full_name ?? 'Anonymous',
+    parent_name: asReviewerProfileJoin(row.profiles)?.full_name ?? 'Anonymous',
   }))
 }

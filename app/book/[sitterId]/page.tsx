@@ -62,16 +62,16 @@ function StepIndicator({
           <span key={step} className="flex items-center gap-2">
             {i > 0 && (
               <span
-                className={`h-px w-4 ${isComplete ? "bg-[#222222]" : "bg-[#DDDDDD]"}`}
+                className={`h-px w-4 ${isComplete ? "bg-[var(--color-text-primary)]" : "bg-[var(--color-border)]"}`}
               />
             )}
             <span
               className={
                 isCurrent
-                  ? "text-[#C4956A]"
+                  ? "text-[var(--color-accent)]"
                   : isComplete
-                    ? "text-[#222222]"
-                    : "text-[#B0B0B0]"
+                    ? "text-[var(--color-text-primary)]"
+                    : "text-[var(--color-text-light)]"
               }
             >
               {t('stepLabel', { step })}
@@ -79,7 +79,7 @@ function StepIndicator({
           </span>
         );
       })}
-      <span className="text-[#B0B0B0]">{t('stepOf', { total })}</span>
+      <span className="text-[var(--color-text-light)]">{t('stepOf', { total })}</span>
     </div>
   );
 }
@@ -89,7 +89,7 @@ function SitterSidebar({ sitter }: { sitter: SitterInfo }) {
   const t = useTranslations('booking');
   return (
     <aside className="hidden md:block w-[240px] shrink-0">
-      <div className="rounded-[12px] bg-[#F5F0EB] p-4">
+      <div className="rounded-[12px] bg-[var(--color-bg-cream)] p-4">
         <div className="flex items-center gap-3">
           <Avatar
             size="md"
@@ -97,16 +97,16 @@ function SitterSidebar({ sitter }: { sitter: SitterInfo }) {
             alt={sitter.name}
           />
           <div>
-            <p className="text-base font-semibold text-[#222222]">
+            <p className="text-base font-semibold text-[var(--color-text-primary)]">
               {sitter.name}
             </p>
-            <p className="text-sm text-[#717171]">
-              <span className="text-[#C4956A]">&#9733;</span>{" "}
+            <p className="text-sm text-[var(--color-text-secondary)]">
+              <span className="text-[var(--color-accent)]">&#9733;</span>{" "}
               {sitter.rating_avg.toFixed(2)}
             </p>
           </div>
         </div>
-        <p className="mt-3 text-sm font-medium text-[#222222]">
+        <p className="mt-3 text-sm font-medium text-[var(--color-text-primary)]">
           {t('won', { amount: sitter.hourly_rate.toLocaleString() })}{t('perHour')}
         </p>
       </div>
@@ -143,7 +143,7 @@ function StepSchedule({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
+      <h1 className="text-[22px] font-semibold leading-tight text-[var(--color-text-primary)]">
         {t('booking.step1Title')}
       </h1>
 
@@ -166,10 +166,10 @@ function StepSchedule({
         onChange={(e) => onChangeEndTime(e.target.value)}
       />
 
-      <p className="text-sm text-[#717171]">{t('booking.eveningNote')}</p>
+      <p className="text-sm text-[var(--color-text-secondary)]">{t('booking.eveningNote')}</p>
 
       {showLeadTimeWarning && (
-        <p className="text-sm text-[#C4956A]">{t('booking.leadTimeWarning')}</p>
+        <p className="text-sm text-[var(--color-accent)]">{t('booking.leadTimeWarning')}</p>
       )}
 
       <Button className="w-full" onClick={onNext}>
@@ -211,13 +211,13 @@ function StepChildren({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
+      <h1 className="text-[22px] font-semibold leading-tight text-[var(--color-text-primary)]">
         {t('booking.step2Title')}
       </h1>
 
       {/* Child 1 */}
       <fieldset className="flex flex-col gap-4">
-        <legend className="mb-2 text-sm font-semibold text-[#222222]">
+        <legend className="mb-2 text-sm font-semibold text-[var(--color-text-primary)]">
           {t('booking.child1')}
         </legend>
         <Input
@@ -233,7 +233,7 @@ function StepChildren({
           onChange={(e) => updateChild(0, "age", e.target.value)}
         />
         {isAgeOutOfRange(children[0].age) && (
-          <p className="text-sm text-[#C4956A]">{t('booking.ageRangeWarning')}</p>
+          <p className="text-sm text-[var(--color-accent)]">{t('booking.ageRangeWarning')}</p>
         )}
         <Input
           label={t('booking.specialNotesLabel')}
@@ -247,12 +247,12 @@ function StepChildren({
       {children.length > 1 ? (
         <fieldset className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <legend className="text-sm font-semibold text-[#222222]">
+            <legend className="text-sm font-semibold text-[var(--color-text-primary)]">
               {t('booking.child2')}
             </legend>
             <button
               type="button"
-              className="text-sm text-[#717171] underline"
+              className="text-sm text-[var(--color-text-secondary)] underline"
               onClick={() => onChange(children.slice(0, 1))}
             >
               {t('booking.removeChild')}
@@ -271,7 +271,7 @@ function StepChildren({
             onChange={(e) => updateChild(1, "age", e.target.value)}
           />
           {isAgeOutOfRange(children[1].age) && (
-            <p className="text-sm text-[#C4956A]">{t('booking.ageRangeWarning')}</p>
+            <p className="text-sm text-[var(--color-accent)]">{t('booking.ageRangeWarning')}</p>
           )}
           <Input
             label={t('booking.specialNotesLabel')}
@@ -293,7 +293,7 @@ function StepChildren({
         </Button>
       )}
 
-      <p className="text-sm text-[#717171]">{t('booking.maxChildren')}</p>
+      <p className="text-sm text-[var(--color-text-secondary)]">{t('booking.maxChildren')}</p>
 
       <div className="flex gap-3">
         <Button variant="secondary" className="flex-1" onClick={onBack}>
@@ -322,7 +322,7 @@ function StepEmergency({
   const t = useTranslations();
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
+      <h1 className="text-[22px] font-semibold leading-tight text-[var(--color-text-primary)]">
         {t('booking.step3Title')}
       </h1>
 
@@ -348,7 +348,7 @@ function StepEmergency({
         }
       />
 
-      <p className="text-sm text-[#717171]">
+      <p className="text-sm text-[var(--color-text-secondary)]">
         {t('booking.emergencyNote')}
       </p>
 
@@ -398,64 +398,64 @@ function StepConfirm({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
+      <h1 className="text-[22px] font-semibold leading-tight text-[var(--color-text-primary)]">
         {t('booking.step4Title')}
       </h1>
 
       {/* Summary card */}
-      <div className="rounded-[12px] bg-[#F5F0EB] p-6 text-sm">
+      <div className="rounded-[12px] bg-[var(--color-bg-cream)] p-6 text-sm">
         <dl className="flex flex-col gap-3">
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.sitterLabel')}</dt>
-            <dd className="font-medium text-[#222222]">{sitter.name}</dd>
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.sitterLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">{sitter.name}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.dateLabel')}</dt>
-            <dd className="font-medium text-[#222222]">{formatDate(date)}</dd>
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.dateLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">{formatDate(date)}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.timeLabel')}</dt>
-            <dd className="font-medium text-[#222222]">
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.timeLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">
               {startTime} – {endTime}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.durationLabel')}</dt>
-            <dd className="font-medium text-[#222222]">{t('booking.hoursCount', { count: hours })}</dd>
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.durationLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">{t('booking.hoursCount', { count: hours })}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.childrenLabel')}</dt>
-            <dd className="font-medium text-[#222222]">
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.childrenLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">
               {t('common.childCount', { count: childCount })}
             </dd>
           </div>
 
-          <hr className="border-[#DDDDDD]" />
+          <hr className="border-[var(--color-border)]" />
 
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.rateLabel')}</dt>
-            <dd className="font-medium text-[#222222]">
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.rateLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">
               {t('booking.won', { amount: sitter.hourly_rate.toLocaleString() })}{t('booking.perHour')}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.subtotalLabel')}</dt>
-            <dd className="font-medium text-[#222222]">
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.subtotalLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">
               {t('booking.won', { amount: subtotal.toLocaleString() })}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-[#717171]">{t('booking.serviceFeeLabel')}</dt>
-            <dd className="font-medium text-[#222222]">
+            <dt className="text-[var(--color-text-secondary)]">{t('booking.serviceFeeLabel')}</dt>
+            <dd className="font-medium text-[var(--color-text-primary)]">
               {t('booking.won', { amount: serviceFee.toLocaleString() })}
             </dd>
           </div>
 
-          <hr className="border-[#DDDDDD]" />
+          <hr className="border-[var(--color-border)]" />
 
           <div className="flex justify-between">
-            <dt className="text-base font-semibold text-[#222222]">{t('booking.totalLabel')}</dt>
-            <dd className="text-base font-semibold text-[#222222]">
+            <dt className="text-base font-semibold text-[var(--color-text-primary)]">{t('booking.totalLabel')}</dt>
+            <dd className="text-base font-semibold text-[var(--color-text-primary)]">
               {t('booking.won', { amount: total.toLocaleString() })}
             </dd>
           </div>
@@ -464,21 +464,21 @@ function StepConfirm({
 
       {/* Agreements */}
       <div className="flex flex-col gap-3">
-        <label className="flex items-start gap-3 text-sm text-[#222222]">
+        <label className="flex items-start gap-3 text-sm text-[var(--color-text-primary)]">
           <input
             type="checkbox"
             checked={agreeTerms}
             onChange={(e) => setAgreeTerms(e.target.checked)}
-            className="mt-0.5 h-5 w-5 shrink-0 accent-[#C4956A]"
+            className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
           />
           {t('booking.agreeTerms')}
         </label>
-        <label className="flex items-start gap-3 text-sm text-[#222222]">
+        <label className="flex items-start gap-3 text-sm text-[var(--color-text-primary)]">
           <input
             type="checkbox"
             checked={agreeExcluded}
             onChange={(e) => setAgreeExcluded(e.target.checked)}
-            className="mt-0.5 h-5 w-5 shrink-0 accent-[#C4956A]"
+            className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-accent)]"
           />
           {t('booking.agreeExcluded')}
         </label>
@@ -494,7 +494,7 @@ function StepConfirm({
         {submitting ? t('booking.submitting') : t('booking.confirmBooking')}
       </Button>
 
-      <p className="text-sm text-[#717171]">
+      <p className="text-sm text-[var(--color-text-secondary)]">
         {t('booking.chargeNote')}
       </p>
 
@@ -619,7 +619,7 @@ export default function BookingPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">{t('common.loading')}</p>
+          <p className="text-[var(--color-text-secondary)]">{t('common.loading')}</p>
         </main>
         <Footer />
       </div>
@@ -631,7 +631,7 @@ export default function BookingPage() {
       <div className="flex min-h-screen flex-col bg-white">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-[#717171]">{error || t('booking.sitterNotFound')}</p>
+          <p className="text-[var(--color-text-secondary)]">{error || t('booking.sitterNotFound')}</p>
         </main>
         <Footer />
       </div>
