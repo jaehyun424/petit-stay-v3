@@ -270,7 +270,11 @@
     "notFound": "予約が見つかりません",
     "contactSitterAlert": "連絡機能は準備中です。help@petitstay.comまでお問い合わせください。",
     "cancelConfirm": "本当にキャンセルしますか？",
-    "cancelAlert": "キャンセル機能は準備中です。"
+    "cancelSuccess": "予約がキャンセルされました。",
+    "cancelFailed": "キャンセルに失敗しました。もう一度お試しください。",
+    "cancelling": "キャンセル中...",
+    "cancelled": "予約キャンセル済み",
+    "cancelledNote": "この予約はキャンセルされました。"
   },
   "about": {
     "title": "About Petit Stay",

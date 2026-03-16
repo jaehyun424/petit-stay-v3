@@ -270,7 +270,11 @@
     "notFound": "예약을 찾을 수 없어요",
     "contactSitterAlert": "연락 기능은 준비 중이에요. help@petitstay.com으로 문의해 주세요.",
     "cancelConfirm": "정말 취소하시겠어요?",
-    "cancelAlert": "취소 기능은 준비 중이에요."
+    "cancelSuccess": "예약이 취소됐어요.",
+    "cancelFailed": "취소에 실패했어요. 다시 시도해 주세요.",
+    "cancelling": "취소 중...",
+    "cancelled": "예약 취소됨",
+    "cancelledNote": "이 예약은 취소됐어요."
   },
   "about": {
     "title": "Petit Stay 소개",

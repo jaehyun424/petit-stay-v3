@@ -270,7 +270,11 @@
     "notFound": "Booking not found",
     "contactSitterAlert": "Contact feature is coming soon. Please email help@petitstay.com.",
     "cancelConfirm": "Are you sure you want to cancel?",
-    "cancelAlert": "Cancellation feature is coming soon."
+    "cancelSuccess": "Your booking has been cancelled.",
+    "cancelFailed": "Failed to cancel. Please try again.",
+    "cancelling": "Cancelling...",
+    "cancelled": "Booking cancelled",
+    "cancelledNote": "This booking has been cancelled."
   },
   "about": {
     "title": "About Petit Stay",

@@ -12,7 +12,7 @@ import { Avatar } from "@/src/components/ui/avatar";
 
 /* ── Types ── */
 
-type BookingStatus = "confirmed" | "inProgress" | "completed";
+type BookingStatus = "confirmed" | "inProgress" | "completed" | "cancelled";
 
 interface BookingData {
   id: string;
@@ -80,6 +80,7 @@ function formatTime(timeStr: string | null | undefined): string {
 function mapDbStatus(dbStatus: string): BookingStatus {
   if (dbStatus === "in_progress") return "inProgress";
   if (dbStatus === "completed") return "completed";
+  if (dbStatus === "cancelled") return "cancelled";
   return "confirmed";
 }
 
@@ -95,7 +96,7 @@ function getSitterName(booking: BookingData): string {
 }
 
 /* ── Confirmed ── */
-function ConfirmedView({ booking }: { booking: BookingData }) {
+function ConfirmedView({ booking, onCancel, cancelling }: { booking: BookingData; onCancel: () => void; cancelling: boolean }) {
   const t = useTranslations('bookingDetail');
   const tCommon = useTranslations('common');
   const sitterName = getSitterName(booking);
@@ -205,13 +206,10 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
         <Button
           variant="ghost"
           className="w-full text-[var(--color-error)] no-underline hover:text-[var(--color-error)]"
-          onClick={() => {
-            if (window.confirm(t('cancelConfirm'))) {
-              alert(t('cancelAlert'));
-            }
-          }}
+          onClick={onCancel}
+          disabled={cancelling}
         >
-          {t('cancelBooking')}
+          {cancelling ? t('cancelling') : t('cancelBooking')}
         </Button>
         <p className="text-center text-sm text-[var(--color-text-secondary)]">
           {t('freeCancellation', { deadline: getCancellationDeadline(booking.date, booking.start_time) })}
@@ -363,6 +361,46 @@ function CompletedView({ booking }: { booking: BookingData }) {
   );
 }
 
+/* ── Cancelled ── */
+function CancelledView({ booking }: { booking: BookingData }) {
+  const t = useTranslations('bookingDetail');
+  const sitterName = getSitterName(booking);
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="rounded-[var(--radius-card)] bg-[#F5F0EB] p-5">
+        <p className="text-lg font-semibold text-[var(--color-text-primary)]">
+          {t('cancelled')}
+        </p>
+        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+          {t('cancelledNote')}
+        </p>
+      </div>
+
+      <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white p-5">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-[var(--color-text-secondary)]">{t('sitterLabel')}</span>
+            <span className="text-sm text-[var(--color-text-primary)]">{sitterName}</span>
+          </div>
+          <hr className="border-[var(--color-border)]" />
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-[var(--color-text-secondary)]">{t('dateLabel')}</span>
+            <span className="text-sm text-[var(--color-text-primary)]">{formatDate(booking.date)}</span>
+          </div>
+          <hr className="border-[var(--color-border)]" />
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-[var(--color-text-secondary)]">{t('timeLabel')}</span>
+            <span className="text-sm text-[var(--color-text-primary)]">
+              {formatTime(booking.start_time)} – {formatTime(booking.end_time)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main Page ── */
 export default function BookingDetailPage() {
   const t = useTranslations();
@@ -373,6 +411,25 @@ export default function BookingDetailPage() {
   const [status, setStatus] = useState<BookingStatus>("confirmed");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [cancelling, setCancelling] = useState(false);
+
+  async function handleCancel() {
+    if (!window.confirm(t('bookingDetail.cancelConfirm'))) return;
+    setCancelling(true);
+    try {
+      const res = await fetch(`/api/bookings/${id}/cancel`, { method: 'PUT' });
+      if (!res.ok) {
+        alert(t('bookingDetail.cancelFailed'));
+        setCancelling(false);
+        return;
+      }
+      setStatus('cancelled');
+      setBooking(prev => prev ? { ...prev, status: 'cancelled' } : prev);
+    } catch {
+      alert(t('bookingDetail.cancelFailed'));
+    }
+    setCancelling(false);
+  }
 
   useEffect(() => {
     async function init() {
@@ -429,9 +486,10 @@ export default function BookingDetailPage() {
 
       <main id="main-content" className="mx-auto w-full max-w-[640px] flex-1 px-6 py-8">
         {/* Content by status */}
-        {status === "confirmed" && <ConfirmedView booking={booking} />}
+        {status === "confirmed" && <ConfirmedView booking={booking} onCancel={handleCancel} cancelling={cancelling} />}
         {status === "inProgress" && <InProgressView booking={booking} />}
         {status === "completed" && <CompletedView booking={booking} />}
+        {status === "cancelled" && <CancelledView booking={booking} />}
       </main>
 
       <Footer />

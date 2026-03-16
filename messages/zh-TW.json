@@ -270,7 +270,11 @@
     "notFound": "找不到預約",
     "contactSitterAlert": "聯繫功能即將推出，請發送郵件至 help@petitstay.com。",
     "cancelConfirm": "確定要取消嗎？",
-    "cancelAlert": "取消功能即將推出。"
+    "cancelSuccess": "預約已取消。",
+    "cancelFailed": "取消失敗，請再試一次。",
+    "cancelling": "取消中...",
+    "cancelled": "預約已取消",
+    "cancelledNote": "此預約已取消。"
   },
   "about": {
     "title": "About Petit Stay",
