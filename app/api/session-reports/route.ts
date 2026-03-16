@@ -2,14 +2,20 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const body = await request.json()
+  let body: unknown
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
   const { bookingId, checkInAt, activities, moodBehavior, sleepNotes, additionalNotes } = body as {
     bookingId: string
     checkInAt: string
@@ -60,5 +66,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to create session report' }, { status: 500 })
   }
 
-  return NextResponse.json({ reportId: report.id }, { status: 201 })
+    return NextResponse.json({ reportId: report.id }, { status: 201 })
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

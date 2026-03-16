@@ -82,6 +82,7 @@ export function SearchContent() {
 
   const [allSitters, setAllSitters] = useState<Sitter[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
 
   // Filter inputs (UI state)
   const [date, setDate] = useState("");
@@ -107,7 +108,11 @@ export function SearchContent() {
         if (res.ok) {
           const data = await res.json();
           setAllSitters(data);
+        } else {
+          setFetchError(true);
         }
+      } catch {
+        setFetchError(true);
       } finally {
         setLoading(false);
       }
@@ -280,8 +285,15 @@ export function SearchContent() {
             </select>
           </div>
 
+          {/* Error State */}
+          {fetchError && (
+            <div className="flex flex-col items-center justify-center py-20">
+              <p className="text-sm text-red-600">{t("common.error")}</p>
+            </div>
+          )}
+
           {/* Sitter Grid */}
-          {displayedSitters.length > 0 ? (
+          {!fetchError && displayedSitters.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-6">
               {displayedSitters.map((sitter) => {
                 const badges = buildBadges(sitter, t('common.verified'));
@@ -330,7 +342,7 @@ export function SearchContent() {
                 );
               })}
             </div>
-          ) : !loading ? (
+          ) : !loading && !fetchError ? (
             <div className="flex flex-col items-center justify-center py-20">
               <p className="text-sm text-[#717171]">
                 {hasActiveFilter

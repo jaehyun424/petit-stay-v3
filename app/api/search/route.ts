@@ -2,9 +2,10 @@ import { createClient } from '@/src/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const { data, error } = await supabase
+    const { data, error } = await supabase
     .from('sitter_profiles')
     .select(`
       id,
@@ -51,5 +52,8 @@ export async function GET() {
     }
   })
 
-  return NextResponse.json(sitters)
+    return NextResponse.json(sitters)
+  } catch {
+    return NextResponse.json([], { status: 500 })
+  }
 }

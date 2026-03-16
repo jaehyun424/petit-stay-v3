@@ -436,25 +436,29 @@ export default function BookingDetailPage() {
 
   useEffect(() => {
     async function init() {
-      const res = await fetch(`/api/bookings/${id}`);
-      if (res.status === 401) {
-        router.push("/login");
-        return;
-      }
-      if (!res.ok) {
-        setError(t('bookingDetail.notFound'));
+      try {
+        const res = await fetch(`/api/bookings/${id}`);
+        if (res.status === 401) {
+          router.push("/login");
+          return;
+        }
+        if (!res.ok) {
+          setError(t('bookingDetail.notFound'));
+          return;
+        }
+        const data = await res.json();
+        // Normalize nullable joined data
+        data.booking_children = data.booking_children ?? [];
+        data.booking_emergency_contacts = data.booking_emergency_contacts ?? [];
+        data.session_reports = data.session_reports ?? [];
+        data.reviews = data.reviews ?? [];
+        setBooking(data);
+        setStatus(mapDbStatus(data.status ?? "confirmed"));
+      } catch {
+        setError(t('common.error'));
+      } finally {
         setLoading(false);
-        return;
       }
-      const data = await res.json();
-      // Normalize nullable joined data
-      data.booking_children = data.booking_children ?? [];
-      data.booking_emergency_contacts = data.booking_emergency_contacts ?? [];
-      data.session_reports = data.session_reports ?? [];
-      data.reviews = data.reviews ?? [];
-      setBooking(data);
-      setStatus(mapDbStatus(data.status ?? "confirmed"));
-      setLoading(false);
     }
     init();
   }, [id, router, t]);

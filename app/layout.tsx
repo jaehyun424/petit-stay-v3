@@ -9,7 +9,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://petit-stay-v3.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://petit-stay-v3.vercel.app"),
   title: {
     template: "%s — Petit Stay",
     default: "Petit Stay — 안심하고 맡기는 서울의 저녁",

@@ -3,9 +3,10 @@ import { createClient } from '@/src/lib/supabase/server'
 import { reviewSchema } from '@/src/lib/validations'
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
@@ -95,5 +96,8 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ reviewId: review.id }, { status: 201 })
+    return NextResponse.json({ reviewId: review.id }, { status: 201 })
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

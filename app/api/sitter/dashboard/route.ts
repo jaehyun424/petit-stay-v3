@@ -2,12 +2,13 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
 
 export async function GET() {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
   // Demo account bypass — demo@petitstay.com can view as Emily K.
   const isDemoUser = user.email === 'demo@petitstay.com'
@@ -184,4 +185,7 @@ export async function GET() {
     earnings,
     earningsSummary,
   })
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

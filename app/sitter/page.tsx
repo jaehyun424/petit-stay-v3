@@ -518,7 +518,11 @@ export default function SitterDashboardPage() {
       });
       if (res.ok) {
         await fetchData();
+      } else {
+        alert(t("common.error"));
       }
+    } catch {
+      alert(t("common.error"));
     } finally {
       setActionLoading(null);
     }
@@ -557,7 +561,11 @@ export default function SitterDashboardPage() {
       });
       if (res.ok) {
         await fetchData();
+      } else {
+        alert(t("common.error"));
       }
+    } catch {
+      alert(t("common.error"));
     } finally {
       setSaving(false);
     }

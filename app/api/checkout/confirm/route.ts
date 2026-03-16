@@ -3,9 +3,10 @@ import { createClient } from '@/src/lib/supabase/server'
 import { stripe } from '@/src/lib/stripe'
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
@@ -71,5 +72,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to update booking' }, { status: 500 })
   }
 
-  return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true })
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

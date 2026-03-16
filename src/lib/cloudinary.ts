@@ -1,7 +1,11 @@
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!
-const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
 
 export async function uploadImage(file: File): Promise<string> {
+  if (!CLOUD_NAME || !UPLOAD_PRESET) {
+    throw new Error('Cloudinary environment variables not configured')
+  }
+
   const formData = new FormData()
   formData.append('file', file)
   formData.append('upload_preset', UPLOAD_PRESET)
@@ -16,6 +20,9 @@ export async function uploadImage(file: File): Promise<string> {
     throw new Error('Image upload failed')
   }
 
-  const data = await res.json()
-  return data.secure_url as string
+  const data: { secure_url?: string } = await res.json()
+  if (!data.secure_url) {
+    throw new Error('Image upload response missing URL')
+  }
+  return data.secure_url
 }

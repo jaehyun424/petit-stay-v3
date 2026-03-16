@@ -546,23 +546,27 @@ export default function BookingPage() {
 
   useEffect(() => {
     async function init() {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/login");
-        return;
-      }
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) {
+          router.push("/login");
+          return;
+        }
 
-      const res = await fetch(`/api/sitters/${sitterId}`);
-      if (!res.ok) {
-        setError(t('booking.sitterNotFound'));
+        const res = await fetch(`/api/sitters/${sitterId}`);
+        if (!res.ok) {
+          setError(t('booking.sitterNotFound'));
+          return;
+        }
+        setSitter(await res.json());
+      } catch {
+        setError(t('booking.networkError'));
+      } finally {
         setLoading(false);
-        return;
       }
-      setSitter(await res.json());
-      setLoading(false);
     }
     init();
   }, [sitterId, router, t]);

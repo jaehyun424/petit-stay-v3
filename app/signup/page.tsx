@@ -33,7 +33,7 @@ export default function SignupPage() {
     if (message.toLowerCase().includes("password") && message.includes("6")) {
       return t('auth.passwordTooShort');
     }
-    return message;
+    return t('common.error');
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -51,35 +51,39 @@ export default function SignupPage() {
 
     setLoading(true);
 
-    const supabase = createClient();
-    const { data, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          phone,
-          role: role as UserRole,
+    try {
+      const supabase = createClient();
+      const { data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            phone,
+            role: role as UserRole,
+          },
         },
-      },
-    });
+      });
 
-    setLoading(false);
+      if (authError) {
+        setError(mapAuthError(authError.message));
+        return;
+      }
 
-    if (authError) {
-      setError(mapAuthError(authError.message));
-      return;
+      // If email confirmation is disabled, user is logged in immediately
+      if (data.session) {
+        router.refresh();
+        router.push("/");
+        return;
+      }
+
+      // Email confirmation required
+      setSuccess(true);
+    } catch {
+      setError(t('common.error'));
+    } finally {
+      setLoading(false);
     }
-
-    // If email confirmation is disabled, user is logged in immediately
-    if (data.session) {
-      router.refresh();
-      router.push("/");
-      return;
-    }
-
-    // Email confirmation required
-    setSuccess(true);
   }
 
   if (success) {

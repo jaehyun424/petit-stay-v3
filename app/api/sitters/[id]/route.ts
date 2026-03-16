@@ -6,8 +6,9 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const { id } = await params
-  const supabase = await createClient()
+  try {
+    const { id } = await params
+    const supabase = await createClient()
 
   const { data: sitter, error } = await supabase
     .from('sitter_profiles')
@@ -45,4 +46,7 @@ export async function GET(
     is_verified: sitter.is_verified,
     response_rate: sitter.response_rate,
   })
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

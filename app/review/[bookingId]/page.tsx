@@ -133,26 +133,30 @@ export default function ReviewPage() {
     setSubmitting(true);
     setError(null);
 
-    const res = await fetch("/api/reviews", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        bookingId,
-        rating,
-        keywords: selectedTags,
-        comment: reviewText || null,
-      }),
-    });
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId,
+          rating,
+          keywords: selectedTags,
+          comment: reviewText || null,
+        }),
+      });
 
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error ?? t('common.error'));
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError((data as { error?: string }).error ?? t('common.error'));
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError(t('common.error'));
+    } finally {
       setSubmitting(false);
-      return;
     }
-
-    setSubmitted(true);
-    setSubmitting(false);
   }
 
   if (loading) {

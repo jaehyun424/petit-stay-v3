@@ -5,7 +5,8 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
@@ -67,5 +68,8 @@ export async function PATCH(
     return NextResponse.json({ error: 'Failed to update booking' }, { status: 500 })
   }
 
-  return NextResponse.json({ status: newStatus })
+    return NextResponse.json({ status: newStatus })
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

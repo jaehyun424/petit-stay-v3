@@ -30,21 +30,25 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const supabase = createClient();
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    setLoading(false);
+      if (authError) {
+        setError(t('auth.invalidCredentials'));
+        return;
+      }
 
-    if (authError) {
-      setError(t('auth.invalidCredentials'));
-      return;
+      router.refresh();
+      router.push("/");
+    } catch {
+      setError(t('common.error'));
+    } finally {
+      setLoading(false);
     }
-
-    router.refresh();
-    router.push("/");
   }
 
   async function handleResetPassword(e: FormEvent) {
@@ -52,20 +56,24 @@ export default function LoginPage() {
     setResetError(null);
     setResetLoading(true);
 
-    const supabase = createClient();
-    const { error: resetErr } = await supabase.auth.resetPasswordForEmail(
-      resetEmail,
-      { redirectTo: `${window.location.origin}/auth/callback` }
-    );
+    try {
+      const supabase = createClient();
+      const { error: resetErr } = await supabase.auth.resetPasswordForEmail(
+        resetEmail,
+        { redirectTo: `${window.location.origin}/auth/callback` }
+      );
 
-    setResetLoading(false);
+      if (resetErr) {
+        setResetError(t('common.error'));
+        return;
+      }
 
-    if (resetErr) {
-      setResetError(resetErr.message);
-      return;
+      setResetSent(true);
+    } catch {
+      setResetError(t('common.error'));
+    } finally {
+      setResetLoading(false);
     }
-
-    setResetSent(true);
   }
 
   return (

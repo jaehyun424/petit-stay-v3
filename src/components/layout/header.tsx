@@ -24,6 +24,8 @@ export function Header() {
 
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
+    }).catch(() => {
+      // Auth check failed (network error) — stay logged out
     });
 
     const {
@@ -42,8 +44,12 @@ export function Header() {
   }, []);
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch {
+      // Sign out failed — redirect anyway
+    }
     window.location.href = "/";
   }
 

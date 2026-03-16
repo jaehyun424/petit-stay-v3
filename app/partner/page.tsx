@@ -138,10 +138,14 @@ function QRCodeTab({ data }: { data: PartnerData }) {
   const [copied, setCopied] = useState(false);
   const shareLink = `petitstay.com/ref/${account.referral_code}`;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shareLink);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard API unavailable — ignore silently
+    }
   };
 
   return (
