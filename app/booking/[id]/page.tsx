@@ -27,8 +27,8 @@ interface BookingData {
   sitter_profiles: {
     is_verified: boolean;
     rating_avg: number;
-    profiles: { full_name: string; avatar_url: string | null };
-  };
+    profiles: { full_name: string; avatar_url: string | null } | null;
+  } | null;
   booking_children: {
     id: string;
     name: string;
@@ -73,8 +73,8 @@ function formatWon(amount: number): string {
   return `${amount.toLocaleString()}`;
 }
 
-function formatTime(timeStr: string): string {
-  return timeStr.slice(0, 5);
+function formatTime(timeStr: string | null | undefined): string {
+  return timeStr?.slice(0, 5) ?? "";
 }
 
 function mapDbStatus(dbStatus: string): BookingStatus {
@@ -100,8 +100,8 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
   const tCommon = useTranslations('common');
   const sitterName = getSitterName(booking);
   const isVerified = booking.sitter_profiles?.is_verified ?? false;
-  const childCount = booking.booking_children.length;
-  const contact = booking.booking_emergency_contacts[0];
+  const childCount = booking.booking_children?.length ?? 0;
+  const contact = booking.booking_emergency_contacts?.[0];
 
   return (
     <div className="flex flex-col gap-6">
@@ -225,7 +225,7 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
 function InProgressView({ booking }: { booking: BookingData }) {
   const t = useTranslations('bookingDetail');
   const sitterName = getSitterName(booking);
-  const report = booking.session_reports[0];
+  const report = booking.session_reports?.[0];
 
   const timeline = report
     ? [
@@ -293,7 +293,7 @@ function InProgressView({ booking }: { booking: BookingData }) {
 function CompletedView({ booking }: { booking: BookingData }) {
   const t = useTranslations('bookingDetail');
   const sitterName = getSitterName(booking);
-  const report = booking.session_reports[0];
+  const report = booking.session_reports?.[0];
 
   const sections = report
     ? [
@@ -344,7 +344,7 @@ function CompletedView({ booking }: { booking: BookingData }) {
 
       {/* CTA */}
       <div className="flex flex-col gap-2">
-        {booking.reviews.length > 0 ? (
+        {(booking.reviews?.length ?? 0) > 0 ? (
           <p className="text-center text-sm text-[var(--color-text-secondary)]">
             {t('alreadyReviewed')}
           </p>
@@ -387,8 +387,13 @@ export default function BookingDetailPage() {
         return;
       }
       const data = await res.json();
+      // Normalize nullable joined data
+      data.booking_children = data.booking_children ?? [];
+      data.booking_emergency_contacts = data.booking_emergency_contacts ?? [];
+      data.session_reports = data.session_reports ?? [];
+      data.reviews = data.reviews ?? [];
       setBooking(data);
-      setStatus(mapDbStatus(data.status));
+      setStatus(mapDbStatus(data.status ?? "confirmed"));
       setLoading(false);
     }
     init();

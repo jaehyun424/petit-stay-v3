@@ -42,6 +42,7 @@ export async function GET(
     .single()
 
   if (error || !booking) {
+    console.error('[bookings/[id]] query error:', error?.message ?? 'no data')
     return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
   }
 
@@ -49,5 +50,14 @@ export async function GET(
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  return NextResponse.json(booking)
+  // Normalize nullable joined data for frontend safety
+  const safe = {
+    ...booking,
+    booking_children: booking.booking_children ?? [],
+    booking_emergency_contacts: booking.booking_emergency_contacts ?? [],
+    session_reports: booking.session_reports ?? [],
+    reviews: booking.reviews ?? [],
+  }
+
+  return NextResponse.json(safe)
 }
