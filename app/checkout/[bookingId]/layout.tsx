@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Checkout",
+  title: "결제",
 };
 
 export default function CheckoutLayout({

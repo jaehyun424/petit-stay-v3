@@ -1,12 +1,14 @@
 "use client";
 
 import { useRef, useState, useEffect, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 
 interface SitterCarouselProps {
   children: ReactNode;
 }
 
 export function SitterCarousel({ children }: SitterCarouselProps) {
+  const t = useTranslations();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -41,13 +43,13 @@ export function SitterCarousel({ children }: SitterCarouselProps) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" role="region" aria-label={t('landing.sittersTitle')}>
       {/* Left button */}
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
           className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#DDDDDD] bg-white shadow-md transition-colors hover:border-[#C4956A]"
-          aria-label="이전"
+          aria-label={t('common.previousSlide')}
         >
           <svg
             width="16"
@@ -77,7 +79,7 @@ export function SitterCarousel({ children }: SitterCarouselProps) {
         <button
           onClick={() => scroll("right")}
           className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#DDDDDD] bg-white shadow-md transition-colors hover:border-[#C4956A]"
-          aria-label="다음"
+          aria-label={t('common.nextSlide')}
         >
           <svg
             width="16"

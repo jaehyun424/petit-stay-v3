@@ -11,12 +11,16 @@
     "loading": "載入中...",
     "error": "發生錯誤",
     "verified": "已驗證",
-    "childCount": "{count}位孩子"
+    "childCount": "{count}位孩子",
+    "previousSlide": "上一個",
+    "nextSlide": "下一個"
   },
   "header": {
     "brand": "Petit Stay",
     "skipToMain": "跳至主要內容",
-    "myPage": "我的頁面"
+    "myPage": "我的頁面",
+    "homeLabel": "Petit Stay 首頁",
+    "selectLanguage": "選擇語言"
   },
   "footer": {
     "about": "關於我們",

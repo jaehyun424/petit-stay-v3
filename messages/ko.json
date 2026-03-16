@@ -11,12 +11,16 @@
     "loading": "불러오는 중...",
     "error": "잠시 문제가 생겼어요",
     "verified": "인증됨",
-    "childCount": "아이 {count}명"
+    "childCount": "아이 {count}명",
+    "previousSlide": "이전",
+    "nextSlide": "다음"
   },
   "header": {
     "brand": "Petit Stay",
     "skipToMain": "메인 콘텐츠로 이동",
-    "myPage": "마이페이지"
+    "myPage": "마이페이지",
+    "homeLabel": "Petit Stay 홈",
+    "selectLanguage": "언어 선택"
   },
   "footer": {
     "about": "소개",

@@ -62,14 +62,14 @@ export function Header() {
       </a>
       <header className="border-b border-[#DDDDDD] bg-white">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4">
-        <Link href="/" aria-label="Petit Stay Home">
+        <Link href="/" aria-label={t('header.homeLabel')}>
           <Logo />
         </Link>
         <div className="flex items-center gap-4">
           <select
             value={currentLocale}
             onChange={(e) => handleLocaleChange(e.target.value)}
-            aria-label="Select language"
+            aria-label={t('header.selectLanguage')}
             className="cursor-pointer rounded border border-[#DDDDDD] bg-white px-2 py-1 text-sm text-[#222222] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4956A]"
           >
             {languages.map((lang) => (

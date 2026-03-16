@@ -11,12 +11,16 @@
     "loading": "Loading...",
     "error": "Something went wrong",
     "verified": "Verified",
-    "childCount": "{count} children"
+    "childCount": "{count} children",
+    "previousSlide": "Previous",
+    "nextSlide": "Next"
   },
   "header": {
     "brand": "Petit Stay",
     "skipToMain": "Skip to main content",
-    "myPage": "My Page"
+    "myPage": "My Page",
+    "homeLabel": "Petit Stay Home",
+    "selectLanguage": "Select language"
   },
   "footer": {
     "about": "About",
