@@ -5,8 +5,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Petit Stay",
-    default: "서울에서 믿을 수 있는 베이비시터 | Petit Stay",
+    template: "%s — Petit Stay",
+    default: "Petit Stay — 안심하고 맡기는 서울의 저녁",
   },
   description:
     "서울 여행 중인 가족을 위한 검증된 다국어 베이비시터. 간편하게 예약하고, 편안한 저녁을 보내세요.",
