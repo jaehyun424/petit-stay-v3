@@ -36,8 +36,8 @@
     "heroCta": "シッターを探す",
     "trustVerified": "本人確認済み",
     "trustVerifiedDesc": "すべてのシッターが参加前に本人確認を完了しています",
-    "trustInsured": "保険適用セッション",
-    "trustInsuredDesc": "プラットフォーム上のすべての予約に賠償責任保険が適用されます",
+    "trustInsured": "保険導入準備中",
+    "trustInsuredDesc": "すべての予約への賠償責任保険の導入を準備しています",
     "trustReviews": "認証済みレビューのみ",
     "trustReviewsDesc": "完了した有料セッションの保護者からのレビューのみ掲載",
     "howTitle": "ご利用の流れ",
@@ -133,7 +133,10 @@
     "networkError": "ネットワークエラー。もう一度お試しください。",
     "stepLabel": "ステップ {step}",
     "stepOf": "/ {total}",
-    "won": "{amount}ウォン"
+    "won": "{amount}ウォン",
+    "timeRangeError": "利用時間は18:00〜23:00です。",
+    "ageRangeWarning": "対象年齢は3歳〜8歳です。",
+    "leadTimeWarning": "24時間前までのご予約をおすすめします。"
   },
   "checkout": {
     "paymentMethod": "お支払い方法",

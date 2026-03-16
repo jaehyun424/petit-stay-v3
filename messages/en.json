@@ -36,8 +36,8 @@
     "heroCta": "Find a sitter",
     "trustVerified": "ID Verified",
     "trustVerifiedDesc": "Every sitter completes identity verification before joining",
-    "trustInsured": "Insured Sessions",
-    "trustInsuredDesc": "Liability insurance covers every booking on the platform",
+    "trustInsured": "Insurance Coming Soon",
+    "trustInsuredDesc": "Liability insurance for all bookings is being prepared",
     "trustReviews": "Verified Reviews Only",
     "trustReviewsDesc": "Reviews come from parents with completed, paid sessions",
     "howTitle": "How it works",
@@ -133,7 +133,10 @@
     "networkError": "Network error. Please try again.",
     "stepLabel": "Step {step}",
     "stepOf": "of {total}",
-    "won": "{amount} won"
+    "won": "{amount} won",
+    "timeRangeError": "Operating hours are 18:00–23:00.",
+    "ageRangeWarning": "Target age range is 3–8 years.",
+    "leadTimeWarning": "We recommend booking at least 24 hours in advance."
   },
   "checkout": {
     "paymentMethod": "Payment method",

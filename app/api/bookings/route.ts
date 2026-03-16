@@ -27,6 +27,19 @@ export async function POST(request: Request) {
 
   const { sitterId, date, startTime, endTime, children, emergencyContact } = parsed.data
 
+  // Validate operating hours: 18:00~23:00
+  const [sHour, sMin] = startTime.split(':').map(Number)
+  const [eHour, eMin] = endTime.split(':').map(Number)
+  const startMinutes = sHour * 60 + (sMin || 0)
+  const endMinutes = eHour * 60 + (eMin || 0)
+
+  if (startMinutes < 18 * 60 || endMinutes > 23 * 60) {
+    return NextResponse.json(
+      { error: 'Operating hours are 18:00–23:00.', code: 'TIME_RANGE_ERROR' },
+      { status: 400 },
+    )
+  }
+
   // Get sitter's hourly rate (server-side to prevent tampering)
   const { data: sitter, error: sitterError } = await supabase
     .from('sitter_profiles')
@@ -106,5 +119,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to save emergency contact' }, { status: 500 })
   }
 
-  return NextResponse.json({ bookingId: booking.id })
+  // 24-hour lead time soft warning
+  let warning: string | undefined
+  const bookingDateTime = new Date(`${date}T${startTime}:00`)
+  if (bookingDateTime.getTime() - Date.now() < 24 * 60 * 60 * 1000) {
+    warning = 'LEAD_TIME'
+  }
+
+  return NextResponse.json({ bookingId: booking.id, ...(warning && { warning }) })
 }

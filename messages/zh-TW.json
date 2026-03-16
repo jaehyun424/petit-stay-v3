@@ -36,8 +36,8 @@
     "heroCta": "尋找保姆",
     "trustVerified": "身份已驗證",
     "trustVerifiedDesc": "每位保姆在加入前都已完成身份驗證",
-    "trustInsured": "保險保障服務",
-    "trustInsuredDesc": "平台上的每次預約都受到責任保險保障",
+    "trustInsured": "保險準備中",
+    "trustInsuredDesc": "正在準備為所有預約提供責任保險保障",
     "trustReviews": "僅限驗證評價",
     "trustReviewsDesc": "評價僅來自已完成付費服務的家長",
     "howTitle": "使用流程",
@@ -133,7 +133,10 @@
     "networkError": "網路錯誤，請重試。",
     "stepLabel": "步驟 {step}",
     "stepOf": "/ {total}",
-    "won": "{amount} 韓元"
+    "won": "{amount} 韓元",
+    "timeRangeError": "營業時間為 18:00~23:00。",
+    "ageRangeWarning": "適用年齡為 3~8 歲。",
+    "leadTimeWarning": "建議提前 24 小時預約。"
   },
   "checkout": {
     "paymentMethod": "付款方式",

@@ -36,8 +36,8 @@
     "heroCta": "지금 시터 찾기",
     "trustVerified": "본인인증 완료",
     "trustVerifiedDesc": "모든 시터는 본인인증을 마친 후 활동해요",
-    "trustInsured": "모든 돌봄에 보험 적용",
-    "trustInsuredDesc": "모든 예약에 배상책임보험이 적용돼요",
+    "trustInsured": "보험 적용 준비 중",
+    "trustInsuredDesc": "배상책임보험 도입을 준비하고 있어요",
     "trustReviews": "실제 이용 후기만 게시",
     "trustReviewsDesc": "실제로 이용한 부모님의 후기만 올라가요",
     "howTitle": "이용 방법",
@@ -133,7 +133,10 @@
     "networkError": "네트워크 오류가 발생했어요. 다시 시도해 주세요.",
     "stepLabel": "단계 {step}",
     "stepOf": "/ {total}",
-    "won": "{amount}원"
+    "won": "{amount}원",
+    "timeRangeError": "운영 시간은 18:00~23:00이에요.",
+    "ageRangeWarning": "대상 연령은 3세~8세예요.",
+    "leadTimeWarning": "24시간 전 예약을 권장해요."
   },
   "checkout": {
     "paymentMethod": "결제 수단",

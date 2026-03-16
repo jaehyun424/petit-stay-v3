@@ -142,6 +142,14 @@ function StepSchedule({
   onNext: () => void;
 }) {
   const t = useTranslations();
+
+  const showLeadTimeWarning = (() => {
+    if (!date || !startTime || !/^\d{1,2}:\d{2}$/.test(startTime)) return false;
+    const dt = new Date(`${date}T${startTime}:00`);
+    if (isNaN(dt.getTime())) return false;
+    return dt.getTime() > Date.now() && dt.getTime() - Date.now() < 24 * 60 * 60 * 1000;
+  })();
+
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-[22px] font-semibold leading-tight text-[#222222]">
@@ -169,6 +177,10 @@ function StepSchedule({
 
       <p className="text-sm text-[#717171]">{t('booking.eveningNote')}</p>
 
+      {showLeadTimeWarning && (
+        <p className="text-sm text-[#C4956A]">{t('booking.leadTimeWarning')}</p>
+      )}
+
       <Button className="w-full" onClick={onNext}>
         {t('common.next')}
       </Button>
@@ -189,6 +201,13 @@ function StepChildren({
   onBack: () => void;
 }) {
   const t = useTranslations();
+
+  const isAgeOutOfRange = (ageStr: string) => {
+    if (!ageStr) return false;
+    const age = parseInt(ageStr, 10);
+    return !isNaN(age) && (age < 3 || age > 8);
+  };
+
   const updateChild = (
     index: number,
     field: keyof ChildData,
@@ -222,6 +241,9 @@ function StepChildren({
           value={children[0].age}
           onChange={(e) => updateChild(0, "age", e.target.value)}
         />
+        {isAgeOutOfRange(children[0].age) && (
+          <p className="text-sm text-[#C4956A]">{t('booking.ageRangeWarning')}</p>
+        )}
         <Input
           label={t('booking.specialNotesLabel')}
           placeholder={t('booking.specialNotes')}
@@ -257,6 +279,9 @@ function StepChildren({
             value={children[1].age}
             onChange={(e) => updateChild(1, "age", e.target.value)}
           />
+          {isAgeOutOfRange(children[1].age) && (
+            <p className="text-sm text-[#C4956A]">{t('booking.ageRangeWarning')}</p>
+          )}
           <Input
             label={t('booking.specialNotesLabel')}
             placeholder={t('booking.specialNotes')}
@@ -578,7 +603,11 @@ export default function BookingPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || t('common.error'));
+        if (data.code === 'TIME_RANGE_ERROR') {
+          setError(t('booking.timeRangeError'));
+        } else {
+          setError(data.error || t('common.error'));
+        }
         return;
       }
 
