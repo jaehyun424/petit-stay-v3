@@ -38,10 +38,10 @@ interface EmergencyData {
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
   const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString("ko-KR", {
+    year: "numeric",
     month: "long",
     day: "numeric",
-    year: "numeric",
   });
 }
 
@@ -410,7 +410,7 @@ function StepConfirm({
           <div className="flex justify-between">
             <dt className="text-[#717171]">{t('booking.childrenLabel')}</dt>
             <dd className="font-medium text-[#222222]">
-              {childCount} child{childCount !== 1 ? "ren" : ""}
+              {t('common.childCount', { count: childCount })}
             </dd>
           </div>
 

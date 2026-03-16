@@ -10,11 +10,13 @@
     "save": "Save changes",
     "loading": "Loading...",
     "error": "Something went wrong",
-    "verified": "Verified"
+    "verified": "Verified",
+    "childCount": "{count} children"
   },
   "header": {
     "brand": "Petit Stay",
-    "skipToMain": "Skip to main content"
+    "skipToMain": "Skip to main content",
+    "myPage": "My Page"
   },
   "footer": {
     "about": "About",
@@ -342,5 +344,18 @@
     "title": "Page not found",
     "description": "The page you're looking for doesn't exist or has been moved.",
     "backHome": "Back to home"
+  },
+  "myPage": {
+    "title": "My Bookings",
+    "noBookings": "No bookings yet",
+    "allTab": "All",
+    "pendingTab": "Pending",
+    "confirmedTab": "Confirmed",
+    "completedTab": "Completed",
+    "statusPending": "Pending",
+    "statusConfirmed": "Confirmed",
+    "statusCompleted": "Completed",
+    "statusInProgress": "In Progress",
+    "statusCancelled": "Cancelled"
   }
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Avatar } from "@/src/components/ui/avatar";
@@ -71,7 +72,7 @@ interface DashboardData {
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return d.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
 }
 
 function formatTime(t: string) {
@@ -85,6 +86,7 @@ function formatWon(amount: number) {
 /* ───────────────────── tab content ───────────────────── */
 
 function DashboardTab({ data }: { data: DashboardData }) {
+  const t = useTranslations();
   const { stats, upcomingSessions } = data;
   const statCards = [
     { label: "This month", value: `${stats.monthSessions} sessions`, accent: false },
@@ -126,7 +128,7 @@ function DashboardTab({ data }: { data: DashboardData }) {
                 }`}
               >
                 <p className="text-[14px] text-[#222222]">
-                  {formatDate(session.date)} · {formatTime(session.start_time)}–{formatTime(session.end_time)} · {session.parent_name} · {session.child_count} child{session.child_count !== 1 ? "ren" : ""}
+                  {formatDate(session.date)} · {formatTime(session.start_time)}–{formatTime(session.end_time)} · {session.parent_name} · {t('common.childCount', { count: session.child_count })}
                 </p>
                 <Badge variant={session.status === "confirmed" ? "verified" : "default"}>
                   {session.status === "confirmed" ? "Confirmed" : "Pending"}
@@ -149,6 +151,7 @@ function RequestsTab({
   onAction: (id: string, action: "accept" | "decline") => void;
   actionLoading: string | null;
 }) {
+  const t = useTranslations();
   const { pendingRequests } = data;
 
   return (
@@ -165,7 +168,7 @@ function RequestsTab({
             >
               <p className="text-[16px] font-semibold text-[#222222]">{req.parent_name}</p>
               <p className="mt-1 text-[14px] text-[#717171]">
-                {req.children.length} child{req.children.length !== 1 ? "ren" : ""} ({req.children.map(c => `age ${c.age}`).join(", ")})
+                {t('common.childCount', { count: req.children.length })} ({req.children.map(c => `age ${c.age}`).join(", ")})
               </p>
               <p className="mt-1 text-[14px] text-[#717171]">
                 {formatDate(req.date)} · {formatTime(req.start_time)}–{formatTime(req.end_time)}

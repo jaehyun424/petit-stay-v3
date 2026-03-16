@@ -49,10 +49,10 @@ interface BookingInfo {
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString("ko-KR", {
+    year: "numeric",
     month: "long",
     day: "numeric",
-    year: "numeric",
   });
 }
 

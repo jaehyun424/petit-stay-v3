@@ -79,12 +79,17 @@ export function Header() {
             ))}
           </select>
           {user ? (
-            <button
-              onClick={handleLogout}
-              className="cursor-pointer text-sm text-[#222222] underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4956A] rounded"
-            >
-              {t('common.logout')}
-            </button>
+            <>
+              <Link href="/my" className="text-sm text-[#222222] underline">
+                {t('header.myPage')}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="cursor-pointer text-sm text-[#222222] underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C4956A] rounded"
+              >
+                {t('common.logout')}
+              </button>
+            </>
           ) : (
             <Link href="/login" className="text-sm text-[#222222] underline">
               {t('common.login')}

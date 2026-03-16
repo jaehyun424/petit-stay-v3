@@ -10,11 +10,13 @@
     "save": "儲存變更",
     "loading": "載入中...",
     "error": "發生錯誤",
-    "verified": "已驗證"
+    "verified": "已驗證",
+    "childCount": "{count}位孩子"
   },
   "header": {
     "brand": "Petit Stay",
-    "skipToMain": "Skip to main content"
+    "skipToMain": "跳至主要內容",
+    "myPage": "我的頁面"
   },
   "footer": {
     "about": "關於我們",
@@ -339,8 +341,21 @@
     "backHome": "Back to home"
   },
   "notFound": {
-    "title": "Page not found",
-    "description": "The page you're looking for doesn't exist or has been moved.",
-    "backHome": "Back to home"
+    "title": "找不到頁面",
+    "description": "您尋找的頁面不存在或已移動。",
+    "backHome": "回到首頁"
+  },
+  "myPage": {
+    "title": "我的預約",
+    "noBookings": "尚無預約",
+    "allTab": "全部",
+    "pendingTab": "待確認",
+    "confirmedTab": "已確認",
+    "completedTab": "已完成",
+    "statusPending": "待確認",
+    "statusConfirmed": "已確認",
+    "statusCompleted": "已完成",
+    "statusInProgress": "進行中",
+    "statusCancelled": "已取消"
   }
 }

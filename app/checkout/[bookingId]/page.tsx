@@ -37,6 +37,7 @@ interface BookingData {
 /* ── Booking Summary ── */
 function BookingSummary({ booking }: { booking: BookingData }) {
   const t = useTranslations('checkout');
+  const tCommon = useTranslations('common');
   const sitterName = booking.sitter_profiles?.profiles?.full_name ?? "Sitter";
   const rating = booking.sitter_profiles?.rating_avg;
   const startH = parseInt(booking.start_time.split(":")[0], 10);
@@ -50,7 +51,7 @@ function BookingSummary({ booking }: { booking: BookingData }) {
   const fmt = (n: number) => n.toLocaleString("ko-KR");
 
   const dateStr = new Date(booking.date + "T00:00:00").toLocaleDateString(
-    "en-US",
+    "ko-KR",
     { year: "numeric", month: "long", day: "numeric" }
   );
 
@@ -83,7 +84,7 @@ function BookingSummary({ booking }: { booking: BookingData }) {
         <div className="flex justify-between">
           <dt className="text-[#717171]">{t('childrenLabel')}</dt>
           <dd className="font-medium text-[#222222]">
-            {childCount} {childCount === 1 ? "child" : "children"}
+            {tCommon('childCount', { count: childCount })}
           </dd>
         </div>
 

@@ -62,10 +62,10 @@ interface BookingData {
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString("ko-KR", {
+    year: "numeric",
     month: "long",
     day: "numeric",
-    year: "numeric",
   });
 }
 
@@ -86,10 +86,8 @@ function mapDbStatus(dbStatus: string): BookingStatus {
 function getCancellationDeadline(dateStr: string, startTime: string): string {
   const d = new Date(`${dateStr}T${startTime}`);
   d.setDate(d.getDate() - 1);
-  const month = d.toLocaleDateString("en-US", { month: "long" });
-  const day = d.getDate();
   const time = formatTime(startTime);
-  return `${month} ${day}, ${time}`;
+  return d.toLocaleDateString("ko-KR", { month: "long", day: "numeric" }) + " " + time;
 }
 
 function getSitterName(booking: BookingData): string {
@@ -99,6 +97,7 @@ function getSitterName(booking: BookingData): string {
 /* ── Confirmed ── */
 function ConfirmedView({ booking }: { booking: BookingData }) {
   const t = useTranslations('bookingDetail');
+  const tCommon = useTranslations('common');
   const sitterName = getSitterName(booking);
   const isVerified = booking.sitter_profiles?.is_verified ?? false;
   const childCount = booking.booking_children.length;
@@ -166,7 +165,7 @@ function ConfirmedView({ booking }: { booking: BookingData }) {
               {t('childrenLabel')}
             </span>
             <span className="text-sm text-[var(--color-text-primary)]">
-              {childCount} child{childCount !== 1 ? "ren" : ""}
+              {tCommon('childCount', { count: childCount })}
             </span>
           </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Badge } from "@/src/components/ui/badge";
@@ -58,7 +59,7 @@ interface PartnerData {
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return d.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
 }
 
 function formatTime(t: string) {
@@ -211,6 +212,7 @@ function BookingsTab({ data }: { data: PartnerData }) {
 }
 
 function ReportsTab({ data }: { data: PartnerData }) {
+  const t = useTranslations();
   const { reports } = data;
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -233,7 +235,7 @@ function ReportsTab({ data }: { data: PartnerData }) {
                 {formatDate(report.date)} · {report.parent_name} · {report.sitter_name}
               </p>
               <p className="mt-1 text-[14px] text-[#717171]">
-                Session: {formatTime(report.start_time)}–{formatTime(report.end_time)} · {report.child_count} child{report.child_count !== 1 ? "ren" : ""}
+                Session: {formatTime(report.start_time)}–{formatTime(report.end_time)} · {t('common.childCount', { count: report.child_count })}
               </p>
               <p className="mt-1 text-[14px] text-[#6B8F71]">Status: Completed ✓</p>
 

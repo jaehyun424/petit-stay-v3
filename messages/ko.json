@@ -10,11 +10,13 @@
     "save": "저장하기",
     "loading": "불러오는 중...",
     "error": "잠시 문제가 생겼어요",
-    "verified": "인증됨"
+    "verified": "인증됨",
+    "childCount": "아이 {count}명"
   },
   "header": {
     "brand": "Petit Stay",
-    "skipToMain": "메인 콘텐츠로 이동"
+    "skipToMain": "메인 콘텐츠로 이동",
+    "myPage": "마이페이지"
   },
   "footer": {
     "about": "소개",
@@ -342,5 +344,18 @@
     "title": "페이지를 찾을 수 없어요",
     "description": "요청하신 페이지가 존재하지 않거나 이동됐어요.",
     "backHome": "홈으로 돌아가기"
+  },
+  "myPage": {
+    "title": "마이페이지",
+    "noBookings": "아직 예약이 없어요",
+    "allTab": "전체",
+    "pendingTab": "대기중",
+    "confirmedTab": "확정",
+    "completedTab": "완료",
+    "statusPending": "대기중",
+    "statusConfirmed": "확정",
+    "statusCompleted": "완료",
+    "statusInProgress": "진행 중",
+    "statusCancelled": "취소됨"
   }
 }
