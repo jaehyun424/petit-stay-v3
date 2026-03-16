@@ -88,31 +88,36 @@ export default function ReviewPage() {
 
   useEffect(() => {
     async function loadBooking() {
-      const res = await fetch(`/api/bookings/${bookingId}`);
-      if (res.status === 401) {
-        router.push("/login");
-        return;
-      }
-      if (!res.ok) {
-        setError(t('review.bookingNotFound'));
-        setLoading(false);
-        return;
-      }
-      const data = await res.json();
-      const sp = data.sitter_profiles;
-      const sitterName = sp?.profiles?.full_name ?? t('common.unknownSitter');
+      try {
+        const res = await fetch(`/api/bookings/${bookingId}`);
+        if (res.status === 401) {
+          router.push("/login");
+          return;
+        }
+        if (!res.ok) {
+          setError(t('review.bookingNotFound'));
+          setLoading(false);
+          return;
+        }
+        const data = await res.json();
+        const sp = data.sitter_profiles;
+        const sitterName = sp?.profiles?.full_name ?? t('common.unknownSitter');
 
-      setBookingInfo({
-        sitter_name: sitterName,
-        sitter_initial: sitterName.charAt(0),
-        sitter_is_verified: sp?.is_verified ?? false,
-        date: data.date,
-        start_time: data.start_time,
-        end_time: data.end_time,
-        status: data.status,
-        has_review: Array.isArray(data.reviews) && data.reviews.length > 0,
-      });
-      setLoading(false);
+        setBookingInfo({
+          sitter_name: sitterName,
+          sitter_initial: sitterName.charAt(0),
+          sitter_is_verified: sp?.is_verified ?? false,
+          date: data.date,
+          start_time: data.start_time,
+          end_time: data.end_time,
+          status: data.status,
+          has_review: Array.isArray(data.reviews) && data.reviews.length > 0,
+        });
+      } catch {
+        setError(t('common.error'));
+      } finally {
+        setLoading(false);
+      }
     }
     loadBooking();
   }, [bookingId, router, t]);

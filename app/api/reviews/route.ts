@@ -76,19 +76,23 @@ export async function POST(request: Request) {
   }
 
   // Recalculate sitter rating_avg and review_count
-  const { data: allReviews } = await supabase
+  const { data: allReviews, error: reviewsError } = await supabase
     .from('reviews')
     .select('rating')
     .eq('sitter_id', booking.sitter_id)
 
-  if (allReviews && allReviews.length > 0) {
+  if (!reviewsError && allReviews && allReviews.length > 0) {
     const sum = allReviews.reduce((acc, r) => acc + r.rating, 0)
     const avg = Math.round((sum / allReviews.length) * 10) / 10
 
-    await supabase
+    const { error: updateError } = await supabase
       .from('sitter_profiles')
       .update({ rating_avg: avg, review_count: allReviews.length })
       .eq('id', booking.sitter_id)
+
+    if (updateError) {
+      console.error('Failed to update sitter rating:', updateError)
+    }
   }
 
   return NextResponse.json({ reviewId: review.id }, { status: 201 })

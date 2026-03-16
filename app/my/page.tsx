@@ -49,33 +49,43 @@ export default function MyPage() {
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<StatusFilter>("all");
 
   useEffect(() => {
     async function init() {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
 
-      if (!user) {
-        router.push("/login");
-        return;
+        if (!user) {
+          router.push("/login");
+          return;
+        }
+
+        const { data, error: queryError } = await supabase
+          .from("bookings")
+          .select(
+            "id, date, start_time, end_time, status, total_amount, sitter_profiles(profiles(full_name))"
+          )
+          .eq("parent_id", user.id)
+          .order("date", { ascending: false });
+
+        if (queryError) {
+          setError(t("common.error"));
+        } else {
+          setBookings((data as unknown as Booking[]) ?? []);
+        }
+      } catch {
+        setError(t("common.error"));
+      } finally {
+        setLoading(false);
       }
-
-      const { data } = await supabase
-        .from("bookings")
-        .select(
-          "id, date, start_time, end_time, status, total_amount, sitter_profiles(profiles(full_name))"
-        )
-        .eq("parent_id", user.id)
-        .order("date", { ascending: false });
-
-      setBookings((data as unknown as Booking[]) ?? []);
-      setLoading(false);
     }
     init();
-  }, [router]);
+  }, [router, t]);
 
   const filteredBookings =
     filter === "all"
@@ -165,6 +175,13 @@ export default function MyPage() {
             </button>
           ))}
         </div>
+
+        {/* Error */}
+        {error && (
+          <div className="mt-4 rounded-[8px] bg-red-50 p-4 text-sm text-red-600">
+            {error}
+          </div>
+        )}
 
         {/* Booking list */}
         <div className="mt-6 flex flex-col gap-4">

@@ -10,13 +10,13 @@ export async function PATCH(request: Request) {
   }
 
   // Check sitter role
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', user.id)
     .single()
 
-  if (!profile || profile.role !== 'sitter') {
+  if (profileError || !profile || profile.role !== 'sitter') {
     return NextResponse.json({ error: 'Access denied' }, { status: 403 })
   }
 
