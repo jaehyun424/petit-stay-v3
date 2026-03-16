@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
+import { asReviewerProfileJoin, asBookingChildrenJoin, asIdArrayLength } from '@/src/lib/database.types'
 
 export async function GET() {
   try {
@@ -85,8 +86,8 @@ export async function GET() {
     date: b.date,
     start_time: b.start_time,
     end_time: b.end_time,
-    parent_name: (b.profiles as unknown as { full_name: string } | null)?.full_name ?? 'Unknown',
-    child_count: (b.booking_children as unknown as { id: string }[])?.length ?? 0,
+    parent_name: asReviewerProfileJoin(b.profiles)?.full_name ?? 'Unknown',
+    child_count: asIdArrayLength(b.booking_children),
     status: b.status,
   }))
 
@@ -103,14 +104,14 @@ export async function GET() {
     .order('date', { ascending: true })
 
   const pendingRequests = (pendingData ?? []).map((b) => {
-    const children = (b.booking_children ?? []) as unknown as { id: string; name: string; age: number; special_notes: string | null }[]
+    const children = asBookingChildrenJoin(b.booking_children)
     const notes = children.map(c => c.special_notes).filter(Boolean).join('; ')
     return {
       id: b.id,
       date: b.date,
       start_time: b.start_time,
       end_time: b.end_time,
-      parent_name: (b.profiles as unknown as { full_name: string } | null)?.full_name ?? 'Unknown',
+      parent_name: asReviewerProfileJoin(b.profiles)?.full_name ?? 'Unknown',
       children: children.map(c => ({ name: c.name, age: c.age })),
       special_notes: notes || null,
     }
@@ -143,7 +144,7 @@ export async function GET() {
     const hours = Math.round(((eH + (eM || 0) / 60) - (sH + (sM || 0) / 60)) * 10) / 10
     return {
       date: b.date,
-      parent_name: (b.profiles as unknown as { full_name: string } | null)?.full_name ?? 'Unknown',
+      parent_name: asReviewerProfileJoin(b.profiles)?.full_name ?? 'Unknown',
       hours,
       amount: b.net_amount,
       status: 'Paid',

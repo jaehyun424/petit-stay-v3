@@ -1,5 +1,6 @@
 import { createClient } from '@/src/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { asProfileJoin, asAvailabilityJoin } from '@/src/lib/database.types'
 
 export async function GET() {
   try {
@@ -27,15 +28,8 @@ export async function GET() {
   }
 
   const sitters = data.map((row) => {
-    const p = row.profiles as unknown as { full_name: string; avatar_url: string | null } | null
-    const availability = (
-      (row.sitter_availability ?? []) as unknown as {
-        day_of_week: number
-        start_time: string
-        end_time: string
-        is_active: boolean
-      }[]
-    ).filter((a) => a.is_active)
+    const p = asProfileJoin(row.profiles)
+    const availability = asAvailabilityJoin(row.sitter_availability).filter((a) => a.is_active)
 
     return {
       id: row.id,

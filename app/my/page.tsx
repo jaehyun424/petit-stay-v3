@@ -9,20 +9,11 @@ import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Badge } from "@/src/components/ui/badge";
 import { formatDate, formatTime } from "@/src/lib/format";
+import { asMyBookingsJoin, type MyBookingJoinResult } from "@/src/lib/database.types";
 
 /* ── Types ── */
 
-interface Booking {
-  id: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  status: string;
-  total_amount: number;
-  sitter_profiles: {
-    profiles: { full_name: string };
-  };
-}
+type Booking = MyBookingJoinResult;
 
 const STATUS_FILTERS = ["all", "pending", "confirmed", "completed"] as const;
 type StatusFilter = (typeof STATUS_FILTERS)[number];
@@ -62,7 +53,7 @@ export default function MyPage() {
         if (queryError) {
           setError(t("common.error"));
         } else {
-          setBookings((data as unknown as Booking[]) ?? []);
+          setBookings(asMyBookingsJoin(data));
         }
       } catch {
         setError(t("common.error"));

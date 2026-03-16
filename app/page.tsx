@@ -44,6 +44,7 @@ export default async function Home() {
                   loop
                   muted
                   playsInline
+                  preload="metadata"
                   className="w-full aspect-[4/3] rounded-xl object-cover"
                   src="/hero.mp4"
                 />

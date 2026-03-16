@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
+import { asPartnerReferralsJoin, type PartnerReferralJoinResult } from '@/src/lib/database.types'
 
 export async function GET() {
   try {
@@ -59,8 +60,7 @@ export async function GET() {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0]
 
   // All referrals for this partner
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let referrals: any[] = []
+  let referrals: PartnerReferralJoinResult[] = []
   try {
     const { data: allReferrals, error: referralError } = await supabase
       .from('partner_referrals')
@@ -80,7 +80,7 @@ export async function GET() {
       .order('created_at', { ascending: false })
 
     if (!referralError) {
-      referrals = allReferrals ?? []
+      referrals = asPartnerReferralsJoin(allReferrals)
     }
   } catch {
     // If partner_referrals table doesn't exist or query fails, continue with empty array
@@ -90,22 +90,15 @@ export async function GET() {
   // Stats: this month
   const monthReferrals = referrals.filter(r => r.created_at >= monthStart)
   const monthCompleted = monthReferrals.filter(r => {
-    const b = r.bookings as unknown as { status: string } | null
-    return b?.status === 'completed'
+    return r.bookings?.status === 'completed'
   })
   const monthTotalValue = monthReferrals.reduce((sum, r) => {
-    const b = r.bookings as unknown as { total_amount: number } | null
-    return sum + (b?.total_amount ?? 0)
+    return sum + (r.bookings?.total_amount ?? 0)
   }, 0)
 
   // Recent activity (last 5)
   const recentActivity = referrals.slice(0, 5).map(r => {
-    const b = r.bookings as unknown as {
-      date: string
-      status: string
-      profiles: { full_name: string } | null
-      sitter_profiles: { profiles: { full_name: string } | null } | null
-    } | null
+    const b = r.bookings
     return {
       date: b?.date ?? '',
       parent_name: b?.profiles?.full_name ?? 'Unknown',
@@ -116,17 +109,7 @@ export async function GET() {
 
   // All bookings
   const bookings = referrals.map(r => {
-    const b = r.bookings as unknown as {
-      id: string
-      date: string
-      start_time: string
-      end_time: string
-      status: string
-      total_amount: number
-      profiles: { full_name: string } | null
-      sitter_profiles: { profiles: { full_name: string } | null } | null
-      booking_children: { id: string }[]
-    } | null
+    const b = r.bookings
     return {
       id: b?.id ?? '',
       date: b?.date ?? '',
@@ -143,27 +126,11 @@ export async function GET() {
   // Reports: session reports from completed bookings
   const reports = referrals
     .filter(r => {
-      const b = r.bookings as unknown as { status: string; session_reports: unknown[] } | null
-      return b?.status === 'completed' && (b?.session_reports?.length ?? 0) > 0
+      return r.bookings?.status === 'completed' && (r.bookings?.session_reports?.length ?? 0) > 0
     })
     .map(r => {
-      const b = r.bookings as unknown as {
-        date: string
-        start_time: string
-        end_time: string
-        profiles: { full_name: string } | null
-        sitter_profiles: { profiles: { full_name: string } | null } | null
-        booking_children: { id: string }[]
-        session_reports: {
-          id: string
-          check_in_at: string
-          check_out_at: string | null
-          activities: string | null
-          mood_behavior: string | null
-          sleep_notes: string | null
-          additional_notes: string | null
-        }[]
-      }
+      const b = r.bookings
+      if (!b || b.session_reports.length === 0) return null
       const report = b.session_reports[0]
       return {
         id: report.id,
@@ -181,6 +148,7 @@ export async function GET() {
         additional_notes: report.additional_notes,
       }
     })
+    .filter((x): x is NonNullable<typeof x> => x !== null)
 
   return NextResponse.json({
     account: {

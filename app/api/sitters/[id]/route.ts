@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/src/lib/supabase/server'
 import type { SitterLanguage, SitterCertification } from '@/src/lib/supabase/types'
+import { asProfileJoin } from '@/src/lib/database.types'
 
 export async function GET(
   _request: Request,
@@ -31,7 +32,7 @@ export async function GET(
     return NextResponse.json({ error: 'Sitter not found' }, { status: 404 })
   }
 
-  const profile = sitter.profiles as unknown as { full_name: string; avatar_url: string | null } | null
+  const profile = asProfileJoin(sitter.profiles)
 
   return NextResponse.json({
     id: sitter.id,
