@@ -8,6 +8,7 @@ import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
+import { formatDateShort, formatTime, formatWon } from "@/src/lib/format";
 
 const TABS = ["Dashboard", "QR Code", "Bookings", "Reports"] as const;
 type Tab = (typeof TABS)[number];
@@ -56,19 +57,6 @@ interface PartnerData {
     sleep_notes: string | null;
     additional_notes: string | null;
   }[];
-}
-
-function formatDate(dateStr: string) {
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
-}
-
-function formatTime(t: string) {
-  return t.slice(0, 5);
-}
-
-function formatWon(amount: number) {
-  return `₩${amount.toLocaleString()}`;
 }
 
 /* ───────────────────── tab content ───────────────────── */
@@ -122,7 +110,7 @@ function DashboardTab({ data }: { data: PartnerData }) {
                   i < recentActivity.length - 1 ? "border-b border-[#DDDDDD]" : ""
                 }`}
               >
-                {formatDate(item.date)} · {t("partnerDashboard.bookedViaQR", { parent: item.parent_name, sitter: item.sitter_name })} · {statusText(item.status)} {item.status === "completed" ? "✓" : ""}
+                {formatDateShort(item.date)} · {t("partnerDashboard.bookedViaQR", { parent: item.parent_name, sitter: item.sitter_name })} · {statusText(item.status)} {item.status === "completed" ? "✓" : ""}
               </p>
             ))}
           </div>
@@ -210,7 +198,7 @@ function BookingsTab({ data }: { data: PartnerData }) {
               }`}
             >
               <p className="text-[14px] text-[#222222]">
-                {formatDate(booking.date)} · {booking.parent_name} · {booking.sitter_name} · {formatTime(booking.start_time)}–{formatTime(booking.end_time)}
+                {formatDateShort(booking.date)} · {booking.parent_name} · {booking.sitter_name} · {formatTime(booking.start_time)}–{formatTime(booking.end_time)}
               </p>
               <Badge
                 variant={
@@ -252,7 +240,7 @@ function ReportsTab({ data }: { data: PartnerData }) {
               className="rounded-[12px] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.05)]"
             >
               <p className="text-[14px] text-[#222222]">
-                {formatDate(report.date)} · {report.parent_name} · {report.sitter_name}
+                {formatDateShort(report.date)} · {report.parent_name} · {report.sitter_name}
               </p>
               <p className="mt-1 text-[14px] text-[#717171]">
                 {t("partnerDashboard.session")} {formatTime(report.start_time)}–{formatTime(report.end_time)} · {t('common.childCount', { count: report.child_count })}

@@ -9,6 +9,7 @@ import { Footer } from "@/src/components/layout/footer";
 import { Avatar } from "@/src/components/ui/avatar";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
+import { formatDate, formatTime } from "@/src/lib/format";
 
 const TAG_KEYS = [
   "tagPunctual",
@@ -45,19 +46,6 @@ interface BookingInfo {
   end_time: string;
   status: string;
   has_review: boolean;
-}
-
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-function formatTime(timeStr: string): string {
-  return timeStr.slice(0, 5);
 }
 
 export default function ReviewPage() {

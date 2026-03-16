@@ -110,6 +110,7 @@ export async function getSitters(limit?: number): Promise<SitterListItem[] | nul
   if (error || !data) return null
 
   return data.map((row) => {
+    // Supabase doesn't type nested joins correctly — manual cast required
     const p = row.profiles as unknown as { full_name: string; avatar_url: string | null } | null
     return {
       id: row.id,
@@ -148,6 +149,7 @@ export async function getSitterById(id: string): Promise<SitterDetail | null> {
 
   if (error || !sitter) return null
 
+  // Supabase doesn't type nested joins correctly — manual cast required
   const sp = sitter.profiles as unknown as { full_name: string; avatar_url: string | null } | null
 
   const reviews = await getSitterReviews(id, 3)
@@ -247,6 +249,7 @@ export async function getBookingById(id: string): Promise<BookingDetail | null> 
 
   if (error || !data) return null
 
+  // Supabase doesn't type nested joins correctly — manual cast required
   const sp = data.sitter_profiles as unknown as {
     is_verified: boolean
     rating_avg: number
@@ -306,6 +309,7 @@ export async function getSitterReviews(sitterId: string, limit?: number): Promis
     keywords: row.keywords ?? [],
     comment: row.comment,
     created_at: row.created_at,
+    // Supabase doesn't type nested joins correctly — manual cast required
     parent_name: (row.profiles as unknown as { full_name: string } | null)?.full_name ?? 'Anonymous',
   }))
 }

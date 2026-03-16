@@ -9,6 +9,7 @@ import { Footer } from "@/src/components/layout/footer";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Avatar } from "@/src/components/ui/avatar";
+import { formatDate } from "@/src/lib/format";
 
 /* ── Types ── */
 
@@ -34,16 +35,6 @@ interface EmergencyData {
 }
 
 /* ── Helpers ── */
-
-function formatDate(dateStr: string): string {
-  if (!dateStr) return "";
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 function calculateHours(start: string, end: string): number {
   const [sh, sm] = start.split(":").map(Number);

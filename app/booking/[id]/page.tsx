@@ -9,6 +9,7 @@ import { Footer } from "@/src/components/layout/footer";
 import { Button } from "@/src/components/ui/button";
 import { Badge } from "@/src/components/ui/badge";
 import { Avatar } from "@/src/components/ui/avatar";
+import { formatDate, formatTime, formatWon } from "@/src/lib/format";
 
 /* ── Types ── */
 
@@ -59,23 +60,6 @@ interface BookingData {
 }
 
 /* ── Helpers ── */
-
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-function formatWon(amount: number): string {
-  return `${amount.toLocaleString()}`;
-}
-
-function formatTime(timeStr: string | null | undefined): string {
-  return timeStr?.slice(0, 5) ?? "";
-}
 
 function mapDbStatus(dbStatus: string): BookingStatus {
   if (dbStatus === "in_progress") return "inProgress";
@@ -192,7 +176,7 @@ function ConfirmedView({ booking, onCancel, cancelling }: { booking: BookingData
               {t('totalPaid')}
             </span>
             <span className="text-sm font-semibold text-[var(--color-text-primary)]">
-              {formatWon(booking.total_amount)}원
+              {formatWon(booking.total_amount)}
             </span>
           </div>
         </div>

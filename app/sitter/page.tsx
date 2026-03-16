@@ -9,6 +9,7 @@ import { Footer } from "@/src/components/layout/footer";
 import { Avatar } from "@/src/components/ui/avatar";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
+import { formatDateShort, formatTime, formatWon } from "@/src/lib/format";
 
 const TABS = ["Dashboard", "Requests", "Schedule", "Earnings", "Profile"] as const;
 type Tab = (typeof TABS)[number];
@@ -71,19 +72,6 @@ interface DashboardData {
   };
 }
 
-function formatDate(dateStr: string) {
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
-}
-
-function formatTime(t: string) {
-  return t.slice(0, 5);
-}
-
-function formatWon(amount: number) {
-  return `₩${amount.toLocaleString()}`;
-}
-
 /* ───────────────────── tab content ───────────────────── */
 
 function DashboardTab({ data }: { data: DashboardData }) {
@@ -129,7 +117,7 @@ function DashboardTab({ data }: { data: DashboardData }) {
                 }`}
               >
                 <p className="text-[14px] text-[#222222]">
-                  {formatDate(session.date)} · {formatTime(session.start_time)}–{formatTime(session.end_time)} · {session.parent_name} · {t('common.childCount', { count: session.child_count })}
+                  {formatDateShort(session.date)} · {formatTime(session.start_time)}–{formatTime(session.end_time)} · {session.parent_name} · {t('common.childCount', { count: session.child_count })}
                 </p>
                 <Badge variant={session.status === "confirmed" ? "verified" : "default"}>
                   {session.status === "confirmed" ? t("sitterDashboard.confirmed") : t("sitterDashboard.pending")}
@@ -172,7 +160,7 @@ function RequestsTab({
                 {t('common.childCount', { count: req.children.length })} ({req.children.map(c => t('sitterDashboard.childAge', { age: c.age })).join(", ")})
               </p>
               <p className="mt-1 text-[14px] text-[#717171]">
-                {formatDate(req.date)} · {formatTime(req.start_time)}–{formatTime(req.end_time)}
+                {formatDateShort(req.date)} · {formatTime(req.start_time)}–{formatTime(req.end_time)}
               </p>
               {req.special_notes && (
                 <p className="mt-2 text-[14px] text-[#222222]">
@@ -289,7 +277,7 @@ function EarningsTab({ data }: { data: DashboardData }) {
                   i < earnings.length - 1 ? "border-b border-[#DDDDDD]" : ""
                 }`}
               >
-                {formatDate(tx.date)} · {tx.parent_name} · {tx.hours}h · {formatWon(tx.amount)} · {tx.status} ✓
+                {formatDateShort(tx.date)} · {tx.parent_name} · {tx.hours}h · {formatWon(tx.amount)} · {tx.status} ✓
               </div>
             ))}
           </div>

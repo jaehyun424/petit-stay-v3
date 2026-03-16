@@ -8,6 +8,7 @@ import { createClient } from "@/src/lib/supabase/client";
 import { Header } from "@/src/components/layout/header";
 import { Footer } from "@/src/components/layout/footer";
 import { Badge } from "@/src/components/ui/badge";
+import { formatDate, formatTime } from "@/src/lib/format";
 
 /* ── Types ── */
 
@@ -25,21 +26,6 @@ interface Booking {
 
 const STATUS_FILTERS = ["all", "pending", "confirmed", "completed"] as const;
 type StatusFilter = (typeof STATUS_FILTERS)[number];
-
-/* ── Helpers ── */
-
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-function formatTime(timeStr: string): string {
-  return timeStr.slice(0, 5);
-}
 
 /* ── Page ── */
 
